@@ -1,5 +1,6 @@
 
 # Obtenemos los esquemas de muestreo
+# (just to check whether this change is visible when Joana does git pull!!!)
 library(tidyverse)
 library(island)
 library(data.table)
