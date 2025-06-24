@@ -114,20 +114,18 @@ library(dplyr)
 colext_Results_df_ordenado <- colext_Results_df %>%
   arrange(species)
 
-my_colors <- c(
-  
-  "Pseudophilotes panoptes" = "darkblue",
-  "Cyaniris semiargus" = "mediumblue",
-  "Plebejus argus" = "steelblue4",
-  "Aglais io" = "blueviolet",
-  "Melanargia occitanica" = "deepskyblue1",
-  "Anthocharis euphenoides" = "cadetblue2",
-  "Vanessa cardui" = "gold2",
-  "Lycaena virgaureae" = "yellow",
-  "Pararge aegeria" = "red4",
-  "Celastrina argiolus" = "orangered",
-  "Pyronia bathseba" = "violetred",
-  "Pyronia cecilia" = "palevioletred1")
+my_colors <- c( "Pseudophilotes panoptes" = "darkblue",
+                "Cyaniris semiargus" = "mediumblue",
+                "Plebejus argus" = "steelblue4",
+                "Aglais io" = "blueviolet",
+                "Melanargia occitanica" = "deepskyblue1",
+                "Anthocharis euphenoides" = "cadetblue2",
+                "Vanessa cardui" = "gold2",
+                "Lycaena virgaureae" = "yellow",
+                "Pararge aegeria" = "red4",
+                "Celastrina argiolus" = "orangered",
+                "Pyronia bathseba" = "violetred",
+                "Pyronia cecilia" = "palevioletred1")
 
 
 
@@ -151,8 +149,14 @@ print(gg_colext_total)
 ###############################################################
 
 
-#calcul de col ex per bioregio
+#calcul de col ext per bioregio
 #######################################
+#No olvidemos cargar los paquetes necesarios:
+library(ggplot2)
+library(tidyverse)
+library(island)
+library(data.table)
+library(dplyr)
 # Selecting the intenaris per bioclimatic region:
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
 itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
@@ -235,9 +239,6 @@ for(i in 1: length(Species_Latin_Names)) {
   NLL[i] <- colext_Sp_Res_BR1[[i]]$NLL
 }
 
-# Create the data frame
-colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
-
 # Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
 colext_Results_df_BR1$C <- C
 colext_Results_df_BR1$C_low <- C_low
@@ -248,40 +249,367 @@ colext_Results_df_BR1$E_up <- E_up
 colext_Results_df_BR1$N <- N
 colext_Results_df_BR1$NLL <- NLL
 
+# Create the data frame
+colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
 
-#Scatter plot regio bioclimatica 1 amb barres d'error (Chatgpt example)
-# Load the ggplot2 package
-library(ggplot2)
-# Create the plot
-ggplot(colext_Results_df_BR1, aes(x = C, y = E)) +
-  geom_point(size = 2, color = "green") +  # Scatter points
-  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.05, color = "green") +  # Vertical error bars for E
-  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, color = "green") +  # Horizontal error bars for C
+# Tu vector de colores personalizado
+my_colors <- c(
+  "Pseudophilotes panoptes" = "darkblue",
+  "Cyaniris semiargus" = "mediumblue",
+  "Plebejus argus" = "steelblue4",
+  "Aglais io" = "blueviolet",
+  "Melanargia occitanica" = "deepskyblue1",
+  "Anthocharis euphenoides" = "cadetblue2",
+  "Vanessa cardui" = "gold2",
+  "Lycaena virgaureae" = "yellow",
+  "Pararge aegeria" = "red4",
+  "Celastrina argiolus" = "orangered",
+  "Pyronia bathseba" = "violetred",
+  "Pyronia cecilia" = "palevioletred1"
+)
+
+# Definición del orden personalizado de las especies
+orden_personalizado_spp_colex <- c(
+  "Pseudophilotes panoptes",
+  "Cyaniris semiargus",
+  "Plebejus argus",
+  "Aglais io",
+  "Melanargia occitanica",
+  "Anthocharis euphenoides",
+  "Vanessa cardui",
+  "Lycaena virgaureae",
+  "Pararge aegeria",
+  "Celastrina argiolus",
+  "Pyronia bathseba",
+  "Pyronia cecilia"
+)
+
+# Asegúrate de que colext_Results_df_BR1_ordenado ya ha sido creado por tu script
+# y que los paquetes ggplot2 y tidyverse están cargados.
+# --- PASO CRÍTICO DE PRE-PROCESAMIENTO ---
+# Asegúrate de que esta sección se ejecute *antes* del código ggplot.
+# Esta línea convierte la columna 'species' a un factor con los niveles deseados.
+# Si tus datos tienen nombres de especies que no están en 'orden_personalizado_spp_colex',
+# esos valores se convertirán a NA (Not Available) en el factor.
+colext_Results_df_BR1_ordenado$species <- factor(
+  colext_Results_df_BR1_ordenado$species,
+  levels = orden_personalizado_spp_colex )
+
+
+gg_colext_BR1 <-
+  ggplot(filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"), aes(x = C, y = E, color = species)) +
+  geom_point(size = 2) + 
+  geom_errorbarh(data = filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"),
+                  aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+  geom_errorbar(data = filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"),
+  aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +
   theme_minimal() +
   labs(
-    title = "Scatter plot of C vs E with Confidence Intervals",
-    x = "Colonitzacio",
-    y = "Extincio"
+    title = "Regió Alpina i Subaplina",
+    x = "Colonització",
+    y = "Extinció",
+    color = "Espècie" # Etiqueta para la leyenda de colores
+  ) +
+  # Usar la escala de colores manual con tu vector my_colors
+  # Los 'limits' aquí aseguran que el orden de la leyenda sea el de orden_personalizado_spp_colex
+  scale_color_manual(values = my_colors, limits = orden_personalizado_spp_colex) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
   )
 
-ggplot(colext_Results_df_BR1_sp11, aes(x = C, y = E)) +
-  geom_point(size = 2, color = "green") +  # Scatter points
-  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.05, color = "green") +  # Vertical error bars for E
-  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, color = "green") +  # Horizontal error bars for C
+print(gg_colext_BR1)
+
+#Els valors de melanargia son molt alts per afegirlos a la grafica.
+#Els valors son els seguents: C <- 3.7958428
+#                             C_low <- 0.1862706
+#                             C _up <-26.1190076
+#                             E <- 15.17992361
+#                             E_low <- 2.19767937
+#                             E_up <- 309.30890507
+#COMENTARI: Valors out-layer:
+# Melanargia (Al cbms) s'observa en regressio forta general en el nombre d'abundancia 
+#Hi ha tan sols 1 itinerari = id itin =167 Toirigo, en la que es va observar tan sol un any el 2023
+#la descripcio de la spp diu que nomes es troba de 0 - 1000m i aquest itinerari
+#te una alc'ada mitjana de 1500 m. 
+#Vanessa te un valor de col=2,7 (tendencia pob: regressio moderada general, estable alpina)
+#Lycaena te un valor de col=1,3 (tendencia pob: general estable, i no avaluada)
+
+
+##########################################
+##########################################
+
+
+# --- Cálculo de col/ext para la Región Mediterrania Humida (BR2) ---
+colext_Sp_Res_BR2 <- list()
+# Asegúrate de inicializar No_of_TRANSITIONS si no se hizo globalmente o si se necesita re-inicializar
+# No_of_TRANSITIONS <- vector("numeric", length(Species_Latin_Names)) # Descomentar si es necesario
+
+for( i in 1:length(Species_Latin_Names) ) {
+  # Solo procesar si hay itinerarios filtrados para esta especie en BR2
+  if (length(filtered_list_BR2[[i]]) > 0) {
+    # Calcular ncols de forma robusta
+    temp_ncols <- lapply(filtered_list_BR2[[i]], function(df_item) {
+      if (is.data.frame(df_item)) {
+        return(ncol(df_item))
+      } else {
+        warning(paste0("Elemento en filtered_list_BR2[[", i, "]] no es un dataframe. Es un ", class(df_item), "."))
+        return(NA_integer_)
+      }
+    })
+    ncols <- unlist(temp_ncols)
+    ncols <- ncols[!is.na(ncols)] # Eliminar NAs si los hay
+    
+    if (length(ncols) > 0) { # Si hay conteos de columnas válidos
+      list_vectors <- list()
+      for(j in 1:length(filtered_list_BR2[[i]])) { # Iterar sobre los dataframes válidos
+        if (j <= length(ncols) && is.numeric(ncols[j]) && ncols[j] > 1) {
+          list_vectors[[j]] <- 2:(ncols[j] - 1)
+        } else {
+          list_vectors[[j]] <- integer(0) # Asignar vector entero vacío si hay problemas
+        }
+      }
+      # Cálculo robusto para No_of_TRANSITIONS (asumo que se maneja un único vector No_of_TRANSITIONS global)
+      # Si No_of_TRANSITIONS debe ser específico para BR2, se necesitaría un nuevo vector (ej., No_of_TRANSITIONS_BR2)
+      # Por ahora, se sigue usando el global, lo que podría no ser lo ideal si los cálculos son distintos por BR.
+      No_of_TRANSITIONS[i] = sum(sapply(list_vectors, function(vec) max(0, length(vec) - 1)))
+      
+      colext_Sp_Res_BR2[[i]] <- island::irregular_multiple_datasets(filtered_list_BR2[[i]], list_vectors, 0.0001, 0.0001, CI = TRUE)
+    } else {
+      # No hay dataframes válidos para procesar para esta especie en esta región
+      colext_Sp_Res_BR2[[i]] <- list(c = NA, c_low = NA, c_up = NA, e = NA, e_low = NA, e_up = NA, N = NA, NLL = NA)
+      No_of_TRANSITIONS[i] = NA
+    }
+  } else {
+    # filtered_list_BR2[[i]] es una lista vacía para esta especie
+    colext_Sp_Res_BR2[[i]] <- list(c = NA, c_low = NA, c_up = NA, e = NA, e_low = NA, e_up = NA, N = NA, NLL = NA)
+    No_of_TRANSITIONS[i] = NA
+  }
+}
+
+# Inicializar vectores para extraer resultados de BR2
+C_BR2 <- vector()
+C_low_BR2 <- vector()
+C_up_BR2 <- vector()
+E_BR2 <- vector()
+E_low_BR2 <- vector()
+E_up_BR2 <- vector()
+N_BR2 <- vector()
+NLL_BR2 <- vector()
+
+for(i in 1:length(Species_Latin_Names)) {
+  # Extraer resultados, manejando casos donde colext_Sp_Res_BR2[[i]] podría ser NA o vacío
+  if (!is.null(colext_Sp_Res_BR2[[i]]) && !is.na(colext_Sp_Res_BR2[[i]][[1]])) {
+    C_BR2[i] <- colext_Sp_Res_BR2[[i]]$c
+    C_low_BR2[i] <- colext_Sp_Res_BR2[[i]]$c_low
+    C_up_BR2[i] <- colext_Sp_Res_BR2[[i]]$c_up
+    E_BR2[i] <- colext_Sp_Res_BR2[[i]]$e
+    E_low_BR2[i] <- colext_Sp_Res_BR2[[i]]$e_low
+    E_up_BR2[i] <- colext_Sp_Res_BR2[[i]]$e_up
+    N_BR2[i] <- colext_Sp_Res_BR2[[i]]$N
+    NLL_BR2[i] <- colext_Sp_Res_BR2[[i]]$NLL
+  } else {
+    # Asignar NA si no hay resultados válidos para la especie
+    C_BR2[i] <- NA
+    C_low_BR2[i] <- NA
+    C_up_BR2[i] <- NA
+    E_BR2[i] <- NA
+    E_low_BR2[i] <- NA
+    E_up_BR2[i] <- NA
+    N_BR2[i] <- NA
+    NLL_BR2[i] <- NA
+  }
+}
+
+# --- CREAR Y RELLENAR EL DATAFRAME colext_Results_df_BR2 ---
+# ¡IMPORTANTE: Crear el dataframe ANTES de añadir las columnas!
+colext_Results_df_BR2 <- data.frame(species = Species_Latin_Names)
+
+# Añadir los vectores creados anteriormente (C, C_low, ...) al data frame:
+colext_Results_df_BR2$C <- C_BR2
+colext_Results_df_BR2$C_low <- C_low_BR2
+colext_Results_df_BR2$C_up <- C_up_BR2
+colext_Results_df_BR2$E <- E_BR2
+colext_Results_df_BR2$E_low <- E_low_BR2
+colext_Results_df_BR2$E_up <- E_up_BR2
+colext_Results_df_BR2$N <- N_BR2
+colext_Results_df_BR2$NLL <- NLL_BR2
+
+# Ordenar el dataframe por especie
+colext_Results_df_BR2_ordenado <- colext_Results_df_BR2 %>%
+  arrange(species)
+
+# --- PASO CRÍTICO DE PRE-PROCESAMIENTO PARA EL GRÁFICO BR2 ---
+colext_Results_df_BR2_ordenado$species <- factor(
+  colext_Results_df_BR2_ordenado$species,
+  levels = orden_personalizado_spp_colex
+)
+
+# --- Generación del gráfico ggplot2 para la Región Mediterrania Humida (BR2) ---
+gg_colext_BR2 <-
+  ggplot(colext_Results_df_BR2_ordenado, aes(x = C, y = E, color = species)) +
+  geom_point(size = 2) + #El color se define por 'species' en aes()
+  # Añadir barras de error horizontales para los intervalos de confianza de 'C'
+  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+  # Añadir barras de error verticales para los intervalos de confianza de 'E'
+  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
   theme_minimal() +
   labs(
-    title = "Scatter plot of C vs E with Confidence Intervals",
-    x = "Colonitzacio",
-    y = "Extincio"
+    title = "Regió Mediterrània Humida",
+    x = "Colonització",
+    y = "Extinció",
+    color = "Espècie" # Etiqueta para la leyenda de colores
+  ) +
+  # Usar la escala de colores manual con tu vector my_colors
+  # Los 'limits' aquí aseguran que el orden de la leyenda sea el de orden_personalizado_spp_colex
+  scale_color_manual(values = my_colors, limits = orden_personalizado_spp_colex) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
   )
 
-# Sense barres d'error: 
-ggplot(colext_Results_df_BR1, aes(x = C, y = E)) +
-  geom_point(size = 2, color = "green") +  # Scatter points
+print(gg_colext_BR2)
+
+
+#######################################
+#######################################
+# --- Cálculo de col/ext para la Región Mediterrania Arida (BR3) ---
+colext_Sp_Res_BR3 <- list()
+# Asegúrate de inicializar No_of_TRANSITIONS si no se hizo globalmente o si se necesita re-inicializar
+# No_of_TRANSITIONS <- vector("numeric", length(Species_Latin_Names)) # Descomentar si es necesario
+
+for( i in 1:length(Species_Latin_Names) ) {
+  # Solo procesar si hay itinerarios filtrados para esta especie en BR2
+  if (length(filtered_list_BR3[[i]]) > 0) {
+    # Calcular ncols de forma robusta
+    temp_ncols <- lapply(filtered_list_BR3[[i]], function(df_item) {
+      if (is.data.frame(df_item)) {
+        return(ncol(df_item))
+      } else {
+        warning(paste0("Elemento en filtered_list_BR3[[", i, "]] no es un dataframe. Es un ", class(df_item), "."))
+        return(NA_integer_)
+      }
+    })
+    ncols <- unlist(temp_ncols)
+    ncols <- ncols[!is.na(ncols)] # Eliminar NAs si los hay
+    
+    if (length(ncols) > 0) { # Si hay conteos de columnas válidos
+      list_vectors <- list()
+      for(j in 1:length(filtered_list_BR3[[i]])) { # Iterar sobre los dataframes válidos
+        if (j <= length(ncols) && is.numeric(ncols[j]) && ncols[j] > 1) {
+          list_vectors[[j]] <- 2:(ncols[j] - 1)
+        } else {
+          list_vectors[[j]] <- integer(0) # Asignar vector entero vacío si hay problemas
+        }
+      }
+      # Cálculo robusto para No_of_TRANSITIONS (asumo que se maneja un único vector No_of_TRANSITIONS global)
+      # Si No_of_TRANSITIONS debe ser específico para BR2, se necesitaría un nuevo vector (ej., No_of_TRANSITIONS_BR3)
+      # Por ahora, se sigue usando el global, lo que podría no ser lo ideal si los cálculos son distintos por BR.
+      No_of_TRANSITIONS[i] = sum(sapply(list_vectors, function(vec) max(0, length(vec) - 1)))
+      
+      colext_Sp_Res_BR3[[i]] <- island::irregular_multiple_datasets(filtered_list_BR3[[i]], list_vectors, 0.0001, 0.0001, CI = TRUE)
+    } else {
+      # No hay dataframes válidos para procesar para esta especie en esta región
+      colext_Sp_Res_BR3[[i]] <- list(c = NA, c_low = NA, c_up = NA, e = NA, e_low = NA, e_up = NA, N = NA, NLL = NA)
+      No_of_TRANSITIONS[i] = NA
+    }
+  } else {
+    # filtered_list_BR3[[i]] es una lista vacía para esta especie
+    colext_Sp_Res_BR3[[i]] <- list(c = NA, c_low = NA, c_up = NA, e = NA, e_low = NA, e_up = NA, N = NA, NLL = NA)
+    No_of_TRANSITIONS[i] = NA
+  }
+}
+
+# Inicializar vectores para extraer resultados de BR2
+C_BR3 <- vector()
+C_low_BR3 <- vector()
+C_up_BR3 <- vector()
+E_BR3 <- vector()
+E_low_BR3 <- vector()
+E_up_BR3 <- vector()
+N_BR3 <- vector()
+NLL_BR3 <- vector()
+
+for(i in 1:length(Species_Latin_Names)) {
+  # Extraer resultados, manejando casos donde colext_Sp_Res_BR3[[i]] podría ser NA o vacío
+  if (!is.null(colext_Sp_Res_BR3[[i]]) && !is.na(colext_Sp_Res_BR3[[i]][[1]])) {
+    C_BR3[i] <- colext_Sp_Res_BR3[[i]]$c
+    C_low_BR3[i] <- colext_Sp_Res_BR3[[i]]$c_low
+    C_up_BR3[i] <- colext_Sp_Res_BR3[[i]]$c_up
+    E_BR3[i] <- colext_Sp_Res_BR3[[i]]$e
+    E_low_BR3[i] <- colext_Sp_Res_BR3[[i]]$e_low
+    E_up_BR3[i] <- colext_Sp_Res_BR3[[i]]$e_up
+    N_BR3[i] <- colext_Sp_Res_BR3[[i]]$N
+    NLL_BR3[i] <- colext_Sp_Res_BR3[[i]]$NLL
+  } else {
+    # Asignar NA si no hay resultados válidos para la especie
+    C_BR3[i] <- NA
+    C_low_BR3[i] <- NA
+    C_up_BR3[i] <- NA
+    E_BR3[i] <- NA
+    E_low_BR3[i] <- NA
+    E_up_BR3[i] <- NA
+    N_BR3[i] <- NA
+    NLL_BR3[i] <- NA
+  }
+}
+
+# --- CREAR Y RELLENAR EL DATAFRAME colext_Results_df_BR3 ---
+# ¡IMPORTANTE: Crear el dataframe ANTES de añadir las columnas!
+colext_Results_df_BR3 <- data.frame(species = Species_Latin_Names)
+
+# Añadir los vectores creados anteriormente (C, C_low, ...) al data frame:
+colext_Results_df_BR3$C <- C_BR3
+colext_Results_df_BR3$C_low <- C_low_BR3
+colext_Results_df_BR3$C_up <- C_up_BR3
+colext_Results_df_BR3$E <- E_BR3
+colext_Results_df_BR3$E_low <- E_low_BR3
+colext_Results_df_BR3$E_up <- E_up_BR3
+colext_Results_df_BR3$N <- N_BR3
+colext_Results_df_BR3$NLL <- NLL_BR3
+
+# Ordenar el dataframe por especie
+colext_Results_df_BR3_ordenado <- colext_Results_df_BR3 %>%
+  arrange(species)
+
+# --- PASO CRÍTICO DE PRE-PROCESAMIENTO PARA EL GRÁFICO BR2 ---
+colext_Results_df_BR3_ordenado$species <- factor(
+  colext_Results_df_BR3_ordenado$species,
+  levels = orden_personalizado_spp_colex
+)
+
+# --- Generación del gráfico ggplot2 para la Región Mediterrania Humida (BR2) ---
+gg_colext_BR3 <-
+  ggplot(colext_Results_df_BR3_ordenado, aes(x = C, y = E, color = species)) +
+  geom_point(size = 2) + #El color se define por 'species' en aes()
+  # Añadir barras de error horizontales para los intervalos de confianza de 'C'
+  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+  # Añadir barras de error verticales para los intervalos de confianza de 'E'
+  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
   theme_minimal() +
   labs(
-    title = "Scatter plot of C vs E with Confidence Intervals",
-    x = "Colonitzacio",
-    y = "Extincio"
+    title = "Regió Mediterrània Àrida",
+    x = "Colonització",
+    y = "Extinció",
+    color = "Espècie" # Etiqueta para la leyenda de colores
+  ) +
+  # Usar la escala de colores manual con tu vector my_colors
+  # Los 'limits' aquí aseguran que el orden de la leyenda sea el de orden_personalizado_spp_colex
+  scale_color_manual(values = my_colors, limits = orden_personalizado_spp_colex) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
   )
+
+print(gg_colext_BR3)
+###############################################
+###############################################
+#COMENTARIS: 
+#cyaniris semiargus i la lycaena virgaureae han estat eliminades del grafic
+#perque no esta present en cap itinerari de clima mediterrani arid
+#llavors es normal que no les trobem
+
 
