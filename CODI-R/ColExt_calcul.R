@@ -1,7 +1,16 @@
 
-# Email Vicente:  Construccio de la llista de una especies (p.e. Pararge aegeria) que s'utilitzara com a 
-# input de irregular multiple 
-# Loop to calculate the (c, e) pair for each species across itineraris at once
+# Obtenemos los esquemas de muestreo
+library(tidyverse)
+library(island)
+library(data.table)
+
+# Cargamos los datos
+# BEGIN: Exemples inicials... 
+ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2023.csv")
+#Including 2024 year: 
+ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2024.csv")
+data <- ColExtDades
+
 list_multiple <- list()
 
 colext_Sp_Results <- list()
@@ -144,11 +153,107 @@ print(gg_colext_total)
 
 #calcul de col ex per bioregio
 #######################################
+# Selecting the intenaris per bioclimatic region:
+itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
+itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
+itin_CBMS_RegClim_3 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 3, ]
+itin_ID_1 <- itin_CBMS_RegClim_1$CODI
+itin_ID_2 <- itin_CBMS_RegClim_2$CODI
+itin_ID_3 <- itin_CBMS_RegClim_3$CODI
+
+# Regio Alpine
+filtered_list_BR1 <- list()
+# Med. Humida
+filtered_list_BR2 <- list()
+# Med. Arida
+filtered_list_BR3 <- list()
+
+# Crear les tres llistes segons regions 
+for( i in 1:length(Species_Latin_Names) ) {
+  
+  list_multiple[[i]] <- data %>%
+    group_by(IDitin) %>%
+    group_split() %>%
+    lapply(function(df) {
+      id <- unique(df$IDitin)
+      df_out <- df %>%
+        group_by(Any, sp_latin) %>%
+        count() %>%
+        pivot_wider(names_from = Any, values_from = n) %>%
+        ungroup() %>%
+        mutate(across(-sp_latin, negate(is.na))) %>%
+        mutate(across(-sp_latin, as.numeric)) %>%
+        filter(sp_latin == Species_Latin_Names[i]) %>%
+        as.data.frame()
+      if (nrow(df_out) > 0 && ncol(df_out) > 0) {
+        df_out$IDitin <- id  # Retain IDitin
+      }
+      
+      df_out
+    }) %>%
+    Filter(function(df) nrow(df) > 0 && ncol(df) > 5, .)
+  
+  filtered_list_BR1[[i]] <- Filter(function(x) x$IDitin %in% itin_ID_1, list_multiple[[i]])
+  filtered_list_BR2[[i]] <- Filter(function(x) x$IDitin %in% itin_ID_2, list_multiple[[i]])
+  filtered_list_BR3[[i]] <- Filter(function(x) x$IDitin %in% itin_ID_3, list_multiple[[i]])
+}
+
+
+# Crear una llista amb tots els resultats (de la Regio de Muntanya Alpina: colext_Sp_Res_BR1[[]] 
+# utilitzant la llista d'itineraris 
+colext_Sp_Res_BR1 <- list()
+for( i in 1:length(Species_Latin_Names) ) {
+  
+  ncols <- sapply(filtered_list_BR1[[i]], ncol)  
+  list_vectors <- list()
+  for(j in 1:length( filtered_list_BR1[[i]] ) ){
+    list_vectors[[j]] <- 2:(ncols[j] - 1)
+  }
+  # Aixo es el numero de transiction totals de les especie i en tots els itineraris. 
+  # (numero de factors de la funcio de versemblanc,a multiplicativa)
+  No_of_TRANSITIONS[i] = sum(sapply(list_vectors, length) - 1)
+  
+  colext_Sp_Res_BR1[[i]] <- irregular_multiple_datasets(filtered_list_BR1[[i]], list_vectors, 0.0001, 0.0001, CI = TRUE)
+}
+
+C      <-vector()
+C_low  <-vector()
+C_up   <-vector()
+E      <-vector()  
+E_low  <-vector()
+E_up   <-vector()
+N      <-vector()
+NLL    <-vector()
+for(i in 1: length(Species_Latin_Names)) {
+  C[i] <- colext_Sp_Res_BR1[[i]]$c
+  C_low[i] <- colext_Sp_Res_BR1[[i]]$c_low
+  C_up[i] <- colext_Sp_Res_BR1[[i]]$c_up
+  E[i] <- colext_Sp_Res_BR1[[i]]$e
+  E_low[i] <- colext_Sp_Res_BR1[[i]]$e_low
+  E_up[i] <- colext_Sp_Res_BR1[[i]]$e_up
+  N[i] <- colext_Sp_Res_BR1[[i]]$N
+  NLL[i] <- colext_Sp_Res_BR1[[i]]$NLL
+}
+
+# Create the data frame
+colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
+
+# Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
+colext_Results_df_BR1$C <- C
+colext_Results_df_BR1$C_low <- C_low
+colext_Results_df_BR1$C_up <- C_up
+colext_Results_df_BR1$E <- E
+colext_Results_df_BR1$E_low <- E_low
+colext_Results_df_BR1$E_up <- E_up
+colext_Results_df_BR1$N <- N
+colext_Results_df_BR1$NLL <- NLL
+
+
 #Scatter plot regio bioclimatica 1 amb barres d'error (Chatgpt example)
 # Load the ggplot2 package
 library(ggplot2)
 # Create the plot
-ggplot(colext_Results_df_1, aes(x = C, y = E)) +
+ggplot(colext_Results_df_BR1, aes(x = C, y = E)) +
   geom_point(size = 2, color = "green") +  # Scatter points
   geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.05, color = "green") +  # Vertical error bars for E
   geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, color = "green") +  # Horizontal error bars for C
@@ -159,7 +264,7 @@ ggplot(colext_Results_df_1, aes(x = C, y = E)) +
     y = "Extincio"
   )
 
-ggplot(colext_Results_df_1_sp11, aes(x = C, y = E)) +
+ggplot(colext_Results_df_BR1_sp11, aes(x = C, y = E)) +
   geom_point(size = 2, color = "green") +  # Scatter points
   geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.05, color = "green") +  # Vertical error bars for E
   geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, color = "green") +  # Horizontal error bars for C
@@ -171,7 +276,7 @@ ggplot(colext_Results_df_1_sp11, aes(x = C, y = E)) +
   )
 
 # Sense barres d'error: 
-ggplot(colext_Results_df_1, aes(x = C, y = E)) +
+ggplot(colext_Results_df_BR1, aes(x = C, y = E)) +
   geom_point(size = 2, color = "green") +  # Scatter points
   theme_minimal() +
   labs(
