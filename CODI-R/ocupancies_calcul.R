@@ -1,3 +1,117 @@
+# Cargamos los datos
+ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2023.csv")
+#Including 2024 year: 
+ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2024.csv")
+data <- ColExtDades
+
+itin_CBMS_RegClim <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/itin_CBMS_regionsclimatiques.csv"
+                              , sep ='\t' )
+
+#carregar paquets
+library(vegan)
+library(tidyverse)
+library(island)
+library(data.table)
+library(openxlsx)
+
+# Selecting the intenaris per bioclimatic region:
+itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
+itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
+itin_CBMS_RegClim_3 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 3, ]
+itin_ID_1 <- itin_CBMS_RegClim_1$CODI
+itin_ID_2 <- itin_CBMS_RegClim_2$CODI
+itin_ID_3 <- itin_CBMS_RegClim_3$CODI
+
+
+  
+data_celastrina <-
+  data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Lycaena <-
+  data %>% filter(sp_latin == "Lycaena virgaureae") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Plebejus <-
+  data %>% filter(sp_latin == "Plebejus argus") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Vanessa <-
+  data %>% filter(sp_latin == "Vanessa cardui") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Pseudophilotes <-
+  data %>% filter(sp_latin == "Pseudophilotes panoptes") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Aglais <-
+  data %>% filter(sp_latin == "Aglais io") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Melanargia <-
+  data %>% filter(sp_latin == "Melanargia occitanica") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Pararge <-
+  data %>% filter(sp_latin == "Pararge aegeria") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaCeci <-
+  data %>% filter(sp_latin == "Pyronia cecilia") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaBath <-
+  data %>% filter(sp_latin == "Pyronia bathseba") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Anthocharis <-
+  data %>% filter(sp_latin == "Anthocharis euphenoides") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Cyaniris <-
+  data %>% filter(sp_latin == "Cyaniris semiargus") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+###################################
+
+Samplying_Years <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/cbms_sampling_years.csv")
+# Create the presence matrix with SITE_IDs as rows and years as columns
+presence_matrix <- Samplying_Years %>%
+  pivot_wider(names_from = year, values_from = presence, values_fill = 0)
+
+# Exclude the SITE_ID column and sum across columns (i.e., years)
+yearly_counts <- colSums(presence_matrix[,-1])
+
+# Convert named numeric vector to data frame
+yearly_df <- enframe(yearly_counts, name = "year", value = "count")
+
+# Make sure 'year' is numeric for proper ordering on the x-axis
+yearly_df$year <- as.numeric(as.character(yearly_df$year))
+
+
 ################################################################################
 # Calcul de les ocupancies de les 12 especies. 
 
@@ -144,11 +258,20 @@ presence_94_2024_anthocharis_df$year <- as.numeric(presence_94_2024_anthocharis_
 #
 #
 #
-#Comenc,en les comandes dels 12 grafics de les ocupancies per especie pel total dels itineraris:#
-library(ggplot2)
+#
+# Identify the range of years
+start_year <- min(yearly_df$year)
+end_year <- max(yearly_df$year)
+
+# Generate axis breaks: every 5 years, plus start and end if not already included
+breaks <- sort(unique(c(seq(from = start_year, to = end_year, by = 5), start_year, end_year)))
 breaks_ocupancia <- sort(unique(c(seq(from = start_year, to = end_year, by = 4), start_year, end_year)))
 breaks_ocupancia_general <- c(start_year, end_year)
-##
+
+
+#Comenc,en les comandes dels 12 grafics de les ocupancies per especie pel total dels itineraris:#
+library(ggplot2)
+
 gg_occupancy_cela <-
   ggplot(data = presence_94_2024_celastrina_df, aes(x = year, y = occupancy)) +
   geom_point() +
@@ -308,11 +431,10 @@ gg_occupancies_total <- (gg_occupancy_pseudo + gg_occupancy_lyca + gg_occupancy_
                   axis.title.y = element_text(margin = margin(r = 10))) # Ajusta margen para Y
   ) & labs(x = "Any", y = "Ocupància")
 gg_occupancies_total
-ggsave("ocupancies_totals.png", plot = gg_occupancies_total, path = "graphics", width = 15, height = 10, units = "in", dpi = 300)
+ggsave("ocupancies_totals.png", plot = gg_occupancies_total, path = "/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/", width = 15, height = 10, units = "in", dpi = 300)
 
 ########################
 #Per afegir una columna amb de la ucupancia teorica
 colext_Results_df$Occu_teorica <- colext_Results_df$C / (colext_Results_df$C+colext_Results_df$E)
 
-#
 
