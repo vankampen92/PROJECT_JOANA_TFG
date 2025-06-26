@@ -146,6 +146,7 @@ gg_colext_total <- ggplot(colext_Results_df, aes(x = C, y = E, color = species))
 
 # Para visualizarlo:
 print(gg_colext_total)
+save(colext_Results_df_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_ordenado.RData")
 ###############################################################
 ###############################################################
 
@@ -221,37 +222,39 @@ for( i in 1:length(Species_Latin_Names) ) {
   colext_Sp_Res_BR1[[i]] <- irregular_multiple_datasets(filtered_list_BR1[[i]], list_vectors, 0.0001, 0.0001, CI = TRUE)
 }
 
-C      <-vector()
-C_low  <-vector()
-C_up   <-vector()
-E      <-vector()  
-E_low  <-vector()
-E_up   <-vector()
-N      <-vector()
-NLL    <-vector()
+C_BR1      <-vector()
+C_low_BR1  <-vector()
+C_up_BR1  <-vector()
+E_BR1      <-vector()  
+E_low_BR1  <-vector()
+E_up_BR1   <-vector()
+N_BR1      <-vector()
+NLL_BR1    <-vector()
 for(i in 1: length(Species_Latin_Names)) {
-  C[i] <- colext_Sp_Res_BR1[[i]]$c
-  C_low[i] <- colext_Sp_Res_BR1[[i]]$c_low
-  C_up[i] <- colext_Sp_Res_BR1[[i]]$c_up
-  E[i] <- colext_Sp_Res_BR1[[i]]$e
-  E_low[i] <- colext_Sp_Res_BR1[[i]]$e_low
-  E_up[i] <- colext_Sp_Res_BR1[[i]]$e_up
-  N[i] <- colext_Sp_Res_BR1[[i]]$N
-  NLL[i] <- colext_Sp_Res_BR1[[i]]$NLL
+  C_BR1[i] <- colext_Sp_Res_BR1[[i]]$c
+  C_low_BR1[i] <- colext_Sp_Res_BR1[[i]]$c_low
+  C_up_BR1[i] <- colext_Sp_Res_BR1[[i]]$c_up
+  E_BR1[i] <- colext_Sp_Res_BR1[[i]]$e
+  E_low_BR1[i] <- colext_Sp_Res_BR1[[i]]$e_low
+  E_up_BR1[i] <- colext_Sp_Res_BR1[[i]]$e_up
+  N_BR1[i] <- colext_Sp_Res_BR1[[i]]$N
+  NLL_BR1[i] <- colext_Sp_Res_BR1[[i]]$NLL
 }
-
-# Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
-colext_Results_df_BR1$C <- C
-colext_Results_df_BR1$C_low <- C_low
-colext_Results_df_BR1$C_up <- C_up
-colext_Results_df_BR1$E <- E
-colext_Results_df_BR1$E_low <- E_low
-colext_Results_df_BR1$E_up <- E_up
-colext_Results_df_BR1$N <- N
-colext_Results_df_BR1$NLL <- NLL
 
 # Create the data frame
 colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
+
+# Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
+colext_Results_df_BR1$C_BR1 <- C_BR1
+colext_Results_df_BR1$C_low_BR1 <- C_low_BR1
+colext_Results_df_BR1$C_up_BR1 <- C_up_BR1
+colext_Results_df_BR1$E_BR1 <- E_BR1
+colext_Results_df_BR1$E_low_BR1 <- E_low_BR1
+colext_Results_df_BR1$E_up_BR1 <- E_up_BR1
+colext_Results_df_BR1$N_BR1 <- N_BR1
+colext_Results_df_BR1$NLL_BR1 <- NLL_BR1
+
+
 
 # Tu vector de colores personalizado
 my_colors <- c(
@@ -285,25 +288,34 @@ orden_personalizado_spp_colex <- c(
   "Pyronia cecilia"
 )
 
-# Asegúrate de que colext_Results_df_BR1_ordenado ya ha sido creado por tu script
-# y que los paquetes ggplot2 y tidyverse están cargados.
-# --- PASO CRÍTICO DE PRE-PROCESAMIENTO ---
-# Asegúrate de que esta sección se ejecute *antes* del código ggplot.
-# Esta línea convierte la columna 'species' a un factor con los niveles deseados.
-# Si tus datos tienen nombres de especies que no están en 'orden_personalizado_spp_colex',
-# esos valores se convertirán a NA (Not Available) en el factor.
-colext_Results_df_BR1_ordenado$species <- factor(
-  colext_Results_df_BR1_ordenado$species,
-  levels = orden_personalizado_spp_colex )
+# Paso 1: Crear o modificar la columna 'species' en el dataframe original (o una copia)
+# para que sea un factor con tu orden personalizado.
+# Es mejor trabajar con el dataframe que luego vas a ordenar.
+colext_Results_df_BR1_temp <- colext_Results_df_BR1 # Hacemos una copia temporal si no queremos modificar el original
+
+colext_Results_df_BR1_temp$species <- factor(
+  colext_Results_df_BR1_temp$species,
+  levels = orden_personalizado_spp_colex
+)
+
+# Paso 2: Ahora que 'species' es un factor con el orden correcto,
+# usa arrange() para ordenar las filas del dataframe.
+colext_Results_df_BR1_ordenado <- colext_Results_df_BR1_temp %>%
+  arrange(species)
+
+# Si quieres hacerlo en un solo paso con el pipe, puedes encadenar las operaciones:
+colext_Results_df_BR1_ordenado <- colext_Results_df_BR1 %>%
+  dplyr::mutate(species = factor(species, levels = orden_personalizado_spp_colex)) %>%
+  dplyr::arrange(species)
 
 
 gg_colext_BR1 <-
-  ggplot(filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"), aes(x = C, y = E, color = species)) +
+  ggplot(filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"), aes(x = C_BR1, y = E_BR1,  color = species)) +
   geom_point(size = 2) + 
   geom_errorbarh(data = filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"),
-                  aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+                  aes(xmin = C_low_BR1, xmax = C_up_BR1), height = 0.05, size = 0.8) +
   geom_errorbar(data = filter(colext_Results_df_BR1_ordenado, species != "Melanargia occitanica"),
-  aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +
+  aes(ymin = E_low_BR1, ymax = E_up_BR1), width = 0.005, size = 0.8) +
   theme_minimal() +
   labs(
     title = "Regió Alpina i Subaplina",
@@ -322,6 +334,8 @@ gg_colext_BR1 <-
 
 print(gg_colext_BR1)
 
+save(colext_Results_df_BR1_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData")
+
 #Els valors de melanargia son molt alts per afegirlos a la grafica.
 #Els valors son els seguents: C <- 3.7958428
 #                             C_low <- 0.1862706
@@ -336,7 +350,7 @@ print(gg_colext_BR1)
 #te una alc'ada mitjana de 1500 m. 
 #Vanessa te un valor de col=2,7 (tendencia pob: regressio moderada general, estable alpina)
 #Lycaena te un valor de col=1,3 (tendencia pob: general estable, i no avaluada)
-
+#Pyronia cecilia te una barra d'error de E_up = 1.9
 
 ##########################################
 ##########################################
@@ -428,33 +442,42 @@ for(i in 1:length(Species_Latin_Names)) {
 colext_Results_df_BR2 <- data.frame(species = Species_Latin_Names)
 
 # Añadir los vectores creados anteriormente (C, C_low, ...) al data frame:
-colext_Results_df_BR2$C <- C_BR2
-colext_Results_df_BR2$C_low <- C_low_BR2
-colext_Results_df_BR2$C_up <- C_up_BR2
-colext_Results_df_BR2$E <- E_BR2
-colext_Results_df_BR2$E_low <- E_low_BR2
-colext_Results_df_BR2$E_up <- E_up_BR2
-colext_Results_df_BR2$N <- N_BR2
-colext_Results_df_BR2$NLL <- NLL_BR2
+colext_Results_df_BR2$C_BR2 <- C_BR2
+colext_Results_df_BR2$C_low_BR2 <- C_low_BR2
+colext_Results_df_BR2$C_up_BR2 <- C_up_BR2
+colext_Results_df_BR2$E_BR2 <- E_BR2
+colext_Results_df_BR2$E_low_BR2 <- E_low_BR2
+colext_Results_df_BR2$E_up_BR2 <- E_up_BR2
+colext_Results_df_BR2$N_BR2 <- N_BR2
+colext_Results_df_BR2$NLL_BR2 <- NLL_BR2
 
-# Ordenar el dataframe por especie
-colext_Results_df_BR2_ordenado <- colext_Results_df_BR2 %>%
-  arrange(species)
 
-# --- PASO CRÍTICO DE PRE-PROCESAMIENTO PARA EL GRÁFICO BR2 ---
-colext_Results_df_BR2_ordenado$species <- factor(
-  colext_Results_df_BR2_ordenado$species,
+colext_Results_df_BR2_temp <- colext_Results_df_BR2 # Hacemos una copia temporal si no queremos modificar el original
+
+colext_Results_df_BR2_temp$species <- factor(
+  colext_Results_df_BR2_temp$species,
   levels = orden_personalizado_spp_colex
 )
 
+# Paso 2: Ahora que 'species' es un factor con el orden correcto,
+# usa arrange() para ordenar las filas del dataframe.
+colext_Results_df_BR2_ordenado <- colext_Results_df_BR2_temp %>%
+  arrange(species)
+
+# Si quieres hacerlo en un solo paso con el pipe, puedes encadenar las operaciones:
+colext_Results_df_BR2_ordenado <- colext_Results_df_BR2 %>%
+  dplyr::mutate(species = factor(species, levels = orden_personalizado_spp_colex)) %>%
+  dplyr::arrange(species)
+
+
 # --- Generación del gráfico ggplot2 para la Región Mediterrania Humida (BR2) ---
 gg_colext_BR2 <-
-  ggplot(colext_Results_df_BR2_ordenado, aes(x = C, y = E, color = species)) +
+  ggplot(colext_Results_df_BR2_ordenado, aes(x = C_BR2, y = E_BR2, color = species)) +
   geom_point(size = 2) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
-  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+  geom_errorbarh(aes(xmin = C_low_BR2, xmax = C_up_BR2), height = 0.05, size = 0.8) +
   # Añadir barras de error verticales para los intervalos de confianza de 'E'
-  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
+  geom_errorbar(aes(ymin = E_low_BR2, ymax = E_up_BR2), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
   theme_minimal() +
   labs(
     title = "Regió Mediterrània Humida",
@@ -472,7 +495,9 @@ gg_colext_BR2 <-
   )
 
 print(gg_colext_BR2)
+#lycaena no esta representada al grafic perque no ha pogut calcular c i e
 
+save(colext_Results_df_BR2_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
 
 #######################################
 #######################################
@@ -523,7 +548,7 @@ for( i in 1:length(Species_Latin_Names) ) {
   }
 }
 
-# Inicializar vectores para extraer resultados de BR2
+# Inicializar vectores para extraer resultados de BR3
 C_BR3 <- vector()
 C_low_BR3 <- vector()
 C_up_BR3 <- vector()
@@ -562,33 +587,40 @@ for(i in 1:length(Species_Latin_Names)) {
 colext_Results_df_BR3 <- data.frame(species = Species_Latin_Names)
 
 # Añadir los vectores creados anteriormente (C, C_low, ...) al data frame:
-colext_Results_df_BR3$C <- C_BR3
-colext_Results_df_BR3$C_low <- C_low_BR3
-colext_Results_df_BR3$C_up <- C_up_BR3
-colext_Results_df_BR3$E <- E_BR3
-colext_Results_df_BR3$E_low <- E_low_BR3
-colext_Results_df_BR3$E_up <- E_up_BR3
-colext_Results_df_BR3$N <- N_BR3
-colext_Results_df_BR3$NLL <- NLL_BR3
+colext_Results_df_BR3$C_BR3 <- C_BR3
+colext_Results_df_BR3$C_low_BR3 <- C_low_BR3
+colext_Results_df_BR3$C_up_BR3 <- C_up_BR3
+colext_Results_df_BR3$E_BR3 <- E_BR3
+colext_Results_df_BR3$E_low_BR3 <- E_low_BR3
+colext_Results_df_BR3$E_up_BR3 <- E_up_BR3
+colext_Results_df_BR3$N_BR3 <- N_BR3
+colext_Results_df_BR3$NLL_BR3 <- NLL_BR3
 
-# Ordenar el dataframe por especie
-colext_Results_df_BR3_ordenado <- colext_Results_df_BR3 %>%
-  arrange(species)
+colext_Results_df_BR3_temp <- colext_Results_df_BR3 # Hacemos una copia temporal si no queremos modificar el original
 
-# --- PASO CRÍTICO DE PRE-PROCESAMIENTO PARA EL GRÁFICO BR2 ---
-colext_Results_df_BR3_ordenado$species <- factor(
-  colext_Results_df_BR3_ordenado$species,
+colext_Results_df_BR3_temp$species <- factor(
+  colext_Results_df_BR3_temp$species,
   levels = orden_personalizado_spp_colex
 )
 
+# Paso 2: Ahora que 'species' es un factor con el orden correcto,
+# usa arrange() para ordenar las filas del dataframe.
+colext_Results_df_BR3_ordenado <- colext_Results_df_BR3_temp %>%
+  arrange(species)
+
+# Si quieres hacerlo en un solo paso con el pipe, puedes encadenar las operaciones:
+colext_Results_df_BR3_ordenado <- colext_Results_df_BR3 %>%
+  dplyr::mutate(species = factor(species, levels = orden_personalizado_spp_colex)) %>%
+  dplyr::arrange(species)
+
 # --- Generación del gráfico ggplot2 para la Región Mediterrania Humida (BR2) ---
 gg_colext_BR3 <-
-  ggplot(colext_Results_df_BR3_ordenado, aes(x = C, y = E, color = species)) +
+  ggplot(colext_Results_df_BR3_ordenado, aes(x = C_BR3, y = E_BR3, color = species)) +
   geom_point(size = 2) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
-  geom_errorbarh(aes(xmin = C_low, xmax = C_up), height = 0.05, size = 0.8) +
+  geom_errorbarh(aes(xmin = C_low_BR3, xmax = C_up_BR3), height = 0.05, size = 0.8) +
   # Añadir barras de error verticales para los intervalos de confianza de 'E'
-  geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
+  geom_errorbar(aes(ymin = E_low_BR3, ymax = E_up_BR3), width = 0.005, size = 0.8) +  # Puntos dispersos. El color se define por 'species' en aes()
   theme_minimal() +
   labs(
     title = "Regió Mediterrània Àrida",
@@ -606,6 +638,7 @@ gg_colext_BR3 <-
   )
 
 print(gg_colext_BR3)
+save(colext_Results_df_BR3_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
 ###############################################
 ###############################################
 #COMENTARIS: 
