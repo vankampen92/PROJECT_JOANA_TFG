@@ -551,3 +551,7 @@ gg_HPI_E_BR3 <-
   )
 print(gg_HPI_E_BR3)
 
+save(colext_Results_df_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_ordenado.RData")
+save(colext_Results_df_BR1_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData")
+save(colext_Results_df_BR2_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
+save(colext_Results_df_BR3_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
