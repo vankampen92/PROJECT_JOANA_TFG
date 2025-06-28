@@ -555,3 +555,191 @@ save(colext_Results_df_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/c
 save(colext_Results_df_BR1_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData")
 save(colext_Results_df_BR2_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
 save(colext_Results_df_BR3_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
+
+##############################################
+##############################################
+#Calcul grafics mobilitat
+
+df <- data.frame(
+  Species = factor(c("S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12")),
+  Mobility = factor(c(1,2,1,3,1,1,1,3,3,4,1,4)),  # As a factor
+  Colonization = c(0.2, 0.25, 0.5, 0.45, 0.55, 0.7, 0.75, 0.65, 0.68, 0.9, 0.92, 0.88),
+  SE = c(0.05, 0.04, 0.06, 0.05, 0.07, 0.03, 0.04, 0.05, 0.04, 0.06, 0.05, 0.07)
+)
+
+
+library(ggplot2)
+
+Mobilitat_C <- ggplot(colext_Results_df_ordenado, aes(x = Mobilitat, y = C, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = C_low, ymax = C_up),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(x = "Mobility Ability",
+       y = "Colonization Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_C)
+###
+
+###
+Mobilitat_E <- ggplot(colext_Results_df_ordenado, aes(x = Mobilitat, y = E, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = E_low, ymax = E_up),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(x = "Mobility Ability",
+       y = "Extinction Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_E)
+###
+###
+###
+Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
+                      aes(x = Mobilitat, y = C_BR1, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = C_low_BR1, ymax = C_up_BR1),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR1",
+      x = "Mobility Ability",
+      y = "Colonization Rate",
+      color = "species") +
+  scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_C_BR1)
+###
+###
+Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
+                          aes(x = Mobilitat, y = E_BR1, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = E_low_BR1, ymax = E_up_BR1),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR1",
+       x = "Mobility Ability",
+       y = "Extinction Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_E_BR1)
+###
+###
+###
+Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
+                          aes(x = Mobilitat, y = C_BR2, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = C_low_BR2, ymax = C_up_BR2),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR2",
+       x = "Mobility Ability",
+       y = "Colonization Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_C_BR2)
+###
+
+Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
+                          aes(x = Mobilitat, y = E_BR2, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = E_low_BR2, ymax = E_up_BR2),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR2",
+       x = "Mobility Ability",
+       y = "Extinction Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_E_BR2)
+
+###
+Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
+                          aes(x = Mobilitat, y = C_BR3, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = C_low_BR3, ymax = C_up_BR3),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR3",
+       x = "Mobility Ability",
+       y = "Colonization Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_C_BR3)
+###
+
+Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
+                          aes(x = Mobilitat, y = E_BR3, color = species)) +
+  geom_point(position = position_dodge(width = 0.4), size  = 3) +
+  geom_errorbar(aes(ymin = E_low_BR3, ymax = E_up_BR3),
+                width = 0.2,              
+                linewidth = 0.8,                
+                position = position_dodge(width = 0.4)) + 
+  theme_minimal() +
+  labs(title = "BR3",
+       x = "Mobility Ability",
+       y = "Extinction Rate",
+       color = "species") +
+  scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
+  theme(
+    legend.text = element_text(face = "italic"), # Texto de la leyenda en cursiva
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Título centrado y en negrita
+    axis.title = element_text(face = "bold") # Títulos de ejes en negrita
+  )
+
+print(Mobilitat_E_BR3)
