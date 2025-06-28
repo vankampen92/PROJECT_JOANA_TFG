@@ -13,9 +13,7 @@ library(tidyr)
 #############################################
 #Calcul c i e simulades
 
-
 list_vectores_total <- list()
-
 for(i in 1:length(list_multiple)){
   ncols <- sapply(list_multiple[[i]], ncol)  
   list_vectors <- list()
@@ -25,10 +23,9 @@ for(i in 1:length(list_multiple)){
   list_vectores_total[[i]] <- list_vectors
 }
   
-  
-
 #######################################################
 # Pseudocodigo test bondad ajuste
+source("./PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_ce.R")
 
 c = colext_Results_df$C[9]
 e = colext_Results_df$E[9]
@@ -42,18 +39,14 @@ NLL = colext_Results_df[10]$NLL
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
 p_val_10 <- test_simulation_ce (list_multiple[[10]], list_vectores_total, c, e, 100, NLL)
 
-
-
-
-
-
 test_simulacio_ce <- function(list_itin, #Lista con los itinerarios de una especie
                               list_vectores_total, #Lista con las columnas que contienen P/A.
                               c, e, 
                               nsims, #Numero simulaciones
-                              NLL # NLL de las observaciones
-){# 0. busquem el valor de la segona columna que conte la P/A de l'sp per cada itinerari
-   second_column_values <- sapply(list_itin, function(df) df[1, 2])
+                              NLL # NLL de las observaciones)
+{
+  # 0. busquem el valor de la segona columna que conte la P/A de l'sp per cada itinerari
+  second_column_values <- sapply(list_itin, function(df) df[1, 2])
   # 1. Definir vector de NLLs
   nlls <- c()
   # 2. Para cada simulación:
@@ -79,13 +72,13 @@ test_simulacio_ce <- function(list_itin, #Lista con los itinerarios de una espec
       # e. Salvar nuevos datos en lista
       new_data[[i]] <- itin_sim #COMPROBAR QUE LA COLUMNA INICIAL SE HA INCLUIDO
     }
-    # iii. Calcular la nueva lista con las columnas que tienen P/A, ya que ha cambiado
+      # iii. Calcular la nueva lista amb els itineraris con las columnas que tienen P/A, ya que ha cambiado
     
-    ???
+      newd
       
       # iv. Estimar col-ext con irregular_multiple
       
-      col_ext_res_sim <- irregular_multiple_datasets()
+      col_ext_res_sim <- irregular_multiple_datasets(new_data)
       
       # v. Salvar la NLL en nlls
       nlls <- c(nlls, col_ext_res_sim$NLL)
