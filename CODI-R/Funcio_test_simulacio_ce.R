@@ -10,7 +10,7 @@ test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios 
     # 1. Definir vector de NLLs
     nlls <- c()
     # 2. Para cada simulación:
-    for(n in 1:500){
+    for(n in 1:nsims){
       new_data <- list()
       
       for (i in 1:length(list_itin)) {
@@ -50,6 +50,4 @@ test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios 
                                 
     Fn(NLL) 
 }                          
-                              
-                             
-                             
+

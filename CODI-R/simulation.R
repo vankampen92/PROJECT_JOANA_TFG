@@ -12,7 +12,10 @@ library(tidyr)
 
 library(island)
 
+# Test Colonitzacion Extincio
 source("~/PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_ce.R")
+# Test d'equilibri
+source("~/PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_eq.R")
  
 # Cal carregar la llista de tots els itineraris de les 12 species i 
 # el data frame de resultats colext_Results_df. 
@@ -117,7 +120,6 @@ for(i in 1:12){
   print(c("Done!!!"))
 }
 
-
 ##########################################################################################################
 # Calcul del test per totes les especies de BR1 que estan en sp_labels
 
@@ -152,11 +154,11 @@ for(i in sp_labels_BR1){
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
   p_val_sp_BR1[i] <- test_simulacio_ce (list_itin, list_vectors, c, e, 500, NLL)
   
-  print(c("Done!!!"))
+  print(c(i, ": Done!!!"))
 }
 
 # BR2
-# Cal carregar la llista d'itineraris de la BR2 i el data frame de resultats de BR1
+# Cal carregar la llista d'itineraris de la BR2 i el data frame de resultats de BR2
 # colext_Results_df_BR2 de cada especie. 
 
 load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR2.RData") 
@@ -189,7 +191,7 @@ for(i in sp_labels_BR2){
 }
 
 # BR3
-# Cal carregar la llista d'itineraris de la BR3 i el data frame de resultats de BR1
+# Cal carregar la llista d'itineraris de la BR3 i el data frame de resultats de BR3
 # colext_Results_df_BR3 de cada especie. 
 load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR3.RData") 
 load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3.RData")
@@ -238,4 +240,19 @@ e = colext_Results_df_BR1$E_BR1[i]
 NLL = colext_Results_df_BR1$NLL_BR1[i]
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
 p_val_sp_BR1[i] <- test_simulacio_ce (list_itin, list_vectors, c, e, 500, NLL)
+################################################################################
+
+### Test d'equilibri ############################################################################################
+# L'especie 9: Melanargia occitanica:
+c = colext_Results_df$C[9]
+e = colext_Results_df$E[9]
+# list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[3]]
+p_val_9_eq <- test_simulacio_eq (list_multiple[[9]], list_vectores_total[[9]], 
+                                 c, e, 500)
+# L'especie 10: Pararge aegeria: 
+c = colext_Results_df$C[10]
+e = colext_Results_df$E[10]
+# list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
+p_val_10_eq <- test_simulacio_eq (list_multiple[[10]], list_vectores_total[[10]], 
+                                  c, e, 500)
 ################################################################################
