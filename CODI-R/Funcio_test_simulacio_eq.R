@@ -39,7 +39,7 @@ test_simulacio_eq <- function( list_itin,           #Lista con Plos itinerarios 
     }
     
     # v. Salvar nlls en NLLs
-    NLLs[n] <- nlls  
+    NLLs <- c(NLLs, nlls)  
   }
   
   # 3. Calcular el p-valor de las observaciones
