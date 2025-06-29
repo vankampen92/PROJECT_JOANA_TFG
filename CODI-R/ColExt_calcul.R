@@ -53,7 +53,8 @@ for( i in 1:length(Species_Latin_Names) ) {
   # (numero de factors de la funcio de versemblanc,a multiplicativa)
   No_of_TRANSITIONS[i] = sum(sapply(list_vectors, length) - 1)
   
-  colext_Sp_Results[[i]] <- irregular_multiple_datasets(list_multiple[[i]], list_vectors, 0.0001, 0.0001, CI = TRUE)
+  colext_Sp_Results[[i]] <- irregular_multiple_datasets(list_multiple[[i]], list_vectors, 
+                                                        0.0001, 0.0001, CI = TRUE)
 }
 
 C      <-vector()
@@ -149,10 +150,11 @@ save(colext_Results_df_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/c
 ###############################################################
 ###############################################################
 
-
 #calcul de col ext per bioregio
 #######################################
-#No olvidemos cargar los paquetes necesarios:
+#No olvidemos cargar los paquetes y los datos necesarios:
+itin_CBMS_RegClim <- read.csv(file = "~/PROJECT_JOANA_TFG/DADES/itin_CBMS_regionsclimatiques.csv", 
+                              sep = '\t')
 library(ggplot2)
 library(tidyverse)
 library(island)
@@ -162,6 +164,7 @@ library(dplyr)
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
 itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
 itin_CBMS_RegClim_3 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 3, ]
+
 itin_ID_1 <- itin_CBMS_RegClim_1$CODI
 itin_ID_2 <- itin_CBMS_RegClim_2$CODI
 itin_ID_3 <- itin_CBMS_RegClim_3$CODI
@@ -252,8 +255,6 @@ colext_Results_df_BR1$E_low_BR1 <- E_low_BR1
 colext_Results_df_BR1$E_up_BR1 <- E_up_BR1
 colext_Results_df_BR1$N_BR1 <- N_BR1
 colext_Results_df_BR1$NLL_BR1 <- NLL_BR1
-
-
 
 # Tu vector de colores personalizado
 my_colors <- c(
