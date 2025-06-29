@@ -84,7 +84,6 @@ for(n in 1:500){
 Fn <- ecdf(nlls) #Calcula la e.c.d.f.
 
 pValor_9 <- Fn(NLL)     
-
 ##########################################################################################################
 # L'especie 9: Melanargia occitanica:
 c = colext_Results_df$C[9]
@@ -102,7 +101,7 @@ NLL = colext_Results_df$NLL[10]
 p_val_10 <- test_simulacio_ce (list_multiple[[10]], list_vectores_total[[10]], 
                                 c, e, 100, NLL)
 
-# Totles les especies en tots els itineraris
+# Totes les especies en tots els itineraris
 p_val_sp <- vector()
 for(i in 1:12){
   print(colext_Results_df$species[i])
@@ -121,6 +120,8 @@ for(i in 1:12){
 
 ##########################################################################################################
 # Calcul del test per totes les especies de BR1 que estan en sp_labels
+
+# BR1
 # Cal carregar la llista d'itineraris de la BR1 i el data frame de resultats de BR1
 # colext_Results_df_BR1 de cada especie. 
 
@@ -154,6 +155,72 @@ for(i in sp_labels_BR1){
   print(c("Done!!!"))
 }
 
+# BR2
+# Cal carregar la llista d'itineraris de la BR2 i el data frame de resultats de BR1
+# colext_Results_df_BR2 de cada especie. 
+
+load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR2.RData") 
+load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2.RData")
+
+list_vectores_total_BR2 <- list()
+for(i in 1:length(filtered_list_BR2)){
+  ncols <- sapply(filtered_list_BR2[[i]], ncol)  
+  list_vectors <- list()
+  for(j in 1:length(filtered_list_BR2[[i]] ) ){
+    list_vectors[[j]] <- 2:(ncols[j] - 1)
+  }
+  list_vectores_total_BR2[[i]] <- list_vectors
+}
+
+sp_labels_BR2 = c(1,3,4,6,7,8,9,10,11,12)
+p_val_sp_BR2  = vector()
+for(i in sp_labels_BR2){
+  print(colext_Results_df_BR2$species[i])
+  
+  list_itin    <- filtered_list_BR2[[i]]
+  list_vectors <- list_vectores_total_BR2[[i]]
+  c = colext_Results_df_BR2$C_BR2[i]
+  e = colext_Results_df_BR2$E_BR2[i]
+  NLL = colext_Results_df_BR2$NLL_BR2[i]
+  # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
+  p_val_sp_BR2[i] <- test_simulacio_ce (list_itin, list_vectors, c, e, 500, NLL)
+  
+  print(c("Done!!!"))
+}
+
+# BR3
+# Cal carregar la llista d'itineraris de la BR3 i el data frame de resultats de BR1
+# colext_Results_df_BR3 de cada especie. 
+load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR3.RData") 
+load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3.RData")
+
+list_vectores_total_BR3 <- list()
+for(i in 1:length(filtered_list_BR3)){
+  ncols <- sapply(filtered_list_BR3[[i]], ncol)  
+  list_vectors <- list()
+  for(j in 1:length(filtered_list_BR3[[i]] ) ){
+    list_vectors[[j]] <- 2:(ncols[j] - 1)
+  }
+  list_vectores_total_BR3[[i]] <- list_vectors
+}
+
+sp_labels_BR3 = c(1,3,4,6,7,8,9,10,11,12)
+p_val_sp_BR3  = vector()
+for(i in sp_labels_BR3){
+  print(colext_Results_df_BR3$species[i])
+  
+  list_itin    <- filtered_list_BR3[[i]]
+  list_vectors <- list_vectores_total_BR3[[i]]
+  c = colext_Results_df_BR3$C_BR3[i]
+  e = colext_Results_df_BR3$E_BR3[i]
+  NLL = colext_Results_df_BR3$NLL_BR3[i]
+  # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
+  p_val_sp_BR3[i] <- test_simulacio_ce (list_itin, list_vectors, c, e, 500, NLL)
+  
+  print(c("Done!!!"))
+}
+
+########## Exemples Lycaena i Aglais io ########################################
 i <- 2 # Lycaena
 list_itin    <- filtered_list_BR1[[i]]
 list_vectors <- list_vectores_total_BR1[[i]]
@@ -171,4 +238,4 @@ e = colext_Results_df_BR1$E_BR1[i]
 NLL = colext_Results_df_BR1$NLL_BR1[i]
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
 p_val_sp_BR1[i] <- test_simulacio_ce (list_itin, list_vectors, c, e, 500, NLL)
-
+################################################################################

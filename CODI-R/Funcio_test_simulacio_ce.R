@@ -39,7 +39,7 @@ test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios 
       
       # iv. Estimar col-ext con irregular_multiple
       col_ext_res_sim <- irregular_multiple_datasets(new_data, list_vectors, 
-                                                     0.0001, 0.0001, CI = TRUE)
+                                                     0.0001, 0.0001)
       # v. Salvar la NLL en nlls
       nlls <- c(nlls, col_ext_res_sim$NLL)  
     }
