@@ -11,6 +11,8 @@ test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios 
     nlls <- c()
     # 2. Para cada simulación:
     for(n in 1:500){
+      new_data <- list()
+      
       for (i in 1:length(list_itin)) {
         years         <- colnames(list_itin[[i]])[2:(ncol(list_itin[[i]]) - 1)]
         years_numeric <- as.numeric(years)

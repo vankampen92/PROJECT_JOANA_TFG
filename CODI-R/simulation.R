@@ -10,10 +10,14 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
+library(island)
+
 source("~/PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_ce.R")
  
 # Cal carregar la llista de tots els itineraris de les 12 species i 
 # el data frame de resultats colext_Results_df. 
+load(file = "~/PROJECT_JOANA_TFG/DADES/list_multiple.RData") 
+load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df.RData")
 
 #############################################
 #Calcul c i e simulades
@@ -28,10 +32,7 @@ for(i in 1:length(list_multiple)){
   list_vectores_total[[i]] <- list_vectors
 }
   
-#######################################################
-# Pseudocodigo test bondad ajuste
-source("./PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_ce.R")
-
+####################### Exemple species 9 ######################################
 list_itin <- list_multiple[[9]]
 list_vectors <- list_vectores_total[[9]]
 nsims <- 100
