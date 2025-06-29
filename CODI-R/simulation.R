@@ -10,8 +10,11 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-# Cal tenir generada 'list_multilple' per correr aquest script. 
-# Correr l'script ColExt_calcul.R per generar-la 
+source("~/PROJECT_JOANA_TFG/CODI-R/Funcio_test_simulacio_ce.R")
+ 
+# Cal carregar la llista de tots els itineraris de les 12 species i 
+# el data frame de resultats colext_Results_df. 
+
 #############################################
 #Calcul c i e simulades
 
