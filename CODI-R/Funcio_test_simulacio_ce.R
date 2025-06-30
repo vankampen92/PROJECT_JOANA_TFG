@@ -51,3 +51,52 @@ test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios 
     Fn(NLL) 
 }                          
 
+test_simulacio_ce2 <- function(
+    list_itin,      # List of data.frames: itineraries for one species
+    list_vectors,   # List of columns with P/A (presence/absence) data
+    c, e,           # Colonization and extinction parameters
+    nsims,          # Number of simulations
+    NLL             # NLL value from observations
+) {
+  # Extract initial P/A value for each itinerary
+  initial_PA_values <- sapply(list_itin, function(df) df[1, 2])
+  
+  # Preallocate vector to store NLLs
+  nlls <- numeric(nsims)
+  
+  for (sim in seq_len(nsims)) {
+    simulated_datasets <- vector("list", length(list_itin))
+    
+    for (i in seq_along(list_itin)) {
+      itin <- list_itin[[i]]
+      year_cols <- colnames(itin)[2:(ncol(itin) - 1)]
+      years_num <- as.numeric(year_cols)
+      dt <- diff(years_num)
+      
+      transition_probs <- cetotrans(c, e, dt)
+      num_transitions <- length(dt)
+      
+      
+      simulated_PA <- PA_simulation(
+        itin, 2, transition_probs, num_transitions
+      )
+      
+      final_col <- length(year_cols) + 1
+      itin[1, 3:final_col] <- simulated_PA[1, 1:num_transitions]
+      
+      simulated_datasets[[i]] <- itin
+    }
+    
+    # Estimate col-ext from simulated data
+    sim_result <- irregular_multiple_datasets(
+      simulated_datasets, list_vectors, 0.0001, 0.0001
+    )
+    
+    nlls[sim] <- sim_result$NLL
+  }
+  
+  # Compute p-value of observed NLL against simulated NLLs
+  Fn <- ecdf(nlls)
+  return(Fn(NLL))
+}
+                                   
