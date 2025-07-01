@@ -1,11 +1,13 @@
 # Test de bondat d'ajust del model de colonitzacio-extincio
-test_simulacio_ce <- function( list_itin,           #Lista con Plos itinerarios de una especie
-                               list_vectors, #Lista con las columnas que contienen P/A.
-                               c, e, 
-                               nsims,               #Numero simulaciones
-                               NLL )                # NLL de las observaciones)
+test_simulacio_ce <- function( 
+    list_itin,           #Lista con Plos itinerarios de una especie
+    list_vectors,        #Lista con las columnas que contienen P/A.
+    c, e,                # Colonization and extinction parameters
+    nsims,               #Numero simulaciones
+    NLL )                # NLL de las observaciones)
 {
     # 0. busquem el valor de la segona columna que conte la P/A de l'sp per cada itinerari
+    #    Aquest valor conte la P/A inicial
     second_column_values <- sapply(list_itin, function(df) df[1, 2])
     # 1. Definir vector de NLLs
     nlls <- c()

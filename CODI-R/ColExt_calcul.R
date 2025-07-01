@@ -211,6 +211,9 @@ for( i in 1:length(Species_Latin_Names) ) {
   filtered_list_BR3[[i]] <- Filter(function(x) x$IDitin %in% itin_ID_3, list_multiple[[i]])
 }
 
+save(filtered_list_BR1, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR1.RData")
+save(filtered_list_BR2, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR2.RData")
+save(filtered_list_BR3, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR3.RData")
 
 # Crear una llista amb tots els resultats (de la Regio de Muntanya Alpina: colext_Sp_Res_BR1[[]] 
 # utilitzant la llista d'itineraris 

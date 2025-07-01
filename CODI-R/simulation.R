@@ -101,10 +101,20 @@ c = colext_Results_df$C[10]
 e = colext_Results_df$E[10]
 NLL = colext_Results_df$NLL[10]
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
-p_val_10 <- test_simulacio_ce (list_multiple[[10]], list_vectores_total[[10]], 
-                                c, e, 100, NLL)
+p_val_10 <- test_simulacio_ce2 (list_multiple[[10]], list_vectores_total[[10]], 
+                                c, e, 500, NLL)
 
 # Totes les especies en tots els itineraris
+list_vectores_total <- list()
+for(i in 1:length(list_multiple)){
+  ncols <- sapply(list_multiple[[i]], ncol)  
+  list_vectors <- list()
+  for(j in 1:length( list_multiple[[i]] ) ){
+    list_vectors[[j]] <- 2:(ncols[j] - 1)
+  }
+  list_vectores_total[[i]] <- list_vectors
+}
+
 p_val_sp <- vector()
 for(i in 1:12){
   print(colext_Results_df$species[i])
@@ -130,8 +140,10 @@ for(i in 1:12){
 load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR1.RData") 
 load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1.RData")
 
+sp_labels_BR1 = c(1,2,3,4,5,6,7,8,10,11)
+
 list_vectores_total_BR1 <- list()
-for(i in 1:length(filtered_list_BR1)){
+for(i in sp_labels_BR1){
   ncols <- sapply(filtered_list_BR1[[i]], ncol)  
   list_vectors <- list()
   for(j in 1:length(filtered_list_BR1[[i]] ) ){
@@ -139,8 +151,6 @@ for(i in 1:length(filtered_list_BR1)){
   }
   list_vectores_total_BR1[[i]] <- list_vectors
 }
-
-sp_labels_BR1 = c(1,2,3,4,5,6,7,8,10,11)
 
 p_val_sp_BR1  = vector()
 for(i in sp_labels_BR1){
@@ -164,8 +174,10 @@ for(i in sp_labels_BR1){
 load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR2.RData") 
 load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2.RData")
 
+sp_labels_BR2 = c(1,3,4,6,7,8,9,10,11,12)
 list_vectores_total_BR2 <- list()
-for(i in 1:length(filtered_list_BR2)){
+
+for(i in sp_labels_BR2){
   ncols <- sapply(filtered_list_BR2[[i]], ncol)  
   list_vectors <- list()
   for(j in 1:length(filtered_list_BR2[[i]] ) ){
@@ -174,7 +186,6 @@ for(i in 1:length(filtered_list_BR2)){
   list_vectores_total_BR2[[i]] <- list_vectors
 }
 
-sp_labels_BR2 = c(1,3,4,6,7,8,9,10,11,12)
 p_val_sp_BR2  = vector()
 for(i in sp_labels_BR2){
   print(colext_Results_df_BR2$species[i])
@@ -196,8 +207,10 @@ for(i in sp_labels_BR2){
 load(file = "~/PROJECT_JOANA_TFG/DADES/filtered_list_BR3.RData") 
 load(file = "~/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3.RData")
 
+sp_labels_BR3 = c(1,3,4,6,7,8,9,10,11,12)
+
 list_vectores_total_BR3 <- list()
-for(i in 1:length(filtered_list_BR3)){
+for(i in sp_labels_BR3){
   ncols <- sapply(filtered_list_BR3[[i]], ncol)  
   list_vectors <- list()
   for(j in 1:length(filtered_list_BR3[[i]] ) ){
@@ -206,7 +219,6 @@ for(i in 1:length(filtered_list_BR3)){
   list_vectores_total_BR3[[i]] <- list_vectors
 }
 
-sp_labels_BR3 = c(1,3,4,6,7,8,9,10,11,12)
 p_val_sp_BR3  = vector()
 for(i in sp_labels_BR3){
   print(colext_Results_df_BR3$species[i])
