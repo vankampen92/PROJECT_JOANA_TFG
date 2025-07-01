@@ -119,7 +119,7 @@ for(i in 1:12){
   
   print(c("Done!!!"))
 }
-colext_Results_df$p_val_sp <- p_val_sp
+
 ##########################################################################################################
 # Calcul del test per totes les especies de BR1 que estan en sp_labels
 
@@ -173,7 +173,6 @@ for(i in 1:length(filtered_list_BR2)){
   }
   list_vectores_total_BR2[[i]] <- list_vectors
 }
-
 
 sp_labels_BR2 = c(1,3,4,6,7,8,9,10,11,12)
 p_val_sp_BR2  = vector()
