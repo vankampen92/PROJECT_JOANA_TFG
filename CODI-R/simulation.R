@@ -102,7 +102,7 @@ e = colext_Results_df$E[10]
 NLL = colext_Results_df$NLL[10]
 # list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[5]]
 p_val_10 <- test_simulacio_ce (list_multiple[[10]], list_vectores_total[[10]], 
-                                c, e, 100, NLL)
+                                c, e, 500, NLL)
 
 # Totes les especies en tots els itineraris
 p_val_sp <- vector()
@@ -158,6 +158,15 @@ for(i in sp_labels_BR1){
 }
 
 # BR2
+
+
+c = colext_Results_df_BR2$C[9]
+e = colext_Results_df_BR2$E[9]
+NLL = colext_Results_df$NLL[9]
+# list_cols: Determinar les listes de les posicions que contenen P/A a partir de list_multiple[[3]]
+p_val_9 <- test_simulacio_ce (list_multiple[[9]], list_vectores_total[[9]], 
+                              c, e, 500, NLL)
+
 # Cal carregar la llista d'itineraris de la BR2 i el data frame de resultats de BR2
 # colext_Results_df_BR2 de cada especie. 
 
