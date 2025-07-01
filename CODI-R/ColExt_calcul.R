@@ -3,6 +3,8 @@
 library(tidyverse)
 library(island)
 library(data.table)
+install.packages("stargazer")
+library(stargazer)
 
 # Cargamos los datos
 # BEGIN: Exemples inicials... 
@@ -88,6 +90,11 @@ colext_Results_df$E_low <- E_low
 colext_Results_df$E_up <- E_up
 colext_Results_df$N <- N
 colext_Results_df$NLL <- NLL
+colext_Results_df$Ratio <- NLL/No_of_TRANSITIONS
+colext_Results_df$Temps_Ca <- 1/(C + E)
+
+# Export LaTeX table
+stargazer(colext_Results_df, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Results_df.tex")
 
 #creacio del grafic general de col ext per tots els itineraris
 
@@ -247,14 +254,16 @@ for(i in 1: length(Species_Latin_Names)) {
 colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
 
 # Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
-colext_Results_df_BR1$C_BR1 <- C_BR1
+colext_Results_df_BR1$C_BR1     <- C_BR1
 colext_Results_df_BR1$C_low_BR1 <- C_low_BR1
-colext_Results_df_BR1$C_up_BR1 <- C_up_BR1
-colext_Results_df_BR1$E_BR1 <- E_BR1
+colext_Results_df_BR1$C_up_BR1  <- C_up_BR1
+colext_Results_df_BR1$E_BR1     <- E_BR1
 colext_Results_df_BR1$E_low_BR1 <- E_low_BR1
-colext_Results_df_BR1$E_up_BR1 <- E_up_BR1
-colext_Results_df_BR1$N_BR1 <- N_BR1
-colext_Results_df_BR1$NLL_BR1 <- NLL_BR1
+colext_Results_df_BR1$E_up_BR1  <- E_up_BR1
+colext_Results_df_BR1$N_BR1     <- N_BR1
+colext_Results_df_BR1$NLL_BR1   <- NLL_BR1
+colext_Results_df_BR1$Ratio     <- NLL_BR1/No_of_TRANSITIONS
+colext_Results_df_BR1$Temps_Ca  <- 1/(C_BR1 + E_BR1)
 
 # Tu vector de colores personalizado
 my_colors <- c(
@@ -450,7 +459,8 @@ colext_Results_df_BR2$E_low_BR2 <- E_low_BR2
 colext_Results_df_BR2$E_up_BR2 <- E_up_BR2
 colext_Results_df_BR2$N_BR2 <- N_BR2
 colext_Results_df_BR2$NLL_BR2 <- NLL_BR2
-
+colext_Results_df_BR2$Ratio     <- NLL_BR2/No_of_TRANSITIONS
+colext_Results_df_BR2$Temps_Ca  <- 1/(C_BR2 + E_BR2)
 
 colext_Results_df_BR2_temp <- colext_Results_df_BR2 # Hacemos una copia temporal si no queremos modificar el original
 
@@ -595,6 +605,9 @@ colext_Results_df_BR3$E_low_BR3 <- E_low_BR3
 colext_Results_df_BR3$E_up_BR3 <- E_up_BR3
 colext_Results_df_BR3$N_BR3 <- N_BR3
 colext_Results_df_BR3$NLL_BR3 <- NLL_BR3
+colext_Results_df_BR3$Ratio     <- NLL_BR2/No_of_TRANSITIONS
+colext_Results_df_BR3$Temps_Ca  <- 1/(C_BR3 + E_BR3)
+
 
 colext_Results_df_BR3_temp <- colext_Results_df_BR3 # Hacemos una copia temporal si no queremos modificar el original
 
