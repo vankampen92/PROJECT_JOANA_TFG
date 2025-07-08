@@ -3,6 +3,8 @@
 library(tidyverse)
 library(island)
 library(data.table)
+install.packages("stargazer")
+library(stargazer)
 
 # Cargamos los datos
 # BEGIN: Exemples inicials... 
@@ -88,6 +90,8 @@ colext_Results_df$E_low <- E_low
 colext_Results_df$E_up <- E_up
 colext_Results_df$N <- N
 colext_Results_df$NLL <- NLL
+colext_Results_df$Ratio <- NLL/No_of_TRANSITIONS
+colext_Results_df$Temps_Ca <- 1/(C + E)
 
 #creacio del grafic general de col ext per tots els itineraris
 
@@ -143,10 +147,11 @@ gg_colext_total <- ggplot(colext_Results_df, aes(x = C, y = E, color = species))
   scale_color_manual(values = my_colors)  +
   theme(legend.text = element_text(face = "italic"))
 
-
 # Para visualizarlo:
 print(gg_colext_total)
 save(colext_Results_df_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_ordenado.RData")
+# Export LaTeX table
+stargazer(colext_Results_df_ordenado, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Results_df_ordenado.tex")
 ###############################################################
 ###############################################################
 
@@ -206,6 +211,9 @@ for( i in 1:length(Species_Latin_Names) ) {
   filtered_list_BR3[[i]] <- Filter(function(x) x$IDitin %in% itin_ID_3, list_multiple[[i]])
 }
 
+save(filtered_list_BR1, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR1.RData")
+save(filtered_list_BR2, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR2.RData")
+save(filtered_list_BR3, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/filtered_list_BR3.RData")
 
 # Crear una llista amb tots els resultats (de la Regio de Muntanya Alpina: colext_Sp_Res_BR1[[]] 
 # utilitzant la llista d'itineraris 
@@ -247,14 +255,18 @@ for(i in 1: length(Species_Latin_Names)) {
 colext_Results_df_BR1<- data.frame(species = Species_Latin_Names)
 
 # Afegir els vectors creats anteriorment (C, C_low, ...) al data frame:
-colext_Results_df_BR1$C_BR1 <- C_BR1
+colext_Results_df_BR1$C_BR1     <- C_BR1
 colext_Results_df_BR1$C_low_BR1 <- C_low_BR1
-colext_Results_df_BR1$C_up_BR1 <- C_up_BR1
-colext_Results_df_BR1$E_BR1 <- E_BR1
+colext_Results_df_BR1$C_up_BR1  <- C_up_BR1
+colext_Results_df_BR1$E_BR1     <- E_BR1
 colext_Results_df_BR1$E_low_BR1 <- E_low_BR1
-colext_Results_df_BR1$E_up_BR1 <- E_up_BR1
-colext_Results_df_BR1$N_BR1 <- N_BR1
-colext_Results_df_BR1$NLL_BR1 <- NLL_BR1
+colext_Results_df_BR1$E_up_BR1  <- E_up_BR1
+colext_Results_df_BR1$N_BR1     <- N_BR1
+colext_Results_df_BR1$NLL_BR1   <- NLL_BR1
+colext_Results_df_BR1$Ratio     <- NLL_BR1/No_of_TRANSITIONS
+colext_Results_df_BR1$Temps_Ca  <- 1/(C_BR1 + E_BR1)
+
+save(colext_Results_df_BR1, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1.RData")
 
 # Tu vector de colores personalizado
 my_colors <- c(
@@ -333,8 +345,9 @@ gg_colext_BR1 <-
   )
 
 print(gg_colext_BR1)
-
 save(colext_Results_df_BR1_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData")
+# Export LaTeX table
+stargazer(colext_Results_df_BR1_ordenado, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Results_df_BR1_ordenado.tex")
 
 #Els valors de melanargia son molt alts per afegirlos a la grafica.
 #Els valors son els seguents: C <- 3.7958428
@@ -351,10 +364,8 @@ save(colext_Results_df_BR1_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DAD
 #Vanessa te un valor de col=2,7 (tendencia pob: regressio moderada general, estable alpina)
 #Lycaena te un valor de col=1,3 (tendencia pob: general estable, i no avaluada)
 #Pyronia cecilia te una barra d'error de E_up = 1.9
-
 ##########################################
 ##########################################
-
 
 # --- Cálculo de col/ext para la Región Mediterrania Humida (BR2) ---
 colext_Sp_Res_BR2 <- list()
@@ -450,7 +461,10 @@ colext_Results_df_BR2$E_low_BR2 <- E_low_BR2
 colext_Results_df_BR2$E_up_BR2 <- E_up_BR2
 colext_Results_df_BR2$N_BR2 <- N_BR2
 colext_Results_df_BR2$NLL_BR2 <- NLL_BR2
+colext_Results_df_BR2$Ratio     <- NLL_BR2/No_of_TRANSITIONS
+colext_Results_df_BR2$Temps_Ca  <- 1/(C_BR2 + E_BR2)
 
+save(colext_Results_df_BR2, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2.RData")
 
 colext_Results_df_BR2_temp <- colext_Results_df_BR2 # Hacemos una copia temporal si no queremos modificar el original
 
@@ -498,6 +512,8 @@ print(gg_colext_BR2)
 #lycaena no esta representada al grafic perque no ha pogut calcular c i e
 
 save(colext_Results_df_BR2_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
+# Export LaTeX table
+stargazer(colext_Results_df_BR2_ordenado, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Results_df_BR2_ordenado.tex")
 
 #######################################
 #######################################
@@ -595,8 +611,14 @@ colext_Results_df_BR3$E_low_BR3 <- E_low_BR3
 colext_Results_df_BR3$E_up_BR3 <- E_up_BR3
 colext_Results_df_BR3$N_BR3 <- N_BR3
 colext_Results_df_BR3$NLL_BR3 <- NLL_BR3
+colext_Results_df_BR3$Ratio     <- NLL_BR2/No_of_TRANSITIONS
+colext_Results_df_BR3$Temps_Ca  <- 1/(C_BR3 + E_BR3)
+
+save(colext_Results_df_BR3, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3.RData")
 
 colext_Results_df_BR3_temp <- colext_Results_df_BR3 # Hacemos una copia temporal si no queremos modificar el original
+
+
 
 colext_Results_df_BR3_temp$species <- factor(
   colext_Results_df_BR3_temp$species,
@@ -639,6 +661,9 @@ gg_colext_BR3 <-
 
 print(gg_colext_BR3)
 save(colext_Results_df_BR3_ordenado, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
+# Export LaTeX table
+stargazer(colext_Results_df_BR3_ordenado, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Results_df_BR3_ordenado.tex")
+
 ###############################################
 ###############################################
 #COMENTARIS: 

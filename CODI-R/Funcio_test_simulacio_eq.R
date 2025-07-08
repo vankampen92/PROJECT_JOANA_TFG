@@ -3,6 +3,8 @@ test_simulacio_eq <- function( list_itin,           #Lista con Plos itinerarios 
                                c, e, 
                                nsims)               #Numero simulaciones
 {
+  resultats <- list()
+  
   p = c/(c+e) # Ocupancia a l'equilibri d'aquesta especie
   
   # 0. Calcul del NLL_Data from the true data of the itineraris. 
@@ -42,9 +44,12 @@ test_simulacio_eq <- function( list_itin,           #Lista con Plos itinerarios 
     NLLs <- c(NLLs, nlls)  
   }
   
+  max_NLLs <- max(NLLs)
+  min_NLLs <- min(NLLs)
+  
   # 3. Calcular el p-valor de las observaciones
   Fn <- ecdf(NLLs) #Calcula la e.c.d.f.
   
-  Fn(NLL_Data) 
+  resultats = c(NLL_Data, max_NLLs, min_NLLs, Fn(NLL_Data))
 }                          
 
