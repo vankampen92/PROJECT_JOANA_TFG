@@ -1,3 +1,10 @@
+#carregar paquets
+library(vegan)
+library(tidyverse)
+library(island)
+library(data.table)
+library(openxlsx)
+
 # Cargamos los datos
 ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2023.csv")
 #Including 2024 year: 
@@ -7,13 +14,6 @@ data <- ColExtDades
 itin_CBMS_RegClim <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/itin_CBMS_regionsclimatiques.csv"
                               , sep ='\t' )
 
-#carregar paquets
-library(vegan)
-library(tidyverse)
-library(island)
-library(data.table)
-library(openxlsx)
-
 # Selecting the intenaris per bioclimatic region:
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
 itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
@@ -21,8 +21,6 @@ itin_CBMS_RegClim_3 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegCl
 itin_ID_1 <- itin_CBMS_RegClim_1$CODI
 itin_ID_2 <- itin_CBMS_RegClim_2$CODI
 itin_ID_3 <- itin_CBMS_RegClim_3$CODI
-
-
   
 data_celastrina <-
   data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%

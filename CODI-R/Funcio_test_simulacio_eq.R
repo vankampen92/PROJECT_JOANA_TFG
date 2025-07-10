@@ -51,5 +51,7 @@ test_simulacio_eq <- function( list_itin,           #Lista con Plos itinerarios 
   Fn <- ecdf(NLLs) #Calcula la e.c.d.f.
   
   resultats = c(NLL_Data, max_NLLs, min_NLLs, Fn(NLL_Data))
+  
+  return(resultats)
 }                          
 
