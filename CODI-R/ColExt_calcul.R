@@ -267,7 +267,7 @@ colext_Results_df_BR1$N_BR1     <- N_BR1
 colext_Results_df_BR1$NLL_BR1   <- NLL_BR1
 colext_Results_df_BR1$Ratio     <- NLL_BR1/No_of_TRANSITIONS
 colext_Results_df_BR1$Temps_Ca  <- 1/(C_BR1 + E_BR1)
-colext_Results_df_BR1$p_star    <  C_BR1/(C_BR1 + E_BR1) 
+colext_Results_df_BR1$p_star    <- C_BR1/(C_BR1 + E_BR1) 
 
 # Tu vector de colores personalizado
 my_colors <- c(
@@ -465,7 +465,7 @@ colext_Results_df_BR2$N_BR2 <- N_BR2
 colext_Results_df_BR2$NLL_BR2 <- NLL_BR2
 colext_Results_df_BR2$Ratio     <- NLL_BR2/No_of_TRANSITIONS
 colext_Results_df_BR2$Temps_Ca  <- 1/(C_BR2 + E_BR2)
-colext_Results_df_BR2$p_star    <  C_BR2/(C_BR2 + E_BR2)
+colext_Results_df_BR2$p_star    <-  C_BR2/(C_BR2 + E_BR2)
 
 colext_Results_df_BR2_temp <- colext_Results_df_BR2 # Hacemos una copia temporal si no queremos modificar el original
 
@@ -614,7 +614,7 @@ colext_Results_df_BR3$N_BR3 <- N_BR3
 colext_Results_df_BR3$NLL_BR3 <- NLL_BR3
 colext_Results_df_BR3$Ratio     <- NLL_BR2/No_of_TRANSITIONS
 colext_Results_df_BR3$Temps_Ca  <- 1/(C_BR3 + E_BR3)
-colext_Results_df_BR3$p_star    <  C_BR3/(C_BR3 + E_BR3)
+colext_Results_df_BR3$p_star    <-  C_BR3/(C_BR3 + E_BR3)
 
 colext_Results_df_BR3_temp <- colext_Results_df_BR3 # Hacemos una copia temporal si no queremos modificar el original
 
