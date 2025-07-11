@@ -45,7 +45,7 @@ my_colors <- c(
 
 SSI <- c(1.430, 2.263, 2.403, 0.831, 1.314, 0.652, 0.813, 2.552, 0.942, 0.593, 0.764, 0.796)
 HPI <- c(0.577, 0.183, 0.129, 0.544, 0.354, 0.667, 0.019, 0.707, 0.111, 0.044, 0.408, 0.707)
-Mobilitat <- c(1, 2, 1, 1, 4, 3, 3, 2, 3, 2, 2, 2)
+Mobilitat <- c(1, 2, 1, 1, 2, 3, , 2, 3, 2, 2, 2)
 
 # Lectura de les taules de dades (dataframes ordenants) amb les colonitzacions i les extinctions
 # de totes les especies. 
