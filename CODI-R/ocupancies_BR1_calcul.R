@@ -1,3 +1,10 @@
+#carregar paquets
+library(vegan)
+library(tidyverse)
+library(island)
+library(data.table)
+library(openxlsx)
+
 # Cargamos los datos
 ColExtDades <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/CBMS_colext_2023.csv")
 #Including 2024 year: 
@@ -8,13 +15,6 @@ itin_CBMS_RegClim <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/itin_C
                               , sep ='\t' )
 
 Samplying_Years <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/cbms_sampling_years.csv")
-
-#carregar paquets
-library(vegan)
-library(tidyverse)
-library(island)
-library(data.table)
-library(openxlsx)
 
 # Selecting the intenaris per bioclimatic region:
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
