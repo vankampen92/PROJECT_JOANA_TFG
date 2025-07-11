@@ -670,4 +670,64 @@ stargazer(colext_Results_df_BR3_ordenado, summary = FALSE, out = "~/PROJECT_JOAN
 #perque no esta present en cap itinerari de clima mediterrani arid
 #llavors es normal que no les trobem
 
+###############################################
+# Taules Latex per les tres bioregions        #
+# ------------------------------------        #
+# 1. Crear un nou data frame anmb nomes les   #
+#    columnes desitjades                      #
+# 2. Salvar-lo en format LaTeX                #
+###############################################
+
+Tab_BR1 <- data.frame(
+  especies = colext_Results_df_BR1_ordenado$species,
+  c = colext_Results_df_BR1_ordenado$C_BR1,
+  c_0 = colext_Results_df_BR1_ordenado$C_low_BR1,
+  c_1 = colext_Results_df_BR1_ordenado$C_up_BR1,  
+  e   = colext_Results_df_BR1_ordenado$E_BR1,
+  e_0 = colext_Results_df_BR1_ordenado$E_low_BR1,
+  e_1 = colext_Results_df_BR1_ordenado$E_up_BR1,
+  M   = colext_Results_df_BR1_ordenado$N_BR1,
+  Ratio =  colext_Results_df_BR1_ordenado$Ratio,
+  Ocupancia = colext_Results_df_BR1_ordenado$p_star,
+  Time =  colext_Results_df_BR1_ordenado$Temps_Ca
+)
+
+stargazer(Tab_BR1, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Res_Summary_BR1_ordenado.tex")
+
+Tab_BR2 <- data.frame(
+  especies = colext_Results_df_BR2_ordenado$species,
+  c = colext_Results_df_BR2_ordenado$C_BR2,
+  c_0 = colext_Results_df_BR2_ordenado$C_low_BR2,
+  c_1 = colext_Results_df_BR2_ordenado$C_up_BR2,  
+  e   = colext_Results_df_BR2_ordenado$E_BR2,
+  e_0 = colext_Results_df_BR2_ordenado$E_low_BR2,
+  e_1 = colext_Results_df_BR2_ordenado$E_up_BR2,
+  M   = colext_Results_df_BR2_ordenado$N_BR2,
+  Ratio =  colext_Results_df_BR2_ordenado$Ratio,
+  Ocupancia = colext_Results_df_BR2_ordenado$p_star,
+  Time =  colext_Results_df_BR2_ordenado$Temps_Ca
+)
+
+stargazer(Tab_BR2, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Res_Summary_BR2_ordenado.tex")
+
+Tab_BR3 <- data.frame(
+  especies = colext_Results_df_BR3_ordenado$species,
+  c = colext_Results_df_BR3_ordenado$C_BR3,
+  c_0 = colext_Results_df_BR3_ordenado$C_low_BR3,
+  c_1 = colext_Results_df_BR3_ordenado$C_up_BR3,  
+  e   = colext_Results_df_BR3_ordenado$E_BR3,
+  e_0 = colext_Results_df_BR3_ordenado$E_low_BR3,
+  e_1 = colext_Results_df_BR3_ordenado$E_up_BR3,
+  M   = colext_Results_df_BR3_ordenado$N_BR3,
+  Ratio =  colext_Results_df_BR3_ordenado$Ratio,
+  Ocupancia = colext_Results_df_BR3_ordenado$p_star,
+  Time =  colext_Results_df_BR3_ordenado$Temps_Ca
+)
+
+stargazer(Tab_BR3, summary = FALSE, out = "~/PROJECT_JOANA_TFG/DOCS-LATEX/colex_Res_Summary_BR3_ordenado.tex")
+
+
+
+
+
 
