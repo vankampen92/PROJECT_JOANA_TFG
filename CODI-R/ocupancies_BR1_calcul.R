@@ -618,8 +618,6 @@ gg_occupancy_Antho_BR1 <-
            size = 2.5, fontface = "bold") # Puedes ajustar el tamaño y estilo de la fuente
 
 print(gg_occupancy_Antho_BR1)
-
-
 #END CALCUL OCUPANCIES PER ESPECIES##################################
 #####################
 #
