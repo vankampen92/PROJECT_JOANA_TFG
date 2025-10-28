@@ -11,10 +11,10 @@ Samplying_Years <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/cbms_sam
 
 #carregar paquets
 library(vegan)
-library(tidyverse)
 library(island)
 library(data.table)
 library(openxlsx)
+library(tidyverse)
 
 # Selecting the intenaris per bioclimatic region:
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
@@ -209,15 +209,15 @@ r2value_cela_BR2 <- summary(model_cela_BR2)$r.squared
 r_2_cela_text_BR2 <- paste0("R² = ", round(r2value_cela_BR2, 2))
 ##
 gg_occupancy_cela_BR2 <-
-  ggplot(data = presence_94_2024_celastrina_BR2_df, aes(x = year, y = occupancy)) +
-  geom_point(size = 0.8) +
-  geom_smooth(method = "lm", se = TRUE, color = "orangered") + # Línea de tendencia lineal sin error estándar
-  labs(title = "Celastrina argiolus  ") +
-  scale_x_continuous(breaks = breaks_ocupancia_general) +
-  theme_minimal() + theme(plot.title = element_text(face = "italic", hjust = 0.5, size = 10),
+  ggplot2::ggplot(data = presence_94_2024_celastrina_BR2_df, aes(x = year, y = occupancy)) +
+  ggplot2::geom_point(size = 0.8) +
+  ggplot2::geom_smooth(method = "lm", se = TRUE, color = "orangered") + # Línea de tendencia lineal sin error estándar
+  ggplot2::labs(title = "Celastrina argiolus  ") +
+  ggplot2::scale_x_continuous(breaks = breaks_ocupancia_general) +
+  ggplot2::theme_minimal() + theme(plot.title = element_text(face = "italic", hjust = 0.5, size = 10),
                           axis.title.x = element_blank(),
                           axis.title.y = element_blank())+
-  annotate("text",
+  ggplot2::annotate("text",
            x = max(presence_94_2024_celastrina_BR2_df$year), # Puedes ajustar esto al inicio de tu eje X o un valor específico
            y = max(presence_94_2024_celastrina_BR2_df$occupancy), # Puedes ajustar esto al final de tu eje Y o un valor específico
            label = r_2_cela_text_BR2,
@@ -383,11 +383,11 @@ gg_occupancy_vane_BR2 <-
 yearly_presence_pseudophilotes_BR2 <-colSums(data_Pseudophilotes_BR2[,-1])
 yearly_presence_pseudophilotes_BR2_df <- enframe(yearly_presence_pseudophilotes_BR2, name = "year", value = "count")
 presence_94_2024_pseudophilotes_BR2_df <- yearly_presence_pseudophilotes_BR2_df
-presence_94_2024_pseudophilotes_BR2_df$No_of_IT <- yearly_df$count
+presence_94_2024_pseudophilotes_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
 presence_94_2024_pseudophilotes_BR2_df$occupancy <- presence_94_2024_pseudophilotes_BR2_df$count/presence_94_2024_pseudophilotes_BR2_df$No_of_IT
 presence_94_2024_pseudophilotes_BR2_df$year <- as.numeric(presence_94_2024_pseudophilotes_BR2_df$year)
 ##Calculem regresio lineal simple
-model_pseudophilotes_BR2 <- lm(presence_94_2024_pseudophilotes_BR2_df$occupancy ~ year, data = presence_94_2024_pseudophilotes_BR2_df)
+model_pseudophilotes_BR2 <- lm(occupancy ~ year, data = presence_94_2024_pseudophilotes_BR2_df)
 summary(model_pseudophilotes_BR2)
 #guardamos el valor de r2 para incorporarlo al grafico
 r2value_pseudophilotes_BR2 <- summary(model_pseudophilotes_BR2)$r.squared

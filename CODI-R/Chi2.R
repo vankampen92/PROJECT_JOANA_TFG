@@ -522,7 +522,7 @@ data_Pseudophilotes_BR3 <-data_Pseudophilotes[data_Pseudophilotes$IDitin %in% it
 yearly_presence_pseudophilotes_BR1 <-colSums(data_Pseudophilotes_BR1[,-1])
 yearly_presence_pseudophilotes_BR1_df <- enframe(yearly_presence_pseudophilotes_BR1, name = "year", value = "count")
 presence_94_2024_pseudophilotes_BR1_df <- yearly_presence_pseudophilotes_BR1_df
-presence_94_2024_pseudophilotes_BR1_df$No_of_IT <- yearly_df$count
+presence_94_2024_pseudophilotes_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
 
 #creamos df de pseudophilotes 
 pseudo_chi2 <-data.frame()
@@ -534,7 +534,7 @@ names(pseudo_chi2)[names(pseudo_chi2) == "No_of_IT"] <- "N1"
 yearly_presence_pseudophilotes_BR2 <-colSums(data_Pseudophilotes_BR2[,-1])
 yearly_presence_pseudophilotes_BR2_df <- enframe(yearly_presence_pseudophilotes_BR2, name = "year", value = "count")
 presence_94_2024_pseudophilotes_BR2_df <- yearly_presence_pseudophilotes_BR2_df
-presence_94_2024_pseudophilotes_BR2_df$No_of_IT <- yearly_df$count
+presence_94_2024_pseudophilotes_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
 
 pseudo_chi2$n2 <- presence_94_2024_pseudophilotes_BR2_df$count
 pseudo_chi2$N2 <- presence_94_2024_pseudophilotes_BR2_df$No_of_IT
@@ -543,7 +543,7 @@ pseudo_chi2$N2 <- presence_94_2024_pseudophilotes_BR2_df$No_of_IT
 yearly_presence_pseudophilotes_BR3 <-colSums(data_Pseudophilotes_BR3[,-1])
 yearly_presence_pseudophilotes_BR3_df <- enframe(yearly_presence_pseudophilotes_BR3, name = "year", value = "count")
 presence_94_2024_pseudophilotes_BR3_df <- yearly_presence_pseudophilotes_BR3_df
-presence_94_2024_pseudophilotes_BR3_df$No_of_IT <- yearly_df$count
+presence_94_2024_pseudophilotes_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 
 pseudo_chi2$n3 <- presence_94_2024_pseudophilotes_BR3_df$count
 pseudo_chi2$N3 <- presence_94_2024_pseudophilotes_BR3_df$No_of_IT
@@ -582,7 +582,7 @@ data_Aglais_BR3 <-data_Aglais[data_Aglais$IDitin %in% itin_ID_3, ]
 yearly_presence_aglais_BR1 <-colSums(data_Aglais_BR1[,-1])
 yearly_presence_aglais_BR1_df <- enframe(yearly_presence_aglais_BR1, name = "year", value = "count")
 presence_94_2024_aglais_BR1_df <- yearly_presence_aglais_BR1_df[-c(1:3), ]
-presence_94_2024_aglais_BR1_df$No_of_IT <- yearly_df$count
+presence_94_2024_aglais_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
 
 #creamos df de AGLAIS 
 agla_chi2 <-data.frame()
@@ -594,7 +594,7 @@ names(agla_chi2)[names(agla_chi2) == "No_of_IT"] <- "N1"
 yearly_presence_aglais_BR2 <-colSums(data_Aglais_BR2[,-1])
 yearly_presence_aglais_BR2_df <- enframe(yearly_presence_aglais_BR2, name = "year", value = "count")
 presence_94_2024_aglais_BR2_df <- yearly_presence_aglais_BR2_df[-c(1:3), ]
-presence_94_2024_aglais_BR2_df$No_of_IT <- yearly_df$count
+presence_94_2024_aglais_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
 
 agla_chi2$n2 <- presence_94_2024_aglais_BR2_df$count
 agla_chi2$N2 <- presence_94_2024_aglais_BR2_df$No_of_IT
@@ -603,7 +603,7 @@ agla_chi2$N2 <- presence_94_2024_aglais_BR2_df$No_of_IT
 yearly_presence_aglais_BR3 <-colSums(data_Aglais_BR3[,-1])
 yearly_presence_aglais_BR3_df <- enframe(yearly_presence_aglais_BR3, name = "year", value = "count")
 presence_94_2024_aglais_BR3_df <- yearly_presence_aglais_BR3_df[-c(1:3), ]
-presence_94_2024_aglais_BR3_df$No_of_IT <- yearly_df$count
+presence_94_2024_aglais_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 
 agla_chi2$n3 <- presence_94_2024_aglais_BR3_df$count
 agla_chi2$N3 <- presence_94_2024_aglais_BR3_df$No_of_IT
@@ -643,7 +643,7 @@ data_Melanargia_BR3 <-data_Melanargia[data_Melanargia$IDitin %in% itin_ID_3, ]
 yearly_presence_melanargia_BR1 <-colSums(data_Melanargia_BR1[,-1])
 yearly_presence_melanargia_BR1_df <- enframe(yearly_presence_melanargia_BR1, name = "year", value = "count")
 presence_94_2024_melanargia_BR1_df <- yearly_presence_melanargia_BR1_df[-1, ]
-presence_94_2024_melanargia_BR1_df$No_of_IT <- yearly_df$count
+presence_94_2024_melanargia_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
 
 #creamos df de melanargia
 mela_chi2 <-data.frame()
@@ -655,7 +655,7 @@ names(mela_chi2)[names(mela_chi2) == "No_of_IT"] <- "N1"
 yearly_presence_melanargia_BR2 <-colSums(data_Melanargia_BR2[,-1])
 yearly_presence_melanargia_BR2_df <- enframe(yearly_presence_melanargia_BR2, name = "year", value = "count")
 presence_94_2024_melanargia_BR2_df <- yearly_presence_melanargia_BR2_df[-1, ]
-presence_94_2024_melanargia_BR2_df$No_of_IT <- yearly_df$count
+presence_94_2024_melanargia_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
 
 mela_chi2$n2 <- presence_94_2024_melanargia_BR2_df$count
 mela_chi2$N2 <- presence_94_2024_melanargia_BR2_df$No_of_IT
@@ -664,7 +664,7 @@ mela_chi2$N2 <- presence_94_2024_melanargia_BR2_df$No_of_IT
 yearly_presence_melanargia_BR3 <-colSums(data_Melanargia_BR3[,-1])
 yearly_presence_melanargia_BR3_df <- enframe(yearly_presence_melanargia_BR3, name = "year", value = "count")
 presence_94_2024_melanargia_BR3_df <- yearly_presence_melanargia_BR3_df[-1, ]
-presence_94_2024_melanargia_BR3_df$No_of_IT <- yearly_df$count
+presence_94_2024_melanargia_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 
 mela_chi2$n3 <- presence_94_2024_melanargia_BR3_df$count
 mela_chi2$N3 <- presence_94_2024_melanargia_BR3_df$No_of_IT
@@ -672,4 +672,238 @@ mela_chi2$N3 <- presence_94_2024_melanargia_BR3_df$No_of_IT
 save(mela_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/mela_chi2.RData")
 ############
 
+####Pararge aegeria
+############################
+data_Pararge <-
+  data %>% filter(sp_latin == "Pararge aegeria") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
 
+data_Pararge_BR1 <-data_Pararge[data_Pararge$IDitin %in% itin_ID_1, ]
+###
+###
+data_Pararge <-
+  data %>% filter(sp_latin == "Pararge aegeria") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Pararge_BR2 <-data_Pararge[data_Pararge$IDitin %in% itin_ID_2, ]
+###
+###
+data_Pararge <-
+  data %>% filter(sp_latin == "Pararge aegeria") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Pararge_BR3 <-data_Pararge[data_Pararge$IDitin %in% itin_ID_3, ]
+###
+###BR1
+yearly_presence_pararge_BR1 <-colSums(data_Pararge_BR1[,-1])
+yearly_presence_pararge_BR1_df <- enframe(yearly_presence_pararge_BR1, name = "year", value = "count")
+presence_94_2024_pararge_BR1_df <- yearly_presence_pararge_BR1_df[-c(1:3), ]
+presence_94_2024_pararge_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
+
+#creamos df de pararge 
+para_chi2 <-data.frame()
+para_chi2 <- presence_94_2024_pararge_BR1_df
+names(para_chi2)[names(para_chi2) == "count"] <- "n1"
+names(para_chi2)[names(para_chi2) == "No_of_IT"] <- "N1" 
+
+###BR2
+yearly_presence_pararge_BR2 <-colSums(data_Pararge_BR2[,-1])
+yearly_presence_pararge_BR2_df <- enframe(yearly_presence_pararge_BR2, name = "year", value = "count")
+presence_94_2024_pararge_BR2_df <- yearly_presence_pararge_BR2_df[-c(1:3), ]
+presence_94_2024_pararge_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
+
+para_chi2$n2 <- presence_94_2024_pararge_BR2_df$count
+para_chi2$N2 <- presence_94_2024_pararge_BR2_df$No_of_IT
+
+###BR3
+yearly_presence_pararge_BR3 <-colSums(data_Pararge_BR3[,-1])
+yearly_presence_pararge_BR3_df <- enframe(yearly_presence_pararge_BR3, name = "year", value = "count")
+presence_94_2024_pararge_BR3_df <- yearly_presence_pararge_BR3_df[-c(1:3), ]
+presence_94_2024_pararge_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
+
+para_chi2$n3 <- presence_94_2024_pararge_BR3_df$count
+para_chi2$N3 <- presence_94_2024_pararge_BR3_df$No_of_IT
+###
+
+####Pyronia cecilia
+###########################
+data_PyroniaCeci <-
+  data %>% filter(sp_latin == "Pyronia cecilia") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaCeci_BR1 <-data_PyroniaCeci[data_PyroniaCeci$IDitin %in% itin_ID_1, ]
+###
+###
+data_PyroniaCeci <-
+  data %>% filter(sp_latin == "Pyronia cecilia") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaCeci_BR2 <-data_PyroniaCeci[data_PyroniaCeci$IDitin %in% itin_ID_2, ]
+###
+###
+data_PyroniaCeci <-
+  data %>% filter(sp_latin == "Pyronia cecilia") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaCeci_BR3 <-data_PyroniaCeci[data_PyroniaCeci$IDitin %in% itin_ID_3, ]
+###
+yearly_presence_pyroniaceci_BR1 <-colSums(data_PyroniaCeci_BR1[,-1])
+yearly_presence_pyroniaceci_BR1_df <- enframe(yearly_presence_pyroniaceci_BR1, name = "year", value = "count")
+presence_94_2024_pyroniaceci_BR1_df <- yearly_presence_pyroniaceci_BR1_df[-c(1:3), ]
+presence_94_2024_pyroniaceci_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
+
+#creamos df de pyronia cecilia 
+pyroceci_chi2 <-data.frame()
+pyroceci_chi2 <- presence_94_2024_pyroniaceci_BR1_df
+names(pyroceci_chi2)[names(pyroceci_chi2) == "count"] <- "n1"
+names(pyroceci_chi2)[names(pyroceci_chi2) == "No_of_IT"] <- "N1" 
+
+###BR2
+yearly_presence_pyroniaceci_BR2 <-colSums(data_PyroniaCeci_BR2[,-1])
+yearly_presence_pyroniaceci_BR2_df <- enframe(yearly_presence_pyroniaceci_BR2, name = "year", value = "count")
+presence_94_2024_pyroniaceci_BR2_df <- yearly_presence_pyroniaceci_BR2_df[-c(1:3), ]
+presence_94_2024_pyroniaceci_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
+
+pyroceci_chi2$n2 <- presence_94_2024_pyroniaceci_BR2_df$count
+pyroceci_chi2$N2 <- presence_94_2024_pyroniaceci_BR2_df$No_of_IT
+
+###BR3
+yearly_presence_pyroniaceci_BR3 <-colSums(data_PyroniaCeci_BR3[,-1])
+yearly_presence_pyroniaceci_BR3_df <- enframe(yearly_presence_pyroniaceci_BR3, name = "year", value = "count")
+presence_94_2024_pyroniaceci_BR3_df <- yearly_presence_pyroniaceci_BR3_df[-c(1:3), ]
+presence_94_2024_pyroniaceci_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
+
+pyroceci_chi2$n3 <- presence_94_2024_pyroniaceci_BR3_df$count
+pyroceci_chi2$N3 <- presence_94_2024_pyroniaceci_BR3_df$No_of_IT
+
+####Pyronia bathseba
+###########################
+data_PyroniaBath <-
+  data %>% filter(sp_latin == "Pyronia bathseba") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaBath_BR1 <-data_PyroniaBath[data_PyroniaBath$IDitin %in% itin_ID_1, ]
+###
+
+###
+data_PyroniaBath <-
+  data %>% filter(sp_latin == "Pyronia bathseba") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaBath_BR2 <-data_PyroniaBath[data_PyroniaBath$IDitin %in% itin_ID_2, ]
+###
+###
+data_PyroniaBath <-
+  data %>% filter(sp_latin == "Pyronia bathseba") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_PyroniaBath_BR3 <-data_PyroniaBath[data_PyroniaBath$IDitin %in% itin_ID_3, ]
+###
+###BR1
+yearly_presence_pyroniabath_BR1 <-colSums(data_PyroniaBath_BR1[,-1])
+yearly_presence_pyroniabath_BR1_df <- enframe(yearly_presence_pyroniabath_BR1, name = "year", value = "count")
+presence_94_2024_pyroniabath_BR1_df <- yearly_presence_pyroniabath_BR1_df
+presence_94_2024_pyroniabath_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
+
+#creamos df de pyronia bathseba 
+pyrobath_chi2 <-data.frame()
+pyrobath_chi2 <- presence_94_2024_pyroniabath_BR1_df
+names(pyrobath_chi2)[names(pyrobath_chi2) == "count"] <- "n1"
+names(pyrobath_chi2)[names(pyrobath_chi2) == "No_of_IT"] <- "N1" 
+
+###BR2
+yearly_presence_pyroniabath_BR2 <-colSums(data_PyroniaBath_BR2[,-1])
+yearly_presence_pyroniabath_BR2_df <- enframe(yearly_presence_pyroniabath_BR2, name = "year", value = "count")
+presence_94_2024_pyroniabath_BR2_df <- yearly_presence_pyroniabath_BR2_df
+presence_94_2024_pyroniabath_BR2_df$No_of_IT <- yearly_df$count
+
+pyrobath_chi2$n2 <- presence_94_2024_pyroniabath_BR2_df$count
+pyrobath_chi2$N2 <- presence_94_2024_pyroniabath_BR2_df$No_of_IT
+###
+
+###BR3
+yearly_presence_pyroniabath_BR3 <-colSums(data_PyroniaBath_BR3[,-1])
+yearly_presence_pyroniabath_BR3_df <- enframe(yearly_presence_pyroniabath_BR3, name = "year", value = "count")
+presence_94_2024_pyroniabath_BR3_df <- yearly_presence_pyroniabath_BR3_df
+presence_94_2024_pyroniabath_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
+
+pyrobath_chi2$n3 <- presence_94_2024_pyroniabath_BR3_df$count
+pyrobath_chi2$N3 <- presence_94_2024_pyroniabath_BR3_df$No_of_IT
+###
+
+####Anthocharis euphenoides
+##########################
+
+data_Anthocharis <-
+  data %>% filter(sp_latin == "Anthocharis euphenoides") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Anthocharis_BR1 <-data_Anthocharis[data_Anthocharis$IDitin %in% itin_ID_1, ]
+###
+###
+data_Anthocharis <-
+  data %>% filter(sp_latin == "Anthocharis euphenoides") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Anthocharis_BR2 <-data_Anthocharis[data_Anthocharis$IDitin %in% itin_ID_2, ]
+###
+###
+data_Anthocharis <-
+  data %>% filter(sp_latin == "Anthocharis euphenoides") %>% group_by(Any, IDitin) %>% count() %>%
+  pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+  mutate(across(!IDitin, negate(is.na))) %>%
+  mutate(across(!IDitin, as.numeric))
+
+data_Anthocharis_BR3 <-data_Anthocharis[data_Anthocharis$IDitin %in% itin_ID_3, ]
+###
+yearly_presence_anthocharis_BR1 <-colSums(data_Anthocharis_BR1[,-1])
+yearly_presence_anthocharis_BR1_df <- enframe(yearly_presence_anthocharis_BR1, name = "year", value = "count")
+presence_94_2024_anthocharis_BR1_df <- yearly_presence_anthocharis_BR1_df
+presence_94_2024_anthocharis_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
+
+#creamos df de anthocharis
+antho_chi2 <-data.frame()
+antho_chi2 <- presence_94_2024_anthocharis_BR1_df
+names(antho_chi2)[names(antho_chi2) == "count"] <- "n1"
+names(antho_chi2)[names(antho_chi2) == "No_of_IT"] <- "N1" 
+
+###BR2
+yearly_presence_anthocharis_BR2 <-colSums(data_Anthocharis_BR2[,-1])
+yearly_presence_anthocharis_BR2_df <- enframe(yearly_presence_anthocharis_BR2, name = "year", value = "count")
+presence_94_2024_anthocharis_BR2_df <- yearly_presence_anthocharis_BR2_df
+presence_94_2024_anthocharis_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
+
+antho_chi2$n2 <- presence_94_2024_anthocharis_BR2_df$count
+antho_chi2$N2 <- presence_94_2024_anthocharis_BR2_df$No_of_IT
+
+###BR3
+yearly_presence_anthocharis_BR3 <-colSums(data_Anthocharis_BR3[,-1])
+yearly_presence_anthocharis_BR3_df <- enframe(yearly_presence_anthocharis_BR3, name = "year", value = "count")
+presence_94_2024_anthocharis_BR3_df <- yearly_presence_anthocharis_BR3_df
+presence_94_2024_anthocharis_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
+
+antho_chi2$n3 <- presence_94_2024_anthocharis_BR3_df$count
+antho_chi2$N3 <- presence_94_2024_anthocharis_BR3_df$No_of_IT
+###
