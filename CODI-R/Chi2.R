@@ -730,6 +730,7 @@ presence_94_2024_pararge_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 para_chi2$n3 <- presence_94_2024_pararge_BR3_df$count
 para_chi2$N3 <- presence_94_2024_pararge_BR3_df$No_of_IT
 ###
+save(para_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/para_chi2.RData")
 
 ####Pyronia cecilia
 ###########################
@@ -787,6 +788,8 @@ presence_94_2024_pyroniaceci_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 
 pyroceci_chi2$n3 <- presence_94_2024_pyroniaceci_BR3_df$count
 pyroceci_chi2$N3 <- presence_94_2024_pyroniaceci_BR3_df$No_of_IT
+
+save(pyroceci_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/pyroceci_chi2.RData")
 
 ####Pyronia bathseba
 ###########################
@@ -848,6 +851,7 @@ presence_94_2024_pyroniabath_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 pyrobath_chi2$n3 <- presence_94_2024_pyroniabath_BR3_df$count
 pyrobath_chi2$N3 <- presence_94_2024_pyroniabath_BR3_df$No_of_IT
 ###
+save(pyrobath_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/pyrobath_chi2.RData")
 
 ####Anthocharis euphenoides
 ##########################
@@ -907,3 +911,8 @@ presence_94_2024_anthocharis_BR3_df$No_of_IT <- yearly_counts_BR3_df$count
 antho_chi2$n3 <- presence_94_2024_anthocharis_BR3_df$count
 antho_chi2$N3 <- presence_94_2024_anthocharis_BR3_df$No_of_IT
 ###
+save(antho_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/antho_chi2.RData")
+
+list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, pseudo = pseudo_chi2, vane = vane_chi2, pyrobath = pyrobath_chi2,
+                  pyroceci = pyroceci_chi2, antho = antho_chi2,  mela = mela_chi2, agla = agla_chi2, 
+                  para = para_chi2, plebe = plebe_chi2, cyani =  cyani_chi2)
