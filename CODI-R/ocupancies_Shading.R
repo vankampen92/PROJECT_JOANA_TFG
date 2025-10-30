@@ -16,31 +16,66 @@ temps <- 1:30
 Ocupancia_teorica <- p_occupancy_ce(c, e, temps, p_0_1994)
 Ocupancia_teorica <- c(p_0_1994, Ocupancia_teorica)
 
+
 Ocupancia_Shading_plebarg_BR2 <- data.frame()   
 Ocupancia_Shading_plebarg_BR2$year <- plebe_chi2$year
 Ocupancia_Shading_plebarg_BR2$n <- plebe_chi2$n2
 Ocupancia_Shading_plebarg_BR2$N <- plebe_chi2$N2
 Ocupancia_Shading_plebarg_BR2$oc_empirica <- plebe_chi2$n2/plebe_chi2$N2
 Ocupancia_Shading_plebarg_BR2$oc_teorica <- Ocupancia_teorica
-Ocupancia_Shading_plebarg_BR2$oc_teorica <- Ocupancia_teorica_0
-Ocupancia_Shading_plebarg_BR2$oc_teorica <- Ocupancia_teorica_1
 
-gg_occupancy_plebe_BR2 <-
-  ggplot(data = presence_94_2024_plebejus_BR2_df, aes(x = year, y = occupancy)) +
-  geom_point(size = 0.8) +
-  geom_smooth(method = "lm", se = FALSE, color = "steelblue4") + # Línea de tendencia lineal sin error estándar
-  labs(title = "Plebejus argus  ") +
-  scale_x_continuous(breaks = breaks_ocupancia_general) +
-  theme_minimal() + theme(plot.title = element_text(face = "italic", hjust = 0.5, size = 10),
-                          axis.title.x = element_blank(),
-                          axis.title.y = element_blank())+
-  annotate("text",
-           x = max(presence_94_2024_plebejus_BR2_df$year)+0.05, # Puedes ajustar esto al inicio de tu eje X o un valor específico
-           y = max(presence_94_2024_plebejus_BR2_df$occupancy), # Puedes ajustar esto al final de tu eje Y o un valor específico
-           label = r_2_plebejus_text_BR2,
-           hjust = 1, vjust = 1, # Ajusta justificación para que el texto empiece en (x,y)
-           size = 2.5, fontface = "bold") # Puedes ajustar el tamaño y estilo de la fuente
-##
+
+n0 <- qbinom(0.025, Ocupancia_Shading_plebarg_BR2$N, Ocupancia_Shading_plebarg_BR2$oc_teorica)
+n1 <- qbinom(0.975, Ocupancia_Shading_plebarg_BR2$N, Ocupancia_Shading_plebarg_BR2$oc_teorica)
+
+Ocupancia_Shading_plebarg_BR2$oc_teorica_0 <- n0
+Ocupancia_Shading_plebarg_BR2$oc_teorica_1 <- n1
+
+
+library(ggplot2)
+library(dplyr)
+
+ggplot(Ocupancia_Shading_plebarg_BR2, aes(x = year)) +
+  # sombreado entre límites teóricos
+  geom_ribbon(
+    aes(ymin = oc_teorica_0, ymax = oc_teorica_1),
+    fill = "grey70", alpha = 0.4
+  ) +
+  
+  # línea teórica (estimación)
+  geom_line(aes(y = oc_teorica, color = "Ocupancia teórica"),
+            size = 0.9, linetype = "solid") +
+  
+  # línea empírica (observada)
+  geom_line(aes(y = oc_empirica, color = "Ocupancia empírica"),
+            size = 0.9, linetype = "dashed") +
+  
+  # escala de colores sobria
+  scale_color_manual(
+    values = c("Ocupancia teórica" = "#1b9e77", 
+               "Ocupancia empírica" = "#d95f02")
+  ) +
+  
+  # etiquetas
+  labs(
+    x = "Any",
+    y = "Ocupancia",
+    color = NULL,
+    title = NULL
+  ) +
+  
+  # estilo tipo paper
+  theme_bw(base_size = 14) +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "grey85", linewidth = 0.3),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top",
+    legend.background = element_blank(),
+    legend.key = element_blank()
+  )
+
 
 
 
