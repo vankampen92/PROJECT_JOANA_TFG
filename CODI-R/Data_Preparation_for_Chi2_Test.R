@@ -913,6 +913,9 @@ antho_chi2$N3 <- presence_94_2024_anthocharis_BR3_df$No_of_IT
 ###
 save(antho_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/antho_chi2.RData")
 
-list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, pseudo = pseudo_chi2, vane = vane_chi2, pyrobath = pyrobath_chi2,
-                  pyroceci = pyroceci_chi2, antho = antho_chi2,  mela = mela_chi2, agla = agla_chi2, 
-                  para = para_chi2, plebe = plebe_chi2, cyani =  cyani_chi2)
+list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, pseudo = pseudo_chi2,
+                  cyani =  cyani_chi2,vane = vane_chi2, agla = agla_chi2, antho = antho_chi2, 
+                  mela = mela_chi2, para = para_chi2, pyrobath = pyrobath_chi2, pyroceci = pyroceci_chi2) 
+                    
+save(list_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
+

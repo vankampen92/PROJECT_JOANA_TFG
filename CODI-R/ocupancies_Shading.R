@@ -1,5 +1,5 @@
 
-# END CALCUL OCUPANCIES Plebejus argus Mediterranea Humida ####################
+# CALCUL OCUPANCIES Plebejus argus Mediterranea Humida ####################
 #
 # Funcio R: Ocupancia teorica en funcio del temps quan la condicio initial es una p_0 generica:
 p_occupancy_ce <- function(c, e, t, p_0) {
