@@ -1,7 +1,7 @@
 # PROJECT JOANA DEKKER TFG, UdG
 # DINÀMICA DE COLONITZACIÓ I EXTINCIÓ DE 12 ESPÈCIES DE PAPALLONES DE CATALUNYA (CBMS)
 
-## Uploading the Data in R:
+## Uploading required libraries and the Data into the R session:
 ```r
 # Required libraries:
 library(tidyverse)
