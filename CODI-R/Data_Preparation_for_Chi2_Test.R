@@ -919,3 +919,25 @@ list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, pseudo
                     
 save(list_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
 
+
+#####################################
+#####################################
+BR1 <- data_frame(
+  species=colext_Results_df_BR1$species,
+  C = colext_Results_df_BR1$C_BR1,
+  E = colext_Results_df_BR1$E_BR1)
+
+BR2 <- data_frame(
+  species=colext_Results_df_BR2$species,
+  C = colext_Results_df_BR2$C_BR2,
+  E = colext_Results_df_BR2$E_BR2)
+
+BR3 <- data_frame(
+  species=colext_Results_df_BR3$species,
+  C = colext_Results_df_BR3$C_BR3,
+  E = colext_Results_df_BR3$E_BR3)
+
+list_colext_regionsbioclima <- list(BR1 = BR1, BR2 = BR2, BR3 = BR3)
+
+save(list_colext_regionsbioclima, 
+     file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
