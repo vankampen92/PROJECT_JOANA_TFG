@@ -333,7 +333,14 @@ yearly_presence_lycaena_BR2_df$year <- as.numeric(as.character(yearly_presence_l
 yearly_presence_lycaena_BR2_df_complete <- years_94_2024 %>%
   left_join(yearly_presence_lycaena_BR2_df, by = "year") %>%
   mutate(count = ifelse(is.na(count), 0, count))
-presence_94_2024_lycaena_BR2_df <- 
+presence_94_2024_lycaena_BR2_df <- yearly_presence_lycaena_BR2_df_complete
+presence_94_2024_lycaena_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
+
+#Agregamos n2 i N2 al dataframe de lycaena
+lyca_chi2$n2 <- presence_94_2024_lycaena_BR2_df$count
+lyca_chi2$N2 <- presence_94_2024_lycaena_BR2_df$No_of_IT
+
+
 #BR3
 yearly_presence_lycaena_BR3 <- colSums(data_Lycaena_BR3[,-1])
 # Convert named numeric vector to data frame
