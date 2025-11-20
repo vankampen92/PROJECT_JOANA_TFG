@@ -253,9 +253,6 @@ library(ggplot2)
 library(tidyr)
 library(dplyr)
 
-# Read your data (adjust path as needed)
-# df <- read.csv("your_file.csv", row.names = 1, check.names = FALSE)
-
 # Preserve species order as in the data
 species_order <- rownames(preferencia_df)
 
@@ -290,19 +287,21 @@ label_colors <- c(
 )
 
 # Plot
-ggplot(df_long, aes(x = Year, y = Species, fill = factor(Label))) +
+ggp <- ggplot(df_long, aes(x = Year, y = Species, fill = factor(Label))) +
   geom_tile(color = "white", linewidth = 0.3) +
   scale_fill_manual(values = label_colors, na.value = "white") +
   scale_x_continuous(breaks = seq(1994, 2024, by = 2)) +
   scale_y_discrete(limits = rev(levels(df_long$Species))) +  # flip vertically
   theme_minimal(base_size = 12) +
-  labs(x = "Year", y = "Species", fill = "Label") +
+  labs(x = "Year", y = "Species", fill = "Regió") +
   theme(
     panel.grid = element_blank(),
     axis.text.x = element_text(angle = 45, hjust = 1),
     axis.text.y = element_text(face = "italic"),
-    legend.position = "right", 
-    legend.title = "Regio"
+    legend.position = "right"
   )
+
+ggsave("~/PROJECT_JOANA_TFG/GRAFICS/preferencia_chi2_regio.png", 
+       plot = ggp, width = 10, height = 6, dpi = 300)
 
 

@@ -89,7 +89,6 @@ yearly_counts_BR3_df <- enframe(yearly_counts_BR3, name = "year", value = "count
 yearly_counts_BR3_df$year <- as.numeric(as.character(yearly_counts_BR3_df$year))
 
 ###############
-
 data_Celastrina <-
   data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
   pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
@@ -97,15 +96,39 @@ data_Celastrina <-
   mutate(across(!IDitin, as.numeric))
 
 data_Celastrina_BR1 <-data_Celastrina[data_Celastrina$IDitin %in% itin_ID_1, ]
-###
+
+data_Celastrina_BR1_94 <- data_Celastrina_BR1[,-c(2:4)]
+
+data_Celastrina_BR1_94_DEF <- data_Celastrina_BR1_94
+
+itin_ID_1_Celastrina <- data_Celastrina_BR1_94$IDitin
+
+presence_matrix_Celastrina_BR1 <-presence_matrix_BR1[presence_matrix_BR1$SITE_ID %in% itin_ID_1_Celastrina, ]
+
+data_Celastrina_BR1_94_DEF[presence_matrix_Celastrina_BR1 == 0] <- 2
+
+years <- colnames(data_Celastrina_BR1_94_DEF)[-1]
+data_Celastrina_BR1_94_EF <-data_Celastrina_BR1_94_DEF[,-1]
+
+metapo_cela <- sapply(seq_along(years), function(i) {
+  
+  subset <- data_Celastrina_BR1_94_EF[, 1:i, drop = FALSE]
+  # 1) Ha tenido al menos un 1 en algún momento hasta el año i
+  has_presence_before <- apply(subset == 1, 1, any)
+  # 2) En el año i NO tiene un 2 (es decir, fue muestreado)
+  not_unsampled_this_year <- subset[, i] != 2
+   # Itinerarios que cumplen ambas
+  sum(has_presence_before & not_unsampled_this_year)
+})
+####
 data_Celastrina <-
   data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
   pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
   mutate(across(!IDitin, negate(is.na))) %>%
   mutate(across(!IDitin, as.numeric))
 
-
 data_Celastrina_BR2 <-data_Celastrina[data_Celastrina$IDitin %in% itin_ID_2, ]
+
 ###
 data_Celastrina <-
   data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
@@ -138,6 +161,7 @@ cela_chi2 <-data.frame()
 cela_chi2 <- presence_94_2024_celastrina_BR1_df
 names(cela_chi2)[names(cela_chi2) == "count"] <- "n1"
 names(cela_chi2)[names(cela_chi2) == "No_of_IT"] <- "N1" 
+presence_94_2024_celastrina_BR1_df$M1 <- metapo_cela
 
 # Celastrina argiolus BR2 #aqui se calcula n2 i N2 (las presencias y los itinerarios de la BR2)
 ##########################
