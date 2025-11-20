@@ -124,7 +124,7 @@ gg_col_9_12 <-
 print(gg_col_9_12)
 
 ####
-EXTINCIO
+#EXTINCIO
 ###
 # Filtrar para las primeras 4 especies
 species_to_plot_1_4_ext <- unique(colext_results_combined$species)[1:4]
@@ -206,3 +206,183 @@ gg_ext_9_12 <-
   theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "italic")) +
   scale_fill_brewer(palette = "Set2")
 print(gg_ext_9_12)
+
+#########################
+#############################
+#Grafics per especie amb c i e separats (24 grafics en total)
+
+
+library(ggplot2)
+library(dplyr)
+
+# --- ⃣ Asegurar orden de las bioregiones ---
+colext_results_combined$bioregion <- factor(
+  colext_results_combined$bioregion,
+  levels = c(
+    "Alpina i subalpina",
+    "Mediterrània humida",
+    "Mediterrània arida",
+    "Total"
+  )
+)
+
+# ---  Crear carpeta donde guardar los gráficos ---
+dir.create("graficos_species", showWarnings = FALSE)
+
+# --- Los valores NA de la med. arida tiene que volver
+
+colext_results_combined$bioregion[is.na(colext_results_combined$bioregion)] <- "Mediterrània arida"
+
+# ---  Paleta de colores personalizada ---
+colores_bioregion <- c(
+  "Alpina i subalpina" = "#1f77b4",   # azul
+  "Mediterrània humida" = "#2ca02c",  # verde
+  "Mediterrània arida" = "#ff7f0e",   # naranja
+  "Total" = "#9467bd"                 # violeta
+)
+
+# ---  Lista de especies ---
+species_list <- unique(colext_results_combined$species)
+
+# --- Bucle para generar y guardar gráficos ---
+for (sp in species_list) {
+  
+  df_sp <- filter(colext_results_combined, species == sp)
+  
+  # --- Gráfico Colonización ---
+  plot_C <- ggplot(df_sp, aes(x = bioregion, y = C, fill = bioregion)) +
+    geom_col(color = "black") +
+    geom_errorbar(aes(ymin = C_low, ymax = C_up), width = 0.2) +
+    scale_fill_manual(values = colores_bioregion, drop = FALSE) +
+    scale_x_discrete(drop = FALSE) +   # <- mantiene todas las bioregiones en orden, aunque falten
+    labs(title = paste("Colonización (C) -", sp),
+         x = "Bioregión", y = "C") +
+    theme_bw() +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(hjust = 0.5),
+      axis.text.x = element_text(angle = 30, hjust = 1)
+    )
+  
+  # --- Gráfico Extinción ---
+  plot_E <- ggplot(df_sp, aes(x = bioregion, y = E, fill = bioregion)) +
+    geom_col(color = "black") +
+    geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.2) +
+    scale_fill_manual(values = colores_bioregion, drop = FALSE) +
+    scale_x_discrete(drop = FALSE) +
+    labs(title = paste("Extinción (E) -", sp),
+         x = "Bioregión", y = "E") +
+    theme_bw() +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(hjust = 0.5),
+      axis.text.x = element_text(angle = 30, hjust = 1)
+    )
+  
+  # --- Guardar gráficos ---
+  ggsave(filename = paste0("graficos_species/", sp, "_Colonizacion.png"),
+         plot = plot_C, width = 6, height = 4, dpi = 300)
+  
+  ggsave(filename = paste0("graficos_species/", sp, "_Extincion.png"),
+         plot = plot_E, width = 6, height = 4, dpi = 300)
+  
+  cat("✓ Guardados gráficos para:", sp, "\n")
+}
+
+
+##########################################
+#############Grafics per especie amb c i e junts (12 grafics en total)
+library(ggplot2)
+library(dplyr)
+library(patchwork)  # para combinar gráficos fácilmente
+
+# --- 1️⃣ Asegurar orden de las bioregiones ---
+colext_results_combined$bioregion <- factor(
+  colext_results_combined$bioregion,
+  levels = c(
+    "Alpina i subalpina",
+    "Mediterrània humida",
+    "Mediterrània àrida",
+    "Total"
+  )
+)
+
+# --- 2️⃣ Crear carpeta de salida ---
+dir.create("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/graficos_species_cie", showWarnings = FALSE)
+
+colext_results_combined$bioregion[is.na(colext_results_combined$bioregion)] <- "Mediterrània àrida"
+
+# --- 3️⃣ Paleta de colores personalizada ---
+colores_bioregion <- c(
+  "Alpina i subalpina" = "#1f77b4",   # azul
+  "Mediterrània humida" = "#2ca02c",  # verde
+  "Mediterrània àrida" = "#ff7f0e",   # naranja
+  "Total" = "#9467bd"                 # violeta
+)
+
+# --- 4️⃣ Lista de especies ---
+species_list <- unique(colext_results_combined$species)
+
+# --- 5️⃣ Bucle para generar gráficos combinados ---
+for (sp in species_list) {
+  
+  df_sp <- filter(colext_results_combined, species == sp)
+  
+  # --- Colonización ---
+  plot_C <- ggplot(df_sp, aes(x = bioregion, y = C, fill = bioregion)) +
+    geom_col(color = "black") +
+    geom_errorbar(aes(ymin = C_low, ymax = C_up), width = 0.2) +
+    scale_fill_manual(values = c(
+      "Alpina i subalpina" = "#1f77b4",
+      "Mediterrània humida" = "#2ca02c",
+      "Mediterrània àrida"  = "#ff7f0e",
+      "Total"               = "#9467bd"
+    ),
+    name = "Bioregió"
+    ) +
+    labs(y = "C", x = "") +
+    theme_minimal(base_size = 14) +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      legend.position = "bottom"
+    )
+  
+  # --- Extinción ---
+  plot_E <- ggplot(df_sp, aes(x = bioregion, y = E, fill = bioregion)) +
+    geom_col(color = "black") +
+    geom_errorbar(aes(ymin = E_low, ymax = E_up), width = 0.2) +
+    scale_fill_manual(values = c(
+      "Alpina i subalpina" = "#1f77b4",
+      "Mediterrània humida" = "#2ca02c",
+      "Mediterrània àrida"  = "#ff7f0e",
+      "Total"               = "#9467bd"
+    ),
+    name = "Bioregió"
+    ) +
+    labs(y = "E", x = "") +
+    theme_minimal(base_size = 14) +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      legend.position = "bottom"
+    )
+  
+  # --- Combinar ambos gráficos ---
+  graf_comb <- plot_C + plot_E +
+    plot_annotation(title = bquote(italic(.(sp)))) &
+    theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) &
+    theme(legend.position = "bottom")
+  
+  graf_comb <- plot_C + plot_E + 
+  plot_layout(guides = "collect") +
+  plot_annotation(title = bquote(italic(.(sp)))) &
+  theme(legend.position = "bottom")
+
+  
+  # --- Guardar gráfico combinado ---
+  ggsave(filename = paste0("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/graficos_species_cie/", sp, "_Colonizacion_Extincion.png"),
+         plot = graf_comb, width = 10, height = 5, dpi = 300)
+  
+  cat("✓ Guardado gráfico combinado para:", sp, "\n")
+}
