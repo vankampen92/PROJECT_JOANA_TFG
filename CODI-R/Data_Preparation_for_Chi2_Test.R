@@ -21,6 +21,7 @@ Samplying_Years <- read.csv(file="/home/dalonso/PROJECT_JOANA_TFG/DADES/cbms_sam
 itin_CBMS_RegClim_1 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 1, ]
 itin_CBMS_RegClim_2 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 2, ]
 itin_CBMS_RegClim_3 <- itin_CBMS_RegClim[itin_CBMS_RegClim[[ncol(itin_CBMS_RegClim)]] == 3, ]
+
 itin_ID_1 <- itin_CBMS_RegClim_1$CODI
 itin_ID_2 <- itin_CBMS_RegClim_2$CODI
 itin_ID_3 <- itin_CBMS_RegClim_3$CODI
@@ -61,10 +62,6 @@ yearly_counts_BR1_df$year <- as.numeric(as.character(yearly_counts_BR1_df$year))
 # Create the presence matrix with SITE_IDs as rows and years as columns
 presence_matrix_BR2 <- presence_matrix[presence_matrix$SITE_ID %in% itin_ID_2, ]
 
-
-
-
-
 # Exclude the SITE_ID column and sum across columns (i.e., years)
 yearly_counts_BR2 <- colSums(presence_matrix_BR2[,-1])
 # Convert named numeric vector to data frame
@@ -76,10 +73,6 @@ yearly_counts_BR2_df$year <- as.numeric(as.character(yearly_counts_BR2_df$year))
 
 # Create the presence matrix with SITE_IDs as rows and years as columns
 presence_matrix_BR3 <- presence_matrix[presence_matrix$SITE_ID %in% itin_ID_3, ]
-
-
-
-
 
 # Exclude the SITE_ID column and sum across columns (i.e., years)
 yearly_counts_BR3 <- colSums(presence_matrix_BR3[,-1])
@@ -105,12 +98,20 @@ itin_ID_1_Celastrina <- data_Celastrina_BR1_94$IDitin
 
 presence_matrix_Celastrina_BR1 <-presence_matrix_BR1[presence_matrix_BR1$SITE_ID %in% itin_ID_1_Celastrina, ]
 
+# Ordenem els dos data frames segons ID del itinerari (1a columna). 
+data_Celastrina_BR1_94_DEF <- data_Celastrina_BR1_94_DEF[
+  order(data_Celastrina_BR1_94_DEF[[1]]),]
+
+presence_matrix_Celastrina_BR1 <- presence_matrix_Celastrina_BR1[
+  order(presence_matrix_Celastrina_BR1[[1]]),]
+
 data_Celastrina_BR1_94_DEF[presence_matrix_Celastrina_BR1 == 0] <- 2
 
+# Eliminim la primera columna
 years <- colnames(data_Celastrina_BR1_94_DEF)[-1]
 data_Celastrina_BR1_94_EF <-data_Celastrina_BR1_94_DEF[,-1]
 
-metapo_cela <- sapply(seq_along(years), function(i) {
+metapo_cela <- sapply(seq_along(years), function(i) { # 
   
   subset <- data_Celastrina_BR1_94_EF[, 1:i, drop = FALSE]
   # 1) Ha tenido al menos un 1 en algún momento hasta el año i
@@ -120,6 +121,7 @@ metapo_cela <- sapply(seq_along(years), function(i) {
    # Itinerarios que cumplen ambas
   sum(has_presence_before & not_unsampled_this_year)
 })
+
 ####
 data_Celastrina <-
   data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
@@ -155,13 +157,12 @@ presence_94_2024_celastrina_BR1_df$No_of_IT <- yearly_counts_BR1_df$count
 #Convertimos year en numerico para despues poder hacer bien el grafico despues
 presence_94_2024_celastrina_BR1_df$year <- as.numeric(presence_94_2024_celastrina_BR1_df$year)
 
-
-#creamos df de celastrina 
+#creamos df de celastrina con el nombre cela_Chi2 
 cela_chi2 <-data.frame()
 cela_chi2 <- presence_94_2024_celastrina_BR1_df
 names(cela_chi2)[names(cela_chi2) == "count"] <- "n1"
 names(cela_chi2)[names(cela_chi2) == "No_of_IT"] <- "N1" 
-presence_94_2024_celastrina_BR1_df$M1 <- metapo_cela
+cela_chi2$M1 <- metapo_cela
 
 # Celastrina argiolus BR2 #aqui se calcula n2 i N2 (las presencias y los itinerarios de la BR2)
 ##########################
@@ -972,3 +973,4 @@ list_colext_regionsbioclima <- list(BR1 = BR1, BR2 = BR2, BR3 = BR3)
 
 save(list_colext_regionsbioclima, 
      file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
+
