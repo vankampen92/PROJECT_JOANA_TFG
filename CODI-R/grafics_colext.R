@@ -340,7 +340,7 @@ for (sp in species_list) {
     ),
     name = "Bioregió"
     ) +
-    labs(y = "C", x = "") +
+    labs(y = "Colonització (C)", x = "") +
     theme_minimal(base_size = 14) +
     theme(
       axis.text.x = element_blank(),
@@ -360,7 +360,7 @@ for (sp in species_list) {
     ),
     name = "Bioregió"
     ) +
-    labs(y = "E", x = "") +
+    labs(y = "Extinció (E)", x = "") +
     theme_minimal(base_size = 14) +
     theme(
       axis.text.x = element_blank(),

@@ -5,6 +5,10 @@ library(dplyr)
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
 
+# ---  Crear carpeta donde guardar los gráficos ---
+dir.create("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/grafics_ocupancies", showWarnings = FALSE)
+
+
 # Funcio R: Ocupancia teorica en funcio del temps quan la condicio initial es una p_0 generica:
 p_occupancy_ce <- function(c, e, t, p_0) {
   value <- (c / (e + c)) * (1 - exp(-(e + c) * t)) + p_0 * exp(-(e + c) * t)
@@ -26,11 +30,11 @@ Occupancia_Shading_Function <- function(Occupancia_Shading, Sp, BioReg )
     
     # línea teórica (estimación)
     geom_line(aes(y = oc_teorica, color = "Ocupancia teórica"),
-              size = 0.9, linetype = "solid") +
+              linewidth = 0.9, linetype = "solid") +
     
     # línea empírica (observada)
     geom_line(aes(y = oc_empirica, color = "Ocupancia empírica"),
-              size = 0.9, linetype = "dashed") +
+              linewidth = 0.9, linetype = "dashed") +
     
     # escala de colores sobria
     scale_color_manual(
@@ -60,6 +64,8 @@ Occupancia_Shading_Function <- function(Occupancia_Shading, Sp, BioReg )
   
     # Print the plot to the device
     print(gra)
+    
+    return(gra)
 }
 
 # list_of_graphics <- list(list())
@@ -68,9 +74,9 @@ Sp = c("Celastrina Argiolus", "Lycaena Vigaureae", "Plebejus argus",
        "Psedophilotes panoptes", "Cyaniris semiargus", "Vanessa cardui", 
        "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica", 
        "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia") 
-BioReg = c("Regio Alpina i Subalpina", 
-           "Regio Mediterranea humida", 
-           "Regio Mediterranea arida")
+BioReg = c("Regió Alpina i Subalpina", 
+           "Regió Mediterrània humida", 
+           "Regió Mediterrània àrida")
 
 for (i in 1:12 ) {
   # Dades ocupancia species i en les tres regions. 
@@ -80,10 +86,7 @@ for (i in 1:12 ) {
     
     FES <- 1 # Only if "FES" is changed to 0, the plot is not done!!!
     
-    print(paste("Plotting data for species", Sp[i], "in", BioReg[j]))
-    # Wait for user input
-    readline(prompt = "Press [Enter] to see the plot...")
-  
+   
     # Controlar especies que no hi son presents en alguna regio bioclimatic
     if (j == 3 && i == 2) { # Lyca (Sp i=2) no hi es present en regio j=3 
       print(paste("No data for species", Sp[i], "in:", BioReg[j], 
@@ -144,7 +147,10 @@ for (i in 1:12 ) {
       
       # Graficar Occupancia Shading 
       # list_of_graphics[[i]][[j]] = 
-      Occupancia_Shading_Function(Occpancia_Shading, Sp[i], BioReg[j])
+      gra <- Occupancia_Shading_Function(Ocpancia_Shading, Sp[i], BioReg[j])
+      
+      ggsave(filename = paste0("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/grafics_ocupancies/", Sp[i], BioReg[j], "_Ocupancia.png"),
+             plot = gra, width = 10, height = 7, dpi = 300)
     }
   }
 }

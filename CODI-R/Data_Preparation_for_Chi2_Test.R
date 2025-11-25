@@ -118,7 +118,7 @@ data_Celastrina_BR1_94_DEF[presence_matrix_Celastrina_BR1 == 0] <- 2
 years <- colnames(data_Celastrina_BR1_94_DEF)[-1]
 data_Celastrina_BR1_94_EF <-data_Celastrina_BR1_94_DEF[,-1]
 
-metapo_cela <- sapply(seq_along(years), function(i) { # 
+metapo_cela_BR1 <- sapply(seq_along(years), function(i) { # 
   
   subset <- data_Celastrina_BR1_94_EF[, 1:i, drop = FALSE]
   # 1) Ha tenido al menos un 1 en algún momento hasta el año i
@@ -137,6 +137,41 @@ data_Celastrina <-
   mutate(across(!IDitin, as.numeric))
 
 data_Celastrina_BR2 <-data_Celastrina[data_Celastrina$IDitin %in% itin_ID_2, ]
+###
+
+data_Celastrina_BR2_94 <- data_Celastrina_BR2[,-c(2:4)]
+
+data_Celastrina_BR2_94_DEF <- data_Celastrina_BR2_94
+
+itin_ID_1_Celastrina <- data_Celastrina_BR2_94$IDitin
+
+presence_matrix_Celastrina_BR2 <-presence_matrix_BR2[presence_matrix_BR2$SITE_ID %in% itin_ID_1_Celastrina, ]
+
+# Ordenem els dos data frames segons ID del itinerari (1a columna). 
+data_Celastrina_BR2_94_DEF <- data_Celastrina_BR2_94_DEF[
+  order(data_Celastrina_BR2_94_DEF[[1]]),]
+
+presence_matrix_Celastrina_BR2 <- presence_matrix_Celastrina_BR2[
+  order(presence_matrix_Celastrina_BR2[[1]]),]
+
+data_Celastrina_BR2_94_DEF[presence_matrix_Celastrina_BR2 == 0] <- 2
+
+# Eliminim la primera columna
+years <- colnames(data_Celastrina_BR2_94_DEF)[-1]
+data_Celastrina_BR2_94_EF <-data_Celastrina_BR2_94_DEF[,-1]
+
+metapo_cela_BR2 <- sapply(seq_along(years), function(i) { # 
+  
+  subset <- data_Celastrina_BR2_94_EF[, 1:i, drop = FALSE]
+  # 1) Ha tenido al menos un 1 en algún momento hasta el año i
+  has_presence_before <- apply(subset == 1, 1, any)
+  # 2) En el año i NO tiene un 2 (es decir, fue muestreado)
+  not_unsampled_this_year <- subset[, i] != 2
+  # Itinerarios que cumplen ambas
+  sum(has_presence_before & not_unsampled_this_year)
+})
+
+
 
 ###
 data_Celastrina <-
@@ -169,7 +204,7 @@ cela_chi2 <-data.frame()
 cela_chi2 <- presence_94_2024_celastrina_BR1_df
 names(cela_chi2)[names(cela_chi2) == "count"] <- "n1"
 names(cela_chi2)[names(cela_chi2) == "No_of_IT"] <- "N1" 
-cela_chi2$M1 <- metapo_cela
+cela_chi2$M1 <- metapo_cela_BR1
 
 # Celastrina argiolus BR2 #aqui se calcula n2 i N2 (las presencias y los itinerarios de la BR2)
 ##########################
@@ -184,7 +219,7 @@ presence_94_2024_celastrina_BR2_df$No_of_IT <- yearly_counts_BR2_df$count
 #Agregamos n2 i N2 al dataframe de celatrina
 cela_chi2$n2 <- presence_94_2024_celastrina_BR2_df$count
 cela_chi2$N2 <- presence_94_2024_celastrina_BR2_df$No_of_IT
-
+cela_chi2$M2 <- metapo_cela_BR2
 # Celastrina argiolus BR3
 ##########################
 # Exclude the SITE_ID column and sum across columns (i.e., years)
