@@ -108,8 +108,6 @@ for (i in 1:12 ) {
     c = list_colext_regionsbioclima[[j]]$C[i]
     e = list_colext_regionsbioclima[[j]]$E[i]
     
-    c   = 0.25
-    e   = 0.1
     T = 1 / (c + e)
     T_n = round(4 * T)
     

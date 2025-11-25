@@ -85,8 +85,130 @@ yearly_counts_BR3_df$year <- as.numeric(as.character(yearly_counts_BR3_df$year))
 # Input arguments: 
 # Sp: Nom de les especies
 # Bioreg: Nom de les bioregions. 
-Occupancia_Shading_Function <- function(Occupancia_Shading, Sp, BioReg )
 
+Sp = c("Celastrina Argiolus", "Lycaena Vigaureae", "Plebejus argus", 
+       "Psedophilotes panoptes", "Cyaniris semiargus", "Vanessa cardui", 
+       "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica", 
+       "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia") 
+BioReg = c("Regio Alpina i Subalpina", 
+           "Regio Mediterranea humida", 
+           "Regio Mediterranea arida")
+
+# Create the the matrix of SITE_IDs (1, sampled, 0, non-sampled) as rows and years 
+# as columns
+Itinerary_Matrix <- Samplying_Years %>%
+  pivot_wider(names_from = year, values_from = presence, values_fill = 0)
+
+
+itin_ID_List <- list(itin_ID_1, itin_ID_2, itin_ID_3)
+
+Itinerary_List <- list(presence_matrix_BR1, presence_matrix_BR2, presence_matrix_BR3)
+
+yearly_counts_BioReg_List = list(yearly_counts_BR1_df, yearly_counts_BR2_df, yearly_counts_BR3_df)
+
+n_List = list("n1", "n2", "n3")
+
+N_List = list("N1", "N2", "N3")
+
+M_List = list("M1", "M2", "M3")
+
+
+my_list <- list_Chi2_Function(data, Itinerary_List, yearly_counts_BioReg_List, 
+                              n_List, N_List, M_List, itin_ID_List, 
+                              Sp, BioReg)
+
+list_Chi2_Function <- function(data, Itinerary_List, yearly_counts_BioReg_List, 
+                               n_List, N_List, M_List, itin_ID_List, 
+                               Sp, BioReg)
+{
+  
+  list_chi2 <- list()
+  
+  for (i in 1:12 ) {
+    data_Sp <- 
+      data %>% filter(sp_latin == Sp[i]) %>% group_by(Any, IDitin) %>% count() %>%
+      pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
+      mutate(across(!IDitin, negate(is.na))) %>%
+      mutate(across(!IDitin, as.numeric))
+    
+    sp_chi2 <- data.frame() 
+    
+    for (j in 1:3) {
+      data_Sp_BioReg <-data_Sp[data_Sp$IDitin %in% itin_ID[[j]], ]
+  
+      data_Sp_BioReg_94 <- data_Sp_BioReg[,-c(2:4)]
+      
+      data_Sp_BioReg_94_DEF <- data_Sp_BioReg_94
+      
+      itin_ID_BioReg_Sp <- data_Sp_BioReg_94$IDitin 
+      
+      Itineary_Matrix_BioReg <- Itinerary_List[[j]]
+      
+      yearly_counts_BioReg_df <- yearly_counts_BioReg_List[[j]]
+      
+      n_BR = n_List[[j]]
+      
+      N_BR = N_List[[j]]
+      
+      M_BR = M_List[[j]]
+      
+      Intinerary_Matrix_Sp_BioReg <-Itinerary_Matrix_BioReg[Itinerary_Matrix_BioReg$SITE_ID %in% itin_ID_BioReg_Sp, ]
+      
+      # Ordenem els dos data frames segons ID del itinerari (1a columna). 
+      data_Sp_BioReg_94_DEF <- data_Sp_BioReg_94_DEF[
+        order(data_Sp_BioReg_94_DEF[[1]]),]
+      
+      Intinerary_Matrix_Sp_BioReg <- Intinerary_Matrix_Sp_BioReg[
+        order(Intinerary_Matrix_Sp_BioReg[[1]]),]
+      
+      data_Sp_BioReg_94_DEF[Intinerary_Matrix_Sp_BioReg == 0] <- 2
+      
+      # Eliminim la primera columna
+      years <- colnames(data_Celastrina_BR1_94_DEF)[-1]
+      data_Sp_BioReg_94_EF <-data_Sp_BioReg_94_DEF[,-1]
+      
+      metapo <- sapply(seq_along(years), function(i) { # 
+        
+        subset <- data_Sp_BioReg_94_EF[, 1:i, drop = FALSE]
+        # 1) Ha tenido al menos un 1 en algún momento hasta el año i
+        has_presence_before <- apply(subset == 1, 1, any)
+        # 2) En el año i NO tiene un 2 (es decir, fue muestreado)
+        not_unsampled_this_year <- subset[, i] != 2
+        # Itinerarios que cumplen ambas
+        sum(has_presence_before & not_unsampled_this_year)
+      })
+      
+      sp_chi2 <-data.frame()
+      sp_chi2 <- presence_94_2024_Sp_BioReg_df
+    
+      yearly_presence_Sp_BioReg <- colSums(data_Sp_BioReg[,-1])
+      
+      yearly_presence_Sp_BioReg_df <- enframe(yearly_presence_Sp_BioReg, name = "year", value = "count")
+      
+      presence_94_2024_Sp_BioReg_df$year <- as.numeric(presence_94_2024_Sp_BioReg_df$year)
+      
+      presence_94_2024_Sp_BioReg_df <- presence_94_2024_Sp_BioReg_df[
+        presence_94_2024_Sp_BioReg_df$year >= 1994, ]
+      
+      #prepararmos el dataframe para el calculo de las ocupancias#
+      presence_94_2024_Sp_BioReg_df$No_of_IT <- yearly_counts_BioReg_df$count
+      
+      #Agregamos n i N (de la BR corresponent) al dataframe de l'especie
+      sp_chi2$count <- presence_94_2024_Sp_BioReg_df$count
+      names(sp_chi2)[names(sp_chi2) == "count"] <- n_BR 
+      
+      sp_chi2$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
+      names(sp_chi2)[names(sp_chi2) == "No_of_IT"] <- N_BR
+      
+      sp_chi2$M <- metapo
+      names(sp_chi2)[names(sp_chi2) == "M"] <- M_BR 
+      
+      list_chi2 <- list(list_chi2, sp_chi2)
+    }
+  }
+  
+  return(list_chi2)
+}
 
 ###############
 data_Celastrina <-
@@ -125,7 +247,7 @@ metapo_cela <- sapply(seq_along(years), function(i) { #
   has_presence_before <- apply(subset == 1, 1, any)
   # 2) En el año i NO tiene un 2 (es decir, fue muestreado)
   not_unsampled_this_year <- subset[, i] != 2
-   # Itinerarios que cumplen ambas
+  # Itinerarios que cumplen ambas
   sum(has_presence_before & not_unsampled_this_year)
 })
 
@@ -952,10 +1074,11 @@ antho_chi2$N3 <- presence_94_2024_anthocharis_BR3_df$No_of_IT
 ###
 save(antho_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/antho_chi2.RData")
 
-list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, pseudo = pseudo_chi2,
-                  cyani =  cyani_chi2,vane = vane_chi2, agla = agla_chi2, antho = antho_chi2, 
-                  mela = mela_chi2, para = para_chi2, pyrobath = pyrobath_chi2, pyroceci = pyroceci_chi2) 
-                    
+list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, 
+                  pseudo = pseudo_chi2, cyani =  cyani_chi2, vane = vane_chi2, 
+                  agla = agla_chi2, antho = antho_chi2, mela = mela_chi2, 
+                  para = para_chi2, pyrobath = pyrobath_chi2, pyroceci = pyroceci_chi2) 
+
 save(list_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
 
 
