@@ -120,6 +120,7 @@ for (i in 1:12 ) {
       N_1994  = data_ocupancia[1, NN]    
       # Ocupancia a l'inici del periode (1)
       p_0_1994 <- as.numeric(n_1994/N_1994)
+      
       # print(paste("col_n =", nn, "col_N =", NN, 
       #             "n_0 = ", n_1994, "N_0 = ", N_1994, "p_0 = ", p_0_1994))
       
