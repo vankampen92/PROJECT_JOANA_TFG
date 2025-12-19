@@ -111,9 +111,8 @@ list_Chi2_Function <- function(data,
                                n_List, N_List, M_List, 
                                Sp, BioReg)
 {
-  
-  list_chi2 <- list()
-  
+  list_chi2  <- list()
+  out_list <- vector("list", length = 12)   # I = number of i-values
   for (i in 1:12 ) {
     file_name <- paste0(
       "/home/dalonso/PROJECT_JOANA_TFG/DADES/",
@@ -130,6 +129,7 @@ list_Chi2_Function <- function(data,
     sp_chi2 <- data.frame()   # Do NOT overwrite this inside j-loop
     sp_list <- list()         # temporary list for the 3 bioregions
     
+    out_list[[i]] <- vector("list", length = 3)   # J = number of j-values
     for (j in 1:3) {
       
       FES <- 1 # Only if "FES" is changed to 0, the plot is not done!!!
@@ -198,6 +198,8 @@ list_Chi2_Function <- function(data,
         
         data_Sp_BioReg_94_DEF[Itinerary_Matrix_Sp_BioReg == 0] <- 2
         
+        out_list[[i]][[j]] = data_Sp_BioReg_94_DEF
+        
         # Eliminim la primera columna
         years <- colnames(data_Celastrina_BR1_94_DEF)[-1]
         data_Sp_BioReg_94_EF <-data_Sp_BioReg_94_DEF[,-1]
@@ -227,25 +229,19 @@ list_Chi2_Function <- function(data,
         #prepararmos el dataframe para el calculo de las ocupancias#
         presence_94_2024_Sp_BioReg_df$No_of_IT <- yearly_counts_BioReg_df$count
         
-        # sp_chi2 <- presence_94_2024_Sp_BioReg_df
-        tmp <- presence_94_2024_Sp_BioReg_df   # local df for this j
+        # tmp <- presence_94_2024_Sp_BioReg_df   # local df for this j
+        # sp_list[[j]] <- tmp   # store result for each bioregion
+        
+        sp_list[[j]] <- presence_94_2024_Sp_BioReg_df   # store result for each bioregion
+        #Agregamos n i N (de la BR corresponent) al dataframe de l'especie
+        sp_list[[j]]$count <- presence_94_2024_Sp_BioReg_df$count
+        sp_list[[j]]$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
+        sp_list[[j]]$M <- metapo
         
         # rename columns n, N, M correctly
-        names(tmp)[names(tmp) == "count"] <- n_BR
-        names(tmp)[names(tmp) == "No_of_IT"] <- N_BR
-        names(tmp)[names(tmp) == "M"] <- M_BR
-        
-        sp_list[[j]] <- tmp   # store result for each bioregion
-        
-        #Agregamos n i N (de la BR corresponent) al dataframe de l'especie
-        sp_chi2$count <- presence_94_2024_Sp_BioReg_df$count
-        names(sp_chi2)[names(sp_chi2) == "count"] <- n_BR 
-        
-        sp_chi2$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
-        names(sp_chi2)[names(sp_chi2) == "No_of_IT"] <- N_BR
-        
-        sp_chi2$M <- metapo
-        names(sp_chi2)[names(sp_chi2) == "M"] <- M_BR 
+        names(sp_list[[j]])[names(sp_list[[j]]) == "count"] <- n_BR
+        names(sp_list[[j]])[names(sp_list[[j]]) == "No_of_IT"] <- N_BR
+        names(sp_list[[j]])[names(sp_list[[j]]) == "M"] <- M_BR
       }
     }
     
@@ -258,13 +254,21 @@ list_Chi2_Function <- function(data,
     list_chi2[[i]] <- sp_chi2
   }
   
-  return(list_chi2)
+  list_total = list(list_chi2, out_list)
+  
+  return(list_total)
 }
 
-my_list <- list_Chi2_Function(data, 
+total_list <- list_Chi2_Function(data, 
                               Itinerary_List, yearly_counts_BioReg_List, itin_ID_List, 
                               n_List, N_List, M_List,  
                               Sp, BioReg)
+
+my_list       <- total_list[[1]]
+sp_BR_Occ_012 <- total_list[[2]]
+
+save(my_list, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/my_list_chi2.RData")
+save(sp_BR_Occ_012, file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/list_sp_BR_Occ_012.RData")
 
 ###############
 data_Celastrina <-
@@ -1168,10 +1172,13 @@ save(list_colext_regionsbioclima,
 
 # Aglais io in Mediterranea Humida (2)
 
-j <- 1 # Lycaena virgaureae
+sp_chi2 <- data.frame()   # Do NOT overwrite this inside j-loop
+sp_list <- list()         # temporary list for the 3 bioregions
 
+
+j <- 2 
 data_Sp <- 
-  data %>% filter(sp_latin == "Lycaena virgaureae") %>% group_by(Any, IDitin) %>% count() %>%
+  data %>% filter(sp_latin == "Celastrina argiolus") %>% group_by(Any, IDitin) %>% count() %>%
   pivot_wider(names_from = Any, values_from = n) %>% ungroup() %>%
   mutate(across(!IDitin, negate(is.na))) %>%
   mutate(across(!IDitin, as.numeric))
@@ -1248,28 +1255,50 @@ presence_94_2024_Sp_BioReg_df <- presence_94_2024_Sp_BioReg_df[
 #prepararmos el dataframe para el calculo de las ocupancias#
 presence_94_2024_Sp_BioReg_df$No_of_IT <- yearly_counts_BioReg_df$count
 
-sp_chi2 <- presence_94_2024_Sp_BioReg_df
+####################################################################
+# sp_chi2 <- presence_94_2024_Sp_BioReg_df
+tmp <- presence_94_2024_Sp_BioReg_df   # local df for this j
+sp_list[[j]] <- tmp   # store result for each bioregion
+
 #Agregamos n i N (de la BR corresponent) al dataframe de l'especie
-sp_chi2$count <- presence_94_2024_Sp_BioReg_df$count
-names(sp_chi2)[names(sp_chi2) == "count"] <- n_BR 
+sp_list[[j]]$count <- presence_94_2024_Sp_BioReg_df$count
+# names(sp_chi2)[names(sp_chi2) == "count"] <- n_BR 
+sp_list[[j]]$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
+# names(sp_chi2)[names(sp_chi2) == "No_of_IT"] <- N_BR
+sp_list[[j]]$M <- metapo
+# names(sp_chi2)[names(sp_chi2) == "M"] <- M_BR
 
-sp_chi2$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
-names(sp_chi2)[names(sp_chi2) == "No_of_IT"] <- N_BR
+# rename columns n, N, M correctly
+names(sp_list[[j]])[names(sp_list[[j]]) == "count"] <- n_BR
+names(sp_list[[j]])[names(sp_list[[j]]) == "No_of_IT"] <- N_BR
+names(sp_list[[j]])[names(sp_list[[j]]) == "M"] <- M_BR
 
-sp_chi2$M <- metapo
-names(sp_chi2)[names(sp_chi2) == "M"] <- M_BR
+# After the j-loop finishes, combine the 3 bioregions:
+sp_chi2 <- Reduce(function(x,y) merge(x, y, by="year", all=TRUE), sp_list)
+####################################################################
+
+# sp_chi2 <- presence_94_2024_Sp_BioReg_df
+# Agregamos n i N (de la BR corresponent) al dataframe de l'especie
+# sp_chi2$count <- presence_94_2024_Sp_BioReg_df$count
+# names(sp_chi2)[names(sp_chi2) == "count"] <- n_BR 
+
+# sp_chi2$No_of_IT <- presence_94_2024_Sp_BioReg_df$No_of_IT
+# names(sp_chi2)[names(sp_chi2) == "No_of_IT"] <- N_BR
+
+# sp_chi2$M <- metapo
+# names(sp_chi2)[names(sp_chi2) == "M"] <- M_BR
 
 # Define the full set of years you want
-all_years <- as.character(1994:2024)
+# all_years <- as.character(1994:2024)
 
 # Find which years are missing in your data frame
-missing <- setdiff(all_years, names(data_Sp_BioReg))
+# missing <- setdiff(all_years, names(data_Sp_BioReg))
 
 # Add each missing year as a column filled with 0
-data_Sp_BioReg[missing] <- 0
+# data_Sp_BioReg[missing] <- 0
 
 # Optionally sort columns chronologically
-data_Sp_BioReg <- data_Sp_BioReg[, c("IDitin", all_years)]
+# data_Sp_BioReg <- data_Sp_BioReg[, c("IDitin", all_years)]
 
 list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, 
                   pseudo = pseudo_chi2, cyani =  cyani_chi2, vane = vane_chi2, 
