@@ -98,6 +98,7 @@ data_ocupancia$local_extinctions <- apply(data_ocupancia, 1, count_extinction_pa
 
 # Compta el numero de vegades que s'ha observat un exintion pattern del tipus (1 0 0 ... 0 0) 
 # en el conjunt d'itineraris que composa la metapoblacio d'una especie en una bioregio
+
 n_Extincions <- matrix(
   nrow = length(Sp),
   ncol = length(BioReg),
@@ -161,7 +162,7 @@ for (i in 1:12 ) {
       # M Nombre d'itineraris que defineixen l'Sp i en BR j
       MM = 4 + (j-1)*3  # Numero de columna on hi ha M1, M2, o M3: metapoblacio potencial)
       M = data_nNM[31, MM]
-      if (M > 5) {
+      if (M > 0) {
         n_Extincions[i,j] <- Local_Extinction_Pattern(data_ocupancia, T_n) 
         n_Extincions_per_IT[i,j] <- n_Extincions[i,j] / M 
       }
