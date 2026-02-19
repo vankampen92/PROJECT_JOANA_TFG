@@ -98,7 +98,7 @@ plot_panel <- ggplot(df_final, aes(x = year)) +
             linewidth = 0.8, linetype = "dashed") +
   
   # Estructura de Panel (Filas: Especie, Columnas: Región)
-  facet_grid(Species ~ Region, scales = "fixed") + 
+  facet_grid(Species ~ Region, scales = "fixed") +
   
   # Escalas y Etiquetas
   ylim(0, 1) +
@@ -113,12 +113,21 @@ plot_panel <- ggplot(df_final, aes(x = year)) +
   theme_bw(base_size = 11) +
   theme(
     legend.position = "top",
-    legend.text = element_text(size = 12),
-    strip.text.y = element_text(angle = 0, face = "italic", hjust = 0), # Nombres especies
+    legend.text = element_text(size = 13),
+    legend.key.size = unit(1.2, "lines"),
+    strip.text.y = element_text(size = 11, angle = 0, 
+                                face = "italic",
+                                hjust = 0,
+                                vjust = 1,
+                                margin = margin(t = 2, b = 12, l = 3)), # Nombres especies
+    strip.text.x = element_text(size = 12, face = "bold"),
     strip.background = element_rect(fill = "white"),
     panel.grid.minor = element_blank(),
     panel.spacing = unit(0.4, "lines"),
-    axis.text.x = element_text(angle = 0)
+    axis.text.x = element_text( size = 11, angle = 0),
+    axis.text.y  = element_text(size = 11),
+    axis.title.x = element_text(size = 13),
+    axis.title.y = element_text(size = 13),
   )
 
 # 5. GUARDAR RESULTADO
@@ -134,7 +143,7 @@ dir.create("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/panel_final", showWarnings =
 
 # Nota: He aumentado un poco el ancho y alto para que al ser PNG 
 # y tener 300 dpi, la imagen tenga suficiente definición.
-ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/panel_final/Panel_Ocupancia_12x3.png", 
+ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/panel_final/Panel_Ocupancia_C.png", 
        plot = plot_panel, 
        width = 16,     # Pulgadas de ancho
        height = 26,    # Pulgadas de alto
