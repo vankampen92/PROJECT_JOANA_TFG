@@ -109,7 +109,83 @@ data_ocupancia$local_extinctions <- apply(data_ocupancia, 1, count_extinction_pa
 
 ################
 
+# Compta el numero de vegades que s'ha observat un exintion pattern del
+# tipus (1 0 0 ... 0 0)
+# en el conjunt d'itineraris que composa la metapoblacio d'una especie
+# en una bioregio
 
+n_Extincions <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions <- as.data.frame(n_Extincions)
+
+n_Extincions_per_IT <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_per_IT <- as.data.frame(n_Extincions_per_IT)
+
+for (i in 1:12 ) {
+  
+  data_nNM <- as.data.frame(my_list[[i]])
+  
+  for (j in 1:3) {
+    # Dades ocupancia species i en cada regions.
+    
+    print(paste("Calculating Extinctions for Species", Sp[i], "in",
+                BioReg[j]))
+    # Pause until user presses Enter
+    readline(prompt = "Press [Enter] to continue...")
+    
+    FES <- 1 # Only if "FES" is changed to 0, the plot is not done!!!
+    
+    # Controlar especies que no hi son presents en alguna regio bioclimatic
+    if (j == 3 && i == 2) { # Lyca (Sp i=2) no hi es present en regio j=3
+      print(paste("No data for species", Sp[i], "in:", BioReg[j],
+                  "No occupancy plot possible!!!"))
+      FES = 0
+    }
+    if (j == 2 && i == 2) { # Lyca (Sp i=2) no hi es present en regio j=2
+      print(paste("No data for species", Sp[i], "in:", BioReg[j],
+                  "No occupancy plot possible!!!"))
+      FES = 0
+    }
+    if (j == 3 && i == 5) { # Cyani (Sp i=5) no hi es present en regio j=3
+      print(paste("No data for species", Sp[i], "in", BioReg[j],
+                  "No occupancy plot possible!!!"))
+      FES = 0
+    }
+    
+    if ( FES == 1 ) {
+      
+      data_ocupancia <- as.data.frame(sp_BR_Occ_012[[i]][[j]])
+      
+      c = list_colext_regionsbioclima[[j]]$C[i]
+      e = list_colext_regionsbioclima[[j]]$E[i]
+      
+      T = 1 / (c + e)       # Temps caracteristic
+      T_n = ceiling(4 * T)
+      print(paste("Temps caracteristic:", T))
+      print(paste("Patro d'extincio (1 0 0 ... 0) T_n =", T_n))
+      
+      if(j == 1) n_Extincions_per_IT$T_1[i] = T
+      if(j == 3) n_Extincions_per_IT$T_2[i] = T
+      if(j == 3) n_Extincions_per_IT$T_3[i] = T
+      
+      # M Nombre d'itineraris que defineixen l'Sp i en BR j
+      MM = 4 + (j-1)*3  # Numero de columna on hi ha M1, M2, o M3:
+      #metapoblacio potencial)
+M = data_nNM[31, MM]
+if (M > 0) {
+  n_Extincions[i,j] <- Local_Extinction_Pattern(data_ocupancia, T_n)
+  n_Extincions_per_IT[i,j] <- n_Extincions[i,j] / M
+}
+    }
+  }
+}
 ### PANEL 3 GRAFICS NOMBRE D-EXTINCIONS PER ITINERARI##########################################
 
 #Transformem rownames en una columna "species"
@@ -161,7 +237,7 @@ panel_final <- ggplot(df_long, aes(x = Species, y = Value, fill = Species)) +
   geom_col(width = 0.7) +
   facet_wrap(~Region, ncol = 1, scales = "free_y") +
   scale_fill_manual(values = species_colors) +
-  coord_cartesian(ylim = c(0, 0.5)) +
+  coord_cartesian(ylim = c(0, 1.25)) +
   labs(title = "", x = "Espècies", y = "n.º d'extincions/ itinerari", fill = "Espècies") +
   theme_bw(base_size = 11) +
   theme(
