@@ -24,6 +24,13 @@ ocupancies <- data.frame(
   p_3  = numeric(31)
 )
 
+ocupancies_2004 <- data.frame(
+  year = c(2004:2024),
+  p_1  = numeric(21),
+  p_2  = numeric(21),
+  p_3  = numeric(21)
+)
+
 load("~/PROJECT_JOANA_TFG/DADES/my_list_chi2.RData")
 
 llista_sp_ocupancies <- list()
@@ -48,7 +55,6 @@ results_3 <- data.frame(
   p_value = numeric(),
   stringsAsFactors = FALSE
 )
-
 
 for (i in 1:12 ) {
   # Dades ocupancia species i en les tres regions. 
@@ -117,6 +123,100 @@ for (i in 1:12 ) {
   llista_sp_ocupancies[[i]] <- ocupancies
 }
 
+# Llista and results: tots a zero patatero!!! 
+llista_sp_ocupancies <- list()
+
+results_1 <- data.frame(
+  species = character(),
+  slope = numeric(),
+  p_value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+results_2 <- data.frame(
+  species = character(),
+  slope = numeric(),
+  p_value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+results_3 <- data.frame(
+  species = character(),
+  slope = numeric(),
+  p_value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+###  Loop Ocupancia filtrada 2004 en endavanbt 
+for (i in 1:12 ) {
+  # Dades ocupancia species i en les tres regions. 
+  data_ocupancia <- as.data.frame(my_list[[i]])
+  
+  data_ocupancia_2004 <- data_ocupancia[data_ocupancia$year >= 2004, ]
+  
+  for (j in 1:3) {
+    
+    FES <- 1 # Only if "FES" is changed to 0, the plot is not done!!!
+    
+    # Controlar especies que no hi son presents en alguna regio bioclimatic
+    if (j == 3 && i == 2) { # Lyca (Sp i=2) no hi es present en regio j=3 
+      print(paste("No data for species", Sp[i], "in:", BioReg[j], 
+                  "No occupancy plot possible!!!"))
+      FES = 0
+    }
+    if (j == 2 && i == 2) { # Lyca (Sp i=2) no hi es present en regio j=2 
+      print(paste("No data for species", Sp[i], "in:", BioReg[j], 
+                  "No occupancy plot possible!!!"))
+      FES = 0
+    }
+    if (j == 3 && i == 5) { # Cyani (Sp i=5) no hi es present en regio j=3  
+      print(paste("No data for species", Sp[i], "in", BioReg[j], 
+                  "No occupancy plot possible!!!"))  
+      FES = 0
+    }
+    
+    if ( FES == 1 ) {
+      
+      # Col on hi ha el nombre d'itineraris ocupats a la regio j
+      nn = 2 + (j-1)*3  
+      # Col on hi ha el nombre d'itineraris mostrejats regio j
+      MM = 4 + (j-1)*3  # (M1, M2, o M3: metapoblacio potencial)
+      
+      ocupancies_2004[,j+1] = data_ocupancia_2004[, nn]/data_ocupancia_2004[, MM]
+      
+      if( j == 1) {
+        model <- lm(p_1 ~ year, data = ocupancies_2004)
+        slope <- coef(summary(model))["year", "Estimate"]
+        pval  <- coef(summary(model))["year", "Pr(>|t|)"]
+        results_1 <- rbind(results_1,
+                           data.frame(species = Sp[i],
+                                      slope = slope,
+                                      p_value = pval))
+      }
+      if( j == 2 ) {
+        model <- lm(p_2 ~ year, data = ocupancies_2004)  
+        slope <- coef(summary(model))["year", "Estimate"]
+        pval  <- coef(summary(model))["year", "Pr(>|t|)"]
+        results_2 <- rbind(results_2,
+                           data.frame(species = Sp[i],
+                                      slope = slope,
+                                      p_value = pval))
+      }
+      if( j == 3) {
+        model <- lm(p_3 ~ year, data = ocupancies_2004)
+        slope <- coef(summary(model))["year", "Estimate"]
+        pval  <- coef(summary(model))["year", "Pr(>|t|)"]
+        results_3 <- rbind(results_3,
+                           data.frame(species = Sp[i],
+                                      slope = slope,
+                                      p_value = pval))
+      }
+    }
+  }
+  
+  llista_sp_ocupancies[[i]] <- ocupancies_2004
+}
+
 results_1$trend <- ifelse(results_1$p_value < 0.05 & results_1$slope > 0,
                         "Significant increase",
                         ifelse(results_1$p_value < 0.05 & results_1$slope < 0,
@@ -135,6 +235,7 @@ results_3$trend <- ifelse(results_3$p_value < 0.05 & results_3$slope > 0,
                                  "Significant decrease",
                                  "No significant trend"))
 
+# Filtering for M > M_min: 
 # Build reduced dataframe
 ocupancia_year_p <- data.frame(
   year = numeric(),
@@ -180,6 +281,10 @@ Occupancia_M_Filtering_Function <- function(data_ocupancia, j, M_min = 10)
 for (i in 1:12 ) {
   # Dades ocupancia species i en les tres regions. 
   data_ocupancia <- as.data.frame(my_list[[i]])
+  
+  # Activate the next line if you consider only the period 2004-2024.
+  # (otherwise comment it out, and results will be generatedfor the whole period 1994-2024)
+  data_ocupancia <- data_ocupancia[data_ocupancia$year >= 2004, ]
   
   for (j in 1:3) {
     
