@@ -8,9 +8,9 @@ load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
 ###Per carregar el delta de temps caracteristic carrego els df amb els valors per
 # cada bioregio
 
-load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1.RData")
-load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2.RData")
-load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3.RData")
+load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData")
+load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
+load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
 
 
 Sp = c("Celastrina argiolus", "Lycaena vigaureae", "Plebejus argus", 
@@ -20,6 +20,43 @@ Sp = c("Celastrina argiolus", "Lycaena vigaureae", "Plebejus argus",
 BioReg = c("Regió Alpina i Subalpina", 
            "Regió Mediterrània Humida", 
            "Regió Mediterrània Àrida")
+
+
+temps_br1 <- colext_Results_df_BR1_ordenado %>%
+  transmute(
+    Species = species,
+    Region = "Regió Alpina i Subalpina",
+    valor = Temps_Ca,
+    error = Delta_Temps_Ca,
+    low = Temps_Ca - Delta_Temps_Ca,
+    up = Temps_Ca + Delta_Temps_Ca
+  )
+
+temps_br2 <- colext_Results_df_BR2_ordenado %>%
+  transmute(
+    Species = species,
+    Region = "Regió Mediterrània Humida",
+    valor = Temps_Ca,
+    error = Delta_Temps_Ca,
+    low = Temps_Ca - Delta_Temps_Ca,
+    up = Temps_Ca + Delta_Temps_Ca
+  )
+
+#Mantenim l'ordre de les especies
+df_temps$Species <- factor(df_temps$Species, levels = species_order)
+
+
+temps_br3 <- colext_Results_df_BR3_ordenado %>%
+  transmute(
+    Species = species,
+    Region = "Regió Mediterrània Àrida",
+    valor = Temps_Ca,
+    error = Delta_Temps_Ca,
+    low = Temps_Ca - Delta_Temps_Ca,
+    up = Temps_Ca + Delta_Temps_Ca
+  )
+
+df_temps <- bind_rows(temps_br1, temps_br2, temps_br3)
 
 Local_Extinction_Counts <- function(ocupancia_012, T_n)
 {
@@ -172,7 +209,7 @@ for (i in 1:12 ) {
       print(paste("Patro d'extincio (1 0 0 ... 0) T_n =", T_n))
       
       if(j == 1) n_Extincions_per_IT$T_1[i] = T
-      if(j == 3) n_Extincions_per_IT$T_2[i] = T
+      if(j == 2) n_Extincions_per_IT$T_2[i] = T
       if(j == 3) n_Extincions_per_IT$T_3[i] = T
       
       # M Nombre d'itineraris que defineixen l'Sp i en BR j
@@ -216,10 +253,10 @@ species_colors <- c(
 
 # 2. Definición del orden
 species_order <- c(
-  "Celastrina argiolus", "Lycaena vigaureae", "Plebejus argus",
-  "Pseudophilotes panoptes", "Cyaniris semiargus", "Vanessa cardui",
-  "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica",
-  "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia"
+  "Pseudophilotes panoptes", "Cyaniris semiargus",   "Plebejus argus",
+ "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
+  "Lycaena vigaureae","Pararge aegeria","Celastrina argiolus",  
+   "Pyronia bathseba", "Pyronia cecilia"
 )
 
 # 3. Preparar datos y aplicar factor
@@ -259,33 +296,31 @@ ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/Panel_Extincions.png"
 
 # 1. Definir el orden basado en la columna Species de tu DF actual
 species_order <- unique(n_Extincions_per_IT$Species)
-
-# 1. Preparar datos pivotando las columnas T_1, T_2 y T_3
-df_temps <- n_Extincions_per_IT %>%
-  pivot_longer(
-    cols = c("T_1", "T_2", "T_3"),
-    names_to = "Regions",
-    values_to = "valor"
-  )
-
-# 2. Asegurar el orden de las especies y renombrar regiones para el título
 df_temps$Species <- factor(df_temps$Species, levels = species_order)
-df_temps$Regions <- recode(df_temps$Regions,
-                           "T_1" = "Regió Alpina i Subaplina",
-                           "T_2" = "Regió Mediterrània Humida",
-                           "T_3" = "Regió Mediterrània: Àrida")
 
-# 3. Generar el Gráfico de Tiempos
+#NOu panell temps amb barres d'error
+
 panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
+  
   geom_col(width = 0.7) +
-  facet_wrap(~Regions, ncol = 1, scales = "free_y") +
+  
+  geom_errorbar(
+    aes(ymin = low, ymax = up),
+    width = 0.2,
+    linewidth = 0.5
+  ) +
+  
+  facet_wrap(~Region, ncol = 1, scales = "free_y") +
+  
   scale_fill_manual(values = species_colors) +
+  
   labs(
     title = "",
     x = "Espècies",
     y = "Temps característic",
     fill = ""
   ) +
+  
   theme_bw(base_size = 11) +
   theme(
     axis.text.x = element_blank(),
@@ -295,6 +330,49 @@ panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
     strip.background = element_rect(fill = "gray90"),
     strip.text = element_text(face = "bold")
   )
+
+print(panell_temps)
+ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Temps/Panel_Temps.png",
+       plot = panell_temps,
+       width = 8,
+       height = 10,
+       dpi = 300)
+
+# 1. Preparar datos pivotando las columnas T_1, T_2 y T_3
+#df_temps <- n_Extincions_per_IT %>%
+ # pivot_longer(
+  #  cols = c("T_1", "T_2", "T_3"),
+   # names_to = "Regions",
+    #values_to = "valor"
+#  )
+
+# 2. Asegurar el orden de las especies y renombrar regiones para el título
+#df_temps$Species <- factor(df_temps$Species, levels = species_order)
+#df_temps$Regions <- recode(df_temps$Regions,
+ #                          "T_1" = "Regió Alpina i Subaplina",
+#                         "T_2" = "Regió Mediterrània Humida",
+#                           "T_3" = "Regió Mediterrània: Àrida")
+
+# 3. Generar el Gráfico de Tiempos
+# panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
+#  geom_col(width = 0.7) +
+#  facet_wrap(~Regions, ncol = 1, scales = "free_y") +
+#  scale_fill_manual(values = species_colors) +
+# labs(
+#    title = "",
+#    x = "Espècies",
+#    y = "Temps característic",
+#    fill = ""
+#  ) +
+#  theme_bw(base_size = 11) +
+#  theme(
+#    axis.text.x = element_blank(),
+#    axis.ticks.x = element_blank(),
+#    legend.position = "right",
+#    legend.text = element_text(face = "italic"),
+#    strip.background = element_rect(fill = "gray90"),
+#    strip.text = element_text(face = "bold")
+#  )
 
 print(panell_temps)
 ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/panell_temps.png",
