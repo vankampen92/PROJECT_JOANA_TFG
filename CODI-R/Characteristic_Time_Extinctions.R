@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+library(tidyverse)
 
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_sp_BR_Occ_012.RData")
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
@@ -13,10 +14,10 @@ load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
 
 
-Sp = c("Celastrina argiolus", "Lycaena vigaureae", "Plebejus argus", 
-       "Pseudophilotes panoptes", "Cyaniris semiargus", "Vanessa cardui", 
-       "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica", 
-       "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia") 
+Sp = c( "Pseudophilotes panoptes", "Cyaniris semiargus",   "Plebejus argus",
+        "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
+        "Lycaena vigaureae","Pararge aegeria","Celastrina argiolus",  
+        "Pyronia bathseba", "Pyronia cecilia") 
 BioReg = c("Regió Alpina i Subalpina", 
            "Regió Mediterrània Humida", 
            "Regió Mediterrània Àrida")
@@ -24,7 +25,7 @@ BioReg = c("Regió Alpina i Subalpina",
 
 temps_br1 <- colext_Results_df_BR1_ordenado %>%
   transmute(
-    Species = species,
+    Species = Sp,
     Region = "Regió Alpina i Subalpina",
     valor = Temps_Ca,
     error = Delta_Temps_Ca,
@@ -34,7 +35,7 @@ temps_br1 <- colext_Results_df_BR1_ordenado %>%
 
 temps_br2 <- colext_Results_df_BR2_ordenado %>%
   transmute(
-    Species = species,
+    Species = Sp,
     Region = "Regió Mediterrània Humida",
     valor = Temps_Ca,
     error = Delta_Temps_Ca,
@@ -48,7 +49,7 @@ df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 temps_br3 <- colext_Results_df_BR3_ordenado %>%
   transmute(
-    Species = species,
+    Species = Sp,
     Region = "Regió Mediterrània Àrida",
     valor = Temps_Ca,
     error = Delta_Temps_Ca,
@@ -126,20 +127,6 @@ Local_Extinction_Pattern <- function(ocupancia_012, T_n)
   return(N) #Numero d'extincions observades
 }
 
-
-############################## Provatina: Celastrina a BR1#####################################
-data_ocupancia <- data_Celastrina_BR1_94_DEF
-
-c   = 0.58
-e   = 0.40
-T = 1 / (c + e)
-T_n = round(4 * T)
-
-N1 <- Local_Extinction_Counts(data_ocupancia, T_n)
-N2 <- Local_Extinction_Pattern(data_ocupancia, T_n)
-
-data_ocupancia$local_extinctions <- apply(data_ocupancia, 1, count_extinction_pattern, n = T_n)
-###############################################################################################
 
 # Compta el numero de vegades que s'ha observat un exintion pattern del tipus (1 0 0 ... 0 0) 
 # en el conjunt d'itineraris que composa la metapoblacio d'una especie en una bioregio
@@ -295,7 +282,7 @@ ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/Panel_Extincions.png"
 #PANELL DEL TEMPS CARACTERISTIC
 
 # 1. Definir el orden basado en la columna Species de tu DF actual
-species_order <- unique(n_Extincions_per_IT$Species)
+
 df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 #NOu panell temps amb barres d'error
@@ -338,41 +325,6 @@ ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Temps/Panel_Temps.png",
        height = 10,
        dpi = 300)
 
-# 1. Preparar datos pivotando las columnas T_1, T_2 y T_3
-#df_temps <- n_Extincions_per_IT %>%
- # pivot_longer(
-  #  cols = c("T_1", "T_2", "T_3"),
-   # names_to = "Regions",
-    #values_to = "valor"
-#  )
-
-# 2. Asegurar el orden de las especies y renombrar regiones para el título
-#df_temps$Species <- factor(df_temps$Species, levels = species_order)
-#df_temps$Regions <- recode(df_temps$Regions,
- #                          "T_1" = "Regió Alpina i Subaplina",
-#                         "T_2" = "Regió Mediterrània Humida",
-#                           "T_3" = "Regió Mediterrània: Àrida")
-
-# 3. Generar el Gráfico de Tiempos
-# panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
-#  geom_col(width = 0.7) +
-#  facet_wrap(~Regions, ncol = 1, scales = "free_y") +
-#  scale_fill_manual(values = species_colors) +
-# labs(
-#    title = "",
-#    x = "Espècies",
-#    y = "Temps característic",
-#    fill = ""
-#  ) +
-#  theme_bw(base_size = 11) +
-#  theme(
-#    axis.text.x = element_blank(),
-#    axis.ticks.x = element_blank(),
-#    legend.position = "right",
-#    legend.text = element_text(face = "italic"),
-#    strip.background = element_rect(fill = "gray90"),
-#    strip.text = element_text(face = "bold")
-#  )
 
 print(panell_temps)
 ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/panell_temps.png",
