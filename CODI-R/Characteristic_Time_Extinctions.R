@@ -43,10 +43,6 @@ temps_br2 <- colext_Results_df_BR2_ordenado %>%
     up = Temps_Ca + Delta_Temps_Ca
   )
 
-#Mantenim l'ordre de les especies
-df_temps$Species <- factor(df_temps$Species, levels = species_order)
-
-
 temps_br3 <- colext_Results_df_BR3_ordenado %>%
   transmute(
     Species = Sp,
@@ -58,6 +54,8 @@ temps_br3 <- colext_Results_df_BR3_ordenado %>%
   )
 
 df_temps <- bind_rows(temps_br1, temps_br2, temps_br3)
+#Mantenim l'ordre de les especies
+df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 Local_Extinction_Counts <- function(ocupancia_012, T_n)
 {
@@ -84,7 +82,8 @@ count_extinctions_row <- function(row, n = 3) {
 count_extinction_pattern <- function(row, n = 3) {
   v <- as.numeric(row)
   
-  count <- 0
+  count_end <- 0  # extinction that reaches the end
+  count     <- 0  # extinction followed by recolonization
   run <- 0
   
   for (i in seq_along(v)) {
@@ -105,11 +104,13 @@ count_extinction_pattern <- function(row, n = 3) {
   # check if a run ends at the last element
   if (run >= n) {
     if (length(v) - run >= 1 && v[length(v) - run] == 1) {
-      count <- count + 1
+      count_end <- count_end + 1
     }
   }
   
-  count
+  return(c(count = count, count_end = count_end))
+  
+  return(Extinction_Counts)
 }
 
 Local_Extinction_Pattern <- function(ocupancia_012, T_n)
@@ -118,15 +119,33 @@ Local_Extinction_Pattern <- function(ocupancia_012, T_n)
   #      . ocupancia_012 es la matriu ocupancies (2 no mostrejat, 1 presencia, 0 absencia):  
   #       It  1994  ...  ...  ... ... 2024
   #       12   2     2    1    0   1   0
-  #      . T_n:  patro de 0 seguits a comptabilitzar
+  #      . T_n:  patro de 1, 0 0 0 0 seguits a comptabilitzar
   
   ocupancia_012$local_extinctions <- apply(ocupancia_012, 1, count_extinction_pattern, n = T_n)
   
-  N <- sum(ocupancia_012$local_extinctions)
+  res <- apply(ocupancia_012, 1, count_extinction_pattern, n = T_n)
+  counts  <- res["count", ]
   
-  return(N) #Numero d'extincions observades
+  N <- sum(counts)
+  
+  return(N) #Numero d'extincions observades (amb recolonitzacio)
 }
 
+Local_Extinction_2024 <- function(ocupancia_012, T_n)
+{
+  # Input:
+  #      . ocupancia_012 es la matriu ocupancies (2 no mostrejat, 1 presencia, 0 absencia):  
+  #       It  1994  ...  ...  ... ... 2024
+  #       12   2     2    1    0   1   0
+  #      . T_n:  patro de 1, 0 0 0 0 seguits a comptabilitzar
+  
+  res <- apply(ocupancia_012, 1, count_extinction_pattern, n = T_n)
+  counts_end  <- res["count_end", ]
+  
+  N <- sum(counts_end)
+  
+  return(N) #Numero d'extincions observades fins al 2024
+}
 
 # Compta el numero de vegades que s'ha observat un exintion pattern del tipus (1 0 0 ... 0 0) 
 # en el conjunt d'itineraris que composa la metapoblacio d'una especie en una bioregio
@@ -145,12 +164,40 @@ n_Extincions <- matrix(
 )
 n_Extincions <- as.data.frame(n_Extincions)
 
+n_Extincions_2024 <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_2024 <- as.data.frame(n_Extincions_2024)
+
 n_Extincions_per_IT <- matrix(
   nrow = length(Sp),
   ncol = length(BioReg),
   dimnames = list(Sp, BioReg)
 )
 n_Extincions_per_IT <- as.data.frame(n_Extincions_per_IT)
+
+n_Extincions_per_IT <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_per_IT <- as.data.frame(n_Extincions_per_IT)
+
+n_Extincions_per_IT_Total <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_per_IT_Total <- as.data.frame(n_Extincions_per_IT_Total)
+
+n_Extincions_per_IT_2024 <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_per_IT_2024 <- as.data.frame(n_Extincions_per_IT_2024)
 
 for (i in 1:12 ) {
   
@@ -201,15 +248,22 @@ for (i in 1:12 ) {
       
       # M Nombre d'itineraris que defineixen l'Sp i en BR j
       MM = 4 + (j-1)*3  # Numero de columna on hi ha M1, M2, o M3:
-      #metapoblacio potencial)
-M = data_nNM[31, MM]
-if (M > 0) {
-  n_Extincions[i,j] <- Local_Extinction_Pattern(data_ocupancia, T_n)
-  n_Extincions_per_IT[i,j] <- n_Extincions[i,j] / M
-}
+      # metapoblacio potencial)
+      M = data_nNM[31, MM]
+      if (M > 0) {
+        n_Extincions[i,j] <- Local_Extinction_Pattern(data_ocupancia, T_n)
+        n_Extincions_2024[i,j] <- Local_Extinction_2024(data_ocupancia, T_n)
+        
+        n_Extincions_per_IT[i,j] <- n_Extincions[i,j] / M
+        n_Extincions_per_IT_2024[i,j] <- n_Extincions_2024[i,j] / M
+        
+        n_Extinctions_Total[i,j] <- n_Extincions[i,j] + n_Extincions_2024[i,j] 
+        n_Extincions_per_IT_Total[i,j] <- n_Extincions_Total[i,j] / M
+      }
     }
   }
 }
+
 ### PANEL 3 GRAFICS NOMBRE D-EXTINCIONS PER ITINERARI##########################################
 
 #Transformem rownames en una columna "species"
