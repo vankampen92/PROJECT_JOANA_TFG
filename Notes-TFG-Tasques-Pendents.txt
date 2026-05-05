@@ -1,0 +1,13 @@
+1. Grafiques de colonitzacio i extinctio amb el indexs de mobilitat i especialitzacio. Organitzar en dues grafiques (una per index). Cada grafica haura de tenir 6 panels (extincio en les tres bioregions i colonitzacio en les tres bioregions). 
+
+2. Cal decidir com representem els resultats del criteri d’extinci´o local i el temps caracteristic, pero primer cal trobar l'error que tenim al codi de R.
+
+3. Fer un primer draft de la discusio i conclusions. 
+
+4. Tendencies temporals de les ocupancies (afegir icona papallona). Afegir la grafica de les barres de colors amb els codis de significacio i la variacio total d'ocupancia.  Descriure be les grafiques be.  
+
+5. Descriure la grafica de canvis temporals de les prefer`encies bioclim`atiques de les especies
+
+6. Fer un draft de l'apartat discusio. 
+
+
