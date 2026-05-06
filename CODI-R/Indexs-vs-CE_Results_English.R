@@ -679,9 +679,9 @@ Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Alpine and Subalpine Region",
-       x = "Mobility Index",
-       y = "Colonization Rate",
+  labs(title = "Regió Alpina i Subalpina",
+       x = "Índex de mobilitat",
+       y = "Colonització",
        color = "species") +
   scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
   theme(
@@ -720,9 +720,9 @@ Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Alpine and Subalpine Region",
-       x = "Mobility Index",
-       y = "Extinction Rate",
+  labs(title = "Regió Alpina i Subalpina",
+       x = "Índex de mobilitat",
+       y = "Extinció",
        color = "species") +
   scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
   theme(
@@ -762,9 +762,9 @@ Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Humid Mediterranean Region",
-       x = "Mobility Index",
-       y = "Colonization Rate",
+  labs(title = "Regió Mediterrània Humida",
+       x = "Mobilitat",
+       y = "Índex de Colonizació",
        color = "species") +
   scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
   theme(
@@ -803,9 +803,9 @@ Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Humid Mediterranean Region",
-       x = "Mobility Index",
-       y = "Extinction Rate",
+  labs(title = "Regió Mediterrània humida",
+       x = "Índex de Mobilitat",
+       y = "Extinció",
        color = "species") +
   scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
   theme(
@@ -844,9 +844,9 @@ Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Arid Mediterrenean Region",
-       x = "Mobility Index",
-       y = "Colonization Rate",
+  labs(title = "Regió Mediterrània àrida",
+       x = "Índex de Mobilitat",
+       y = "Colonització",
        color = "species") +
   scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
   theme(
@@ -885,9 +885,9 @@ Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Arid Mediterrenean Region",
-       x = "Mobility Index",
-       y = "Extinction Rate",
+  labs(title = "Regió mediterrània àrida",
+       x = "Índex de mobilitat",
+       y = "Extinció",
        color = "species") +
   scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
   theme(
