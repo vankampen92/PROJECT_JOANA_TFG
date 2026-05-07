@@ -1,6 +1,6 @@
 1. Grafiques de colonitzacio i extinctio amb el indexs de mobilitat i especialitzacio. Organitzar en dues grafiques (una per index). Cada grafica haura de tenir 6 panels (extincio en les tres bioregions i colonitzacio en les tres bioregions). 
 
-2. Cal decidir com representem els resultats del criteri d’extinci´o local i el temps caracteristic, pero primer cal trobar l'error que tenim al codi de R.
+2. Cal decidir com representem els resultats del criteri d’extinci´o local i el temps caracteristic, pero primer cal trobar l'error que tenim al codi de R. Idees: Representar 
 
 3. Fer un primer draft de la discusio i conclusions. 
 
@@ -10,4 +10,8 @@
 
 6. Fer un draft de l'apartat discusio. 
 
+Hipotesi/Conclusions: 
 
+1. Els model de colonizatcio extincio descriu be les dinamicas de presencies i absencies anuals de les especies de papallones en les itineris del CMBS
+2. El model permet capturar contraccions en l'area de distribucio de les especies, es a dir, perdua d'itineraris on les especies son presents. 
+3. L'us del model permet determinar els temps caracteristics de les especies en cada bioregio, els quals permeten definir un criteri d'extincio que permet estimar el numero ´d'extincions local observades i el numero d'itineraris on l'especie es troba extingida en l'actualitat.  

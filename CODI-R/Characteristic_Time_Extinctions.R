@@ -110,7 +110,7 @@ count_extinction_pattern <- function(row, n = 3) {
   
   return(c(count = count, count_end = count_end))
   
-  return(Extinction_Counts)
+  # return(Extinction_Counts)
 }
 
 Local_Extinction_Pattern <- function(ocupancia_012, T_n)
@@ -120,8 +120,6 @@ Local_Extinction_Pattern <- function(ocupancia_012, T_n)
   #       It  1994  ...  ...  ... ... 2024
   #       12   2     2    1    0   1   0
   #      . T_n:  patro de 1, 0 0 0 0 seguits a comptabilitzar
-  
-  ocupancia_012$local_extinctions <- apply(ocupancia_012, 1, count_extinction_pattern, n = T_n)
   
   res <- apply(ocupancia_012, 1, count_extinction_pattern, n = T_n)
   counts  <- res["count", ]
@@ -163,6 +161,13 @@ n_Extincions <- matrix(
   dimnames = list(Sp, BioReg)
 )
 n_Extincions <- as.data.frame(n_Extincions)
+
+n_Extincions_Total <- matrix(
+  nrow = length(Sp),
+  ncol = length(BioReg),
+  dimnames = list(Sp, BioReg)
+)
+n_Extincions_Total <- as.data.frame(n_Extincions_Total)
 
 n_Extincions_2024 <- matrix(
   nrow = length(Sp),
