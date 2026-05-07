@@ -262,7 +262,7 @@ for (i in 1:12 ) {
         n_Extincions_per_IT[i,j] <- n_Extincions[i,j] / M
         n_Extincions_per_IT_2024[i,j] <- n_Extincions_2024[i,j] / M
         
-        n_Extinctions_Total[i,j] <- n_Extincions[i,j] + n_Extincions_2024[i,j] 
+        n_Extincions_Total[i,j] <- n_Extincions[i,j] + n_Extincions_2024[i,j] 
         n_Extincions_per_IT_Total[i,j] <- n_Extincions_Total[i,j] / M
       }
     }
