@@ -13,15 +13,15 @@ load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR1_ordenado.RData
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR2_ordenado.RData")
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData")
 
-
+# This is JOANA order or COLOR order, the one used in data frames colex_Results_df_+++_ordenado.RData !!!
 Sp = c( "Pseudophilotes panoptes", "Cyaniris semiargus",   "Plebejus argus",
         "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
         "Lycaena vigaureae","Pararge aegeria","Celastrina argiolus",  
         "Pyronia bathseba", "Pyronia cecilia") 
+
 BioReg = c("Regió Alpina i Subalpina", 
            "Regió Mediterrània Humida", 
            "Regió Mediterrània Àrida")
-
 
 temps_br1 <- colext_Results_df_BR1_ordenado %>%
   transmute(
@@ -54,7 +54,7 @@ temps_br3 <- colext_Results_df_BR3_ordenado %>%
   )
 
 df_temps <- bind_rows(temps_br1, temps_br2, temps_br3)
-#Mantenim l'ordre de les especies
+# Mantenim l'ordre de les especies
 df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 Local_Extinction_Counts <- function(ocupancia_012, T_n)
@@ -154,6 +154,26 @@ Local_Extinction_2024 <- function(ocupancia_012, T_n)
 # tipus (1 0 0 ... 0 0)
 # en el conjunt d'itineraris que composa la metapoblacio d'una especie
 # en una bioregio
+
+# We need to redefine the order of Sp back to initial order: 
+# The reason is that the loop we are going to do for species and bioregions uses
+# lists of data frames that have that initial order 
+
+species_order <- c("Celastrina argiolus",  
+  "Lycaena virgaureae", 
+  "Plebejus argus", 
+  "Pseudophilotes panoptes", 
+  "Cyaniris semiargus", 
+  "Vanessa cardui",          
+  "Aglais io",               
+  "Anthocharis euphenoides",
+  "Melanargia occitanica", 
+  "Pararge aegeria", 
+  "Pyronia bathseba", 
+  "Pyronia cecilia" 
+) 
+
+Sp <- species_order
 
 n_Extincions <- matrix(
   nrow = length(Sp),
@@ -270,31 +290,32 @@ for (i in 1:12 ) {
 }
 
 ### PANEL 3 GRAFICS NOMBRE D-EXTINCIONS PER ITINERARI##########################################
-
 #Transformem rownames en una columna "species"
 library(tibble)
 n_Extincions_per_IT <- n_Extincions_per_IT %>%
-  rownames_to_column(var = "Species")
+rownames_to_column(var = "Species")
 
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+
+install.packages("patchwork")
 library(patchwork)
 
 # 1. Definición de colores
 species_colors <- c(
-  "Celastrina argiolus" = "#FF4A00",
-  "Lycaena vigaureae" = "#F2E600",
-  "Plebejus argus" = "#4C6A7F",
-  "Pseudophilotes panoptes" = "#0B1E8A",
-  "Cyaniris semiargus" = "#0A2DBF",
-  "Vanessa cardui" = "#D4B000",
-  "Aglais io" = "#8A2BE2",
-  "Anthocharis euphenoides" = "#8ED1DC",
-  "Melanargia occitanica" = "#1CA3D1",
-  "Pararge aegeria" = "#8B0000",
-  "Pyronia bathseba" = "#C71585",
-  "Pyronia cecilia" = "#F48FB1"
+  "Pseudophilotes panoptes" = "darkblue",
+  "Cyaniris semiargus" = "mediumblue",
+  "Plebejus argus" = "steelblue4",
+  "Aglais io" = "blueviolet",
+  "Melanargia occitanica" = "deepskyblue1",
+  "Anthocharis euphenoides" = "cadetblue2",
+  "Vanessa cardui" = "gold2",
+  "Lycaena virgaureae" = "yellow",
+  "Pararge aegeria" = "red4",
+  "Celastrina argiolus" = "orangered",
+  "Pyronia bathseba" = "violetred",
+  "Pyronia cecilia" = "palevioletred1"
 )
 
 # 2. Definición del orden

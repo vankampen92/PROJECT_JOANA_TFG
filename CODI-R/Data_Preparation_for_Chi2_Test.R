@@ -993,7 +993,6 @@ list_chi2 <- list(cela = cela_chi2, lyca = lyca_chi2, plebe = plebe_chi2, pseudo
                     
 save(list_chi2, file="/home/dalonso/PROJECT_JOANA_TFG/DADES/list_chi2.RData")
 
-
 #####################################
 #####################################
 BR1 <- data_frame(
@@ -1012,7 +1011,7 @@ BR3 <- data_frame(
   E = colext_Results_df_BR3$E_BR3)
 
 list_colext_regionsbioclima <- list(BR1 = BR1, BR2 = BR2, BR3 = BR3)
-
+ 
 save(list_colext_regionsbioclima, 
      file = "/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
 

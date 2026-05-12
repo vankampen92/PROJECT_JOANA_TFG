@@ -112,6 +112,7 @@ orden_personalizado_spp_colex <- c(
   "Celastrina argiolus",
   "Pyronia bathseba",
   "Pyronia cecilia") 
+
 colext_Results_df$species <- factor(colext_Results_df$species, levels = orden_personalizado_spp_colex)
 
 # install.packages("dplyr") # Si no lo tienes
@@ -132,8 +133,6 @@ my_colors <- c( "Pseudophilotes panoptes" = "darkblue",
                 "Celastrina argiolus" = "orangered",
                 "Pyronia bathseba" = "violetred",
                 "Pyronia cecilia" = "palevioletred1")
-
-
 
 gg_colext_total <- ggplot(colext_Results_df, aes(x = C, y = E, color = species)) +
   geom_point(size = 4) +
