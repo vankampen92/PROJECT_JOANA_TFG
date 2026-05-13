@@ -16,7 +16,7 @@ load("/home/dalonso/PROJECT_JOANA_TFG/DADES/colext_Results_df_BR3_ordenado.RData
 # This is JOANA order or COLOR order, the one used in data frames colex_Results_df_+++_ordenado.RData !!!
 Sp = c( "Pseudophilotes panoptes", "Cyaniris semiargus",   "Plebejus argus",
         "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
-        "Lycaena vigaureae","Pararge aegeria","Celastrina argiolus",  
+        "Lycaena virgaureae","Pararge aegeria","Celastrina argiolus",  
         "Pyronia bathseba", "Pyronia cecilia") 
 
 BioReg = c("Regió Alpina i Subalpina", 
@@ -322,7 +322,7 @@ species_colors <- c(
 species_order <- c(
   "Pseudophilotes panoptes", "Cyaniris semiargus",   "Plebejus argus",
  "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
-  "Lycaena vigaureae","Pararge aegeria","Celastrina argiolus",  
+  "Lycaena virgaureae","Pararge aegeria","Celastrina argiolus",  
    "Pyronia bathseba", "Pyronia cecilia"
 )
 
@@ -365,25 +365,29 @@ ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/Panel_Extincions.png"
 
 df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
-#NOu panell temps amb barres d'error
+df_temps$Region <- factor(df_temps$Region, levels = c("Regió Alpina i Subalpina", 
+                                                      "Regió Mediterrània Humida",
+                                                      "Regió Mediterrània Àrida")
+)
+#Nou panell temps amb barres d'error
 
 panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
   
   geom_col(width = 0.7) +
   
   geom_errorbar(
-    aes(ymin = low, ymax = up),
-    width = 0.2,
-    linewidth = 0.5
+    aes(ymin = valor, ymax = up),
+    width = 0.1,
+    linewidth = 0.4
   ) +
   
-  facet_wrap(~Region, ncol = 1, scales = "free_y") +
+facet_wrap(~Region, ncol = 1, scales = "fixed") +
   
   scale_fill_manual(values = species_colors) +
   
   labs(
     title = "",
-    x = "Espècies",
+    x = "",
     y = "Temps característic",
     fill = ""
   ) +
@@ -407,6 +411,4 @@ ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Temps/Panel_Temps.png",
 
 
 print(panell_temps)
-ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/panell_temps.png",
-       plot = panell_temps, width = 8, height = 10, dpi = 300)
 
