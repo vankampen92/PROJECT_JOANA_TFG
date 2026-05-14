@@ -88,6 +88,11 @@ species_order <- c(
 df_plot_long$Species <- factor(df_plot_long$Species,
                                levels = species_order)
 
+df_plot_long$Region <- factor(df_plot_long$Region, 
+                              levels = c("Regió Alpina i Subalpina", 
+                                         "Regió Mediterrània Humida",
+                                         "Regió Mediterrània Àrida"))
+
 # =========================================================
 # 7. Colors espècies
 # =========================================================
@@ -123,7 +128,7 @@ panel_final <- ggplot(
 
   geom_col(width = 0.7) +
 
-  facet_wrap(~Region, ncol = 1, scales = "free_y") +
+  facet_wrap(~Region, ncol = 1, scales = "fixed") +
 
   scale_fill_manual(values = species_colors) +
 
@@ -142,10 +147,10 @@ panel_final <- ggplot(
   coord_cartesian(ylim = c(0, 1.25)) +
 
   labs(
-    x = "Espècies",
+    x = "",
     y = "n.º d'extincions / itinerari",
     alpha = "Tipus d'extinció",
-    fill = "Espècies"
+    fill = ""
   ) +
 
   theme_bw(base_size = 11) +

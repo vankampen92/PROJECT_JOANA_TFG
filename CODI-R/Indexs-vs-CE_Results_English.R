@@ -669,7 +669,7 @@ Mobilitat_E <- ggplot(colext_Results_df_ordenado, aes(x = Mobilitat, y = E, colo
 
 print(Mobilitat_E)
 ###
-###
+###MOBILITAT EN LES 3 BIOREGIONS
 ###
 Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
                           aes(x = Mobilitat, y = C_BR1, color = species)) +
@@ -680,10 +680,10 @@ Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "Regió Alpina i Subalpina",
-       x = "Índex de mobilitat",
+       x = "",
        y = "Colonització",
        color = "species") +
-  scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
     
@@ -691,25 +691,25 @@ Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_C_BR1)
+#print(Mobilitat_C_BR1)
 ###
 ###
 Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
@@ -720,11 +720,11 @@ Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió Alpina i Subalpina",
-       x = "Índex de mobilitat",
+  labs(title = "",
+       x = "",
        y = "Extinció",
        color = "species") +
-  scale_color_manual(values = my_colors_BR1, limits = especies_ordered_BR1) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
     
@@ -732,25 +732,25 @@ Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_E_BR1)
+#print(Mobilitat_E_BR1)
 ###
 ###
 ###
@@ -763,10 +763,10 @@ Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "Regió Mediterrània Humida",
-       x = "Mobilitat",
-       y = "Índex de Colonizació",
+       x = "",
+       y = "",
        color = "species") +
-  scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
     
@@ -774,25 +774,25 @@ Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_C_BR2)
+#print(Mobilitat_C_BR2)
 ###
 
 Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
@@ -803,11 +803,11 @@ Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió Mediterrània humida",
-       x = "Índex de Mobilitat",
-       y = "Extinció",
+  labs(title = "",
+       x = "",
+       y = "",
        color = "species") +
-  scale_color_manual(values = my_colors_BR2, limits = especies_ordered_BR2) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
     
@@ -815,25 +815,25 @@ Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_E_BR2)
+#print(Mobilitat_E_BR2)
 
 ###
 Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
@@ -845,10 +845,10 @@ Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "Regió Mediterrània àrida",
-       x = "Índex de Mobilitat",
-       y = "Colonització",
+       x = "",
+       y = "",
        color = "species") +
-  scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
     
@@ -856,25 +856,25 @@ Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_C_BR3)
+#print(Mobilitat_C_BR3)
 ###
 
 Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
@@ -885,34 +885,63 @@ Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió mediterrània àrida",
-       x = "Índex de mobilitat",
-       y = "Extinció",
-       color = "species") +
-  scale_color_manual(values = my_colors_BR3, limits = especies_ordered_BR3) +
+  labs(title = "",
+       x = "",
+       y = "",
+       color = NULL) +
+  scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
-    legend.position = "none",
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 16),
     
     # ---- Titles ----
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 19
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 19),
+    axis.text.y = element_text(size = 19)
   )
 
-print(Mobilitat_E_BR3)
+#print(Mobilitat_E_BR3)
+
+############################### panell_final_indexos #######################
+install.packages("patchwork")
+library(patchwork)
+library(grid)
+
+Panel_final_indexos <- (
+  Mobilitat_C_BR1 + Mobilitat_C_BR2 + Mobilitat_C_BR3
+) / (
+  Mobilitat_E_BR1 + Mobilitat_E_BR2 + Mobilitat_E_BR3
+) +
+  plot_layout(guides = "collect") &
+  theme(
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 14),
+    legend.key.width = unit(1.2, "cm")
+  ) &
+  guides(
+    color = guide_legend(
+      nrow = 3,
+      byrow = TRUE
+    )
+  )
+
+Panel_final_indexos
