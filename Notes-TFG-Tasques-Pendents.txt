@@ -14,9 +14,13 @@
 
 8. Redactar les reflexions de genere.
 
+9. Canviar a tot arreu, grafics i text les segles RA, RMH i RMA per AS, MH i MA.
+
+
+
 
 Hipotesi/Conclusions: 
 
-1. Els model de colonizatcio extincio descriu be les dinamicas de presencies i absencies anuals de les especies de papallones en les itineris del CMBS
+1. Els model de colonizatcio extincio descriu be les dinamicas de presencies i absencies anuals de les especies de papallones estudiades en les itineris del CMBS
 2. El model permet capturar contraccions en l'area de distribucio de les especies, es a dir, perdua d'itineraris on les especies son presents. 
 3. L'us del model permet determinar els temps caracteristics de les especies en cada bioregio, els quals permeten definir un criteri d'extincio que permet estimar el numero ´d'extincions local observades i el numero d'itineraris on l'especie es troba extingida en l'actualitat.  

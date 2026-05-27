@@ -17,26 +17,25 @@ df_long <- yearly_df %>%
   mutate(
     Bioregion = recode(Bioregion,
                        "count" = "Total CBMS",
-                       "countBR1" = "RA",
-                       "countBR2" = "RMH",
-                       "countBR3" = "RMA"),
-    Bioregion = factor(Bioregion, levels = c("Total CBMS", "RA", "RMH", "RMA"))
+                       "countBR1" = "AS",
+                       "countBR2" = "MH",
+                       "countBR3" = "MA"),
+    Bioregion = factor(Bioregion, levels = c("Total CBMS", "AS", "MH", "MA"))
   )
 
-ggplot(df_long, aes(x = year, y = Itinerarios, color = Bioregion)) +
+itin_plot <- ggplot(df_long, aes(x = year, y = Itinerarios, color = Bioregion)) +
   geom_line(linewidth = 0.5) +
   geom_point(size = 2) +
   labs(
-    title = ,
     x = "Any",
     y = "Nombre d'itineraris",
-    color = "",
+    color = ""
   ) +
   scale_color_manual(values = c(
     "Total CBMS" = "black",
-    "RA" = "#7570b3",
-    "RMH" = "#1b9e77",
-    "RMA" = "#d95f02"
+    "AS" = "#7570b3",
+    "MH" = "#1b9e77",
+    "MA" = "#d95f02"
   )) +
   scale_x_continuous(breaks = seq(1994, 2024, by = 5)) +
   theme_minimal(base_size = 14) +
@@ -52,5 +51,8 @@ ggplot(df_long, aes(x = year, y = Itinerarios, color = Bioregion)) +
     legend.text = element_text(size = 12)
   )
 
+print(itin_plot)
+
 ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/itineraris_bioregio_plot.png",
        width = 8, height = 5, dpi = 300)
+

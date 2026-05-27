@@ -25,7 +25,7 @@ chi2_2p2 <- function(n1, N1, n2, N2) {
   }
     
   return(p_val)
-}
+
 
 p_values_df    <- data.frame(matrix(nrow = 12, ncol = length(1994:2024)))
 preferencia_df <- data.frame(matrix(nrow = 12, ncol = length(1994:2024)))

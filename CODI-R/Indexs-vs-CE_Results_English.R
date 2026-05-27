@@ -117,13 +117,13 @@ my_colors_BR1 <- my_colors[names(my_colors) %in% especies_ordered_BR1]
 gg_SSI_C_BR1 <- 
   ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
          aes(x = SSI, y = C_BR1, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = C_low_BR1, ymax = C_up_BR1), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Alpina and Subalpine Region",
+  labs(title = "",
        x = "SSI",
-       y = "Colonization",
+       y = "c",
        color = "species"
   ) +
   # Usar la escala de colores manual con tus vectores filtrados
@@ -131,26 +131,38 @@ gg_SSI_C_BR1 <-
   theme(
     legend.position = "none",
     
-    # ---- Titles ----
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4), 
+    
+   # Para crear el recuadro dell grafico 
+  #  panel.border = element_rect(
+  #    color = "gray80",
+  #    fill = NA,
+   #   linewidth = 0.8
+   # ),
+    
+    # ---- Titles ---- #
+  
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 print(gg_SSI_C_BR1)
@@ -160,13 +172,13 @@ print(gg_SSI_C_BR1)
 gg_SSI_E_BR1 <- 
   ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% melapyro),
          aes(x = SSI, y = E_BR1, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = E_low_BR1, ymax = E_up_BR1), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Alpine and Subalpine Region",
+  labs(title = "",
        x = "SSI",
-       y = "Extinction",
+       y = "e",
        color = "species" # Etiqueta para la leyenda de colores
   ) +
   # Usar la escala de colores manual con tu vector my_colors
@@ -175,26 +187,30 @@ gg_SSI_E_BR1 <-
   theme(
     legend.position = "none",
     
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
+    
     # ---- Titles ----
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 19
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 print(gg_SSI_E_BR1)
@@ -278,13 +294,13 @@ my_colors_BR2 <- my_colors[names(my_colors) %in% especies_ordered_BR2]
 gg_SSI_C_BR2 <- 
   ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
          aes(x = SSI, y = C_BR2, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = C_low_BR2, ymax = C_up_BR2), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Humid Mediterranian Region",
+  labs(title = "",
        x = "SSI",
-       y = "Colonization",
+       y = "c",
        color = "species" # Etiqueta para la leyenda de colores
   ) +
   # Usar la escala de colores manual con tu vector my_colors
@@ -293,26 +309,30 @@ gg_SSI_C_BR2 <-
   theme(
     legend.position = "none",
     
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
+    
     # ---- Titles ----
     plot.title = element_text(
       hjust = 0.5,
       face = "bold",
-      size = 22
+      size = 17
     ),
     
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 print(gg_SSI_C_BR2)
@@ -322,13 +342,13 @@ print(gg_SSI_C_BR2)
 gg_SSI_E_BR2 <- 
   ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
          aes(x = SSI, y = E_BR2, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = E_low_BR2, ymax = E_up_BR2), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Humid Mediterranean Region",
+  labs(title = "",
        x = "SSI",
-       y = "Extinction",
+       y = "e",
        color = "species" # Etiqueta para la leyenda de colores
   ) +
   # Usar la escala de colores manual con tu vector my_colors
@@ -336,6 +356,10 @@ gg_SSI_E_BR2 <-
   scale_color_manual(values = my_colors, limits = especies_ordered_BR2) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -347,16 +371,16 @@ gg_SSI_E_BR2 <-
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 print(gg_SSI_E_BR2)
@@ -367,7 +391,7 @@ print(gg_SSI_E_BR2)
 gg_HPI_C_BR2 <- 
   ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% lyca_cyan),
          aes(x = HPI, y = C_BR2, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = C_low_BR2, ymax = C_up_BR2), width = 0.005, size = 0.8) +
   theme_minimal() +
@@ -440,13 +464,13 @@ my_colors_BR3 <- my_colors[names(my_colors) %in% especies_ordered_BR3]
 gg_SSI_C_BR3 <- 
   ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
          aes(x = SSI, y = C_BR3, color = species))+
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = C_low_BR3, ymax = C_up_BR3), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Arid Mediterranian Region",
+  labs(title = "",
        x = "SSI",
-       y = "Colonitzation",
+       y = "c",
        color = "species" # Etiqueta para la leyenda de colores
   ) +
   # Usar la escala de colores manual con tu vector my_colors
@@ -454,6 +478,10 @@ gg_SSI_C_BR3 <-
   scale_color_manual(values = my_colors, limits = especies_ordered_BR3) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -465,16 +493,16 @@ gg_SSI_C_BR3 <-
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 print(gg_SSI_C_BR3)
@@ -484,13 +512,13 @@ print(gg_SSI_C_BR3)
 gg_SSI_E_BR3 <- 
   ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% lyca_cyan),
          aes(x = SSI, y = E_BR3, color = species)) +
-  geom_point(size = 2) + #El color se define por 'species' en aes()
+  geom_point(size = 3) + #El color se define por 'species' en aes()
   # Añadir barras de error horizontales para los intervalos de confianza de 'C'
   geom_errorbar(aes(ymin = E_low_BR3, ymax = E_up_BR3), width = 0.005, size = 0.8) +
   theme_minimal() +
-  labs(title = "Arid Mediterrenean Region",
+  labs(title = "",
        x = "SSI",
-       y = "Extinction",
+       y = "e",
        color = "species" # Etiqueta para la leyenda de colores
   ) +
   # Usar la escala de colores manual con tu vector my_colors
@@ -498,6 +526,10 @@ gg_SSI_E_BR3 <-
   scale_color_manual(values = my_colors, limits = especies_ordered_BR3) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -509,18 +541,17 @@ gg_SSI_E_BR3 <-
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 20
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 22),
-    axis.text.y = element_text(size = 22)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
-
 print(gg_SSI_E_BR3)
 
 ###
@@ -675,17 +706,26 @@ Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                           aes(x = Mobilitat, y = C_BR1, color = species)) +
   geom_point(position = position_dodge(width = 0.4), size  = 3) +
   geom_errorbar(aes(ymin = C_low_BR1, ymax = C_up_BR1),
-                width = 0.2,              
+                width = 0.005,              
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió Alpina i Subalpina",
-       x = "",
-       y = "Colonització",
+  labs(title = "",
+       x = "Mobilitat",
+       y = "c",
        color = "species") +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
+    
+    # ----  Control de las líneas del fondo ----
+    # Líneas principales: las hacemos más oscuras (gray80) y gruesas (0.6)
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    
+    # Líneas secundarias: las hacemos muy tenues (gray95) y finas (0.3)
+    # Nota: si prefieres borrarlas por completo para que no saturen, usa: element_blank()
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4), 
+    # ------------------------------------------------------
     
     # ---- Titles ----
     plot.title = element_text(
@@ -697,16 +737,16 @@ Mobilitat_C_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 #print(Mobilitat_C_BR1)
@@ -716,17 +756,21 @@ Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
                           aes(x = Mobilitat, y = E_BR1, color = species)) +
   geom_point(position = position_dodge(width = 0.4), size  = 3) +
   geom_errorbar(aes(ymin = E_low_BR1, ymax = E_up_BR1),
-                width = 0.2,              
+                width = 0.005,              
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "",
-       x = "",
-       y = "Extinció",
+       x = "Mobilitat",
+       y = "e",
        color = "species") +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4), 
     
     # ---- Titles ----
     plot.title = element_text(
@@ -738,19 +782,19 @@ Mobilitat_E_BR1 <- ggplot(filter(colext_Results_df_BR1_ordenado, !species %in% m
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
-#print(Mobilitat_E_BR1)
+
 ###
 ###
 ###
@@ -758,17 +802,21 @@ Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                           aes(x = Mobilitat, y = C_BR2, color = species)) +
   geom_point(position = position_dodge(width = 0.4), size  = 3) +
   geom_errorbar(aes(ymin = C_low_BR2, ymax = C_up_BR2),
-                width = 0.2,              
+                width = 0.005,              
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió Mediterrània Humida",
-       x = "",
-       y = "",
+  labs(title = "",
+       x = "Mobilitat",
+       y = "c",
        color = "species") +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -780,16 +828,16 @@ Mobilitat_C_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 #print(Mobilitat_C_BR2)
@@ -799,17 +847,21 @@ Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
                           aes(x = Mobilitat, y = E_BR2, color = species)) +
   geom_point(position = position_dodge(width = 0.4), size  = 3) +
   geom_errorbar(aes(ymin = E_low_BR2, ymax = E_up_BR2),
-                width = 0.2,              
+                width = 0.005,              
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "",
-       x = "",
-       y = "",
+       x = "Mobilitat",
+       y = "e",
        color = "species") +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -821,16 +873,16 @@ Mobilitat_E_BR2 <- ggplot(filter(colext_Results_df_BR2_ordenado, !species %in% l
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 #print(Mobilitat_E_BR2)
@@ -844,13 +896,17 @@ Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 linewidth = 0.8,                
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
-  labs(title = "Regió Mediterrània àrida",
-       x = "",
-       y = "",
+  labs(title = "",
+       x = "Mobilitat",
+       y = "c",
        color = "species") +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
     legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -862,16 +918,16 @@ Mobilitat_C_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 #print(Mobilitat_C_BR3)
@@ -886,14 +942,16 @@ Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
                 position = position_dodge(width = 0.4)) + 
   theme_minimal() +
   labs(title = "",
-       x = "",
-       y = "",
+       x = "Mobilitat",
+       y = "e",
        color = NULL) +
   scale_color_manual(values = my_colors, limits = especies_ordered) +
   theme(
-    legend.position = "bottom",
-    legend.title = element_blank(),
-    legend.text = element_text(size = 16),
+    legend.position = "none",
+    
+    # Lineas del grafico principales y secundarias en diferente color y grosor
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.6),
+    panel.grid.minor = element_line(color = "gray95", linewidth = 0.4),
     
     # ---- Titles ----
     plot.title = element_text(
@@ -905,30 +963,31 @@ Mobilitat_E_BR3 <- ggplot(filter(colext_Results_df_BR3_ordenado, !species %in% l
     # ---- Axis titles ----
     axis.title.x = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     axis.title.y = element_text(
       face = "bold",
-      size = 19
+      size = 17
     ),
     
     # ---- Tick labels ----
-    axis.text.x = element_text(size = 19),
-    axis.text.y = element_text(size = 19)
+    axis.text.x = element_text(size = 17),
+    axis.text.y = element_text(size = 17)
   )
 
 #print(Mobilitat_E_BR3)
 
-############################### panell_final_indexos #######################
+################## panell_final_indexos - c i e per bioregio####################
+
+
 install.packages("patchwork")
 library(patchwork)
 library(grid)
+library(cowplot)
 
-Panel_final_indexos <- (
-  Mobilitat_C_BR1 + Mobilitat_C_BR2 + Mobilitat_C_BR3
-) / (
-  Mobilitat_E_BR1 + Mobilitat_E_BR2 + Mobilitat_E_BR3
-) +
+### Regio bioclimatica Alpina i Subalpina (AS)
+Panel_AS <- (
+  Mobilitat_C_BR1 + Mobilitat_E_BR1) / ( gg_SSI_C_BR1 + gg_SSI_E_BR1 ) +
   plot_layout(guides = "collect") &
   theme(
     legend.position = "bottom",
@@ -944,4 +1003,157 @@ Panel_final_indexos <- (
     )
   )
 
-Panel_final_indexos
+##fem un grafic en el que deixarem nomes la llegenda per despres afegirla a la 
+## la par de abaix dels 4 grafics de la bioreg A.S
+legend_plot_BR1 <- ggplot(
+  colext_Results_df_BR1_ordenado,
+  aes(x = SSI, y = C_BR1, color = species)
+) +
+  geom_point(position = position_dodge(width = 0.4), size=5) +
+  scale_color_manual(
+    values = my_colors,
+    limits = especies_ordered
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 14, face = "italic")
+  )
+
+legend_1 <- cowplot::get_legend(legend_plot_BR1)
+
+
+#Montem el panell de 4 grafics
+Panel_AS <- (
+  Mobilitat_C_BR1 + Mobilitat_E_BR1
+) / (
+  gg_SSI_C_BR1 + gg_SSI_E_BR1
+)
+
+final_plot_AS <- cowplot::plot_grid(
+  Panel_AS,
+  legend_1,
+  ncol = 1,
+  rel_heights = c(1, 0.22)
+)
+
+# Añadimos margen derecho específicamente a todo el panel 
+# El orden de margin es: t (top), r (right), b (bottom), l (left)
+Panel_AS <- Panel_AS & theme(
+  plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
+)
+# ---------------------------
+print(final_plot_AS)
+
+ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/grafics_indexs_cie/Panel_Indexos_AS.png",
+       plot = final_plot_AS,
+       width = 9,
+       height = 6,
+       dpi = 300)
+
+################################################################
+
+### Panell Indexos amb c i e en regio Mediterrania Humida (MH)
+
+Panel_MH <- (
+  Mobilitat_C_BR2 + Mobilitat_E_BR2) / ( gg_SSI_C_BR2 + gg_SSI_E_BR2 ) 
+    
+
+##fem un grafic en el que deixarem nomes la llegenda per despres afegirla a la 
+## la par de abaix dels 4 grafics de la bioreg A.S
+legend_plot_BR2 <- ggplot(
+  colext_Results_df_BR2_ordenado,
+  aes(x = SSI, y = C_BR2, color = species)
+) +
+  geom_point(position = position_dodge(width = 0.4), size=5) +
+  scale_color_manual(
+    values = my_colors,
+    limits = especies_ordered
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 14, face = "italic")
+  )
+
+legend_2 <- cowplot::get_legend(legend_plot_BR2)
+
+
+#Montem el panell de 4 grafics
+Panel_MH <- (
+  Mobilitat_C_BR2 + Mobilitat_E_BR2
+) / (
+  gg_SSI_C_BR2 + gg_SSI_E_BR2
+)
+
+final_plot_MH <- cowplot::plot_grid(
+  Panel_MH,
+  legend_2,
+  ncol = 1,
+  rel_heights = c(1, 0.22)
+)
+
+# Añadimos margen derecho específicamente a todo el panel 
+# El orden de margin es: t (top), r (right), b (bottom), l (left)
+Panel_MH <- Panel_MH & theme(
+  plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
+)
+
+print(final_plot_MH)
+# ---------------------------
+######################################
+
+### Panell Indexos amb c i e en regio Mediterrania Arida (MA)
+
+Panel_MA <- (
+  Mobilitat_C_BR3 + Mobilitat_E_BR3) / ( gg_SSI_C_BR3 + gg_SSI_E_BR3 ) 
+
+##fem un grafic en el que deixarem nomes la llegenda per despres afegirla a la 
+## la par de abaix dels 4 grafics de la bioreg A.S
+legend_plot_BR3 <- ggplot(
+  colext_Results_df_BR3_ordenado,
+  aes(x = SSI, y = C_BR3, color = species)
+) +
+  geom_point(position = position_dodge(width = 0.4), size=5) +
+  scale_color_manual(
+    values = my_colors,
+    limits = especies_ordered
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 14, face = "italic")
+  )
+
+legend_3 <- cowplot::get_legend(legend_plot_BR3)
+
+
+#Montem el panell de 4 grafics
+Panel_MA <- (
+  Mobilitat_C_BR3 + Mobilitat_E_BR3
+) / (
+  gg_SSI_C_BR3 + gg_SSI_E_BR3
+)
+
+final_plot_MA <- cowplot::plot_grid(
+  Panel_MA,
+  legend_3,
+  ncol = 1,
+  rel_heights = c(1, 0.22)
+)
+
+# Añadimos margen derecho específicamente a todo el panel 
+# El orden de margin es: t (top), r (right), b (bottom), l (left)
+Panel_MA <- Panel_MA & theme(
+  plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
+)
+
+print(final_plot_MA)
+# ---------------------------
+
+
+
+
