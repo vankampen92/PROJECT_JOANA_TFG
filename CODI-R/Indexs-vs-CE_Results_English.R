@@ -990,7 +990,7 @@ Panel_AS <- (
   Mobilitat_C_BR1 + Mobilitat_E_BR1) / ( gg_SSI_C_BR1 + gg_SSI_E_BR1 ) +
   plot_layout(guides = "collect") &
   theme(
-    legend.position = "bottom",
+    legend.position = "none",
     legend.box = "horizontal",
     legend.title = element_blank(),
     legend.text = element_text(size = 14),
@@ -1016,7 +1016,7 @@ legend_plot_BR1 <- ggplot(
   ) +
   theme_minimal() +
   theme(
-    legend.position = "bottom",
+    legend.position = "",
     legend.title = element_blank(),
     legend.text = element_text(size = 14, face = "italic")
   )
@@ -1033,7 +1033,7 @@ Panel_AS <- (
 
 final_plot_AS <- cowplot::plot_grid(
   Panel_AS,
-  legend_1,
+  legend = "none",
   ncol = 1,
   rel_heights = c(1, 0.22)
 )
@@ -1044,7 +1044,7 @@ Panel_AS <- Panel_AS & theme(
   plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
 )
 # ---------------------------
-print(final_plot_AS)
+
 
 ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/grafics_indexs_cie/Panel_Indexos_AS.png",
        plot = final_plot_AS,
@@ -1073,7 +1073,7 @@ legend_plot_BR2 <- ggplot(
   ) +
   theme_minimal() +
   theme(
-    legend.position = "bottom",
+    legend.position = "",
     legend.title = element_blank(),
     legend.text = element_text(size = 14, face = "italic")
   )
@@ -1090,7 +1090,6 @@ Panel_MH <- (
 
 final_plot_MH <- cowplot::plot_grid(
   Panel_MH,
-  legend_2,
   ncol = 1,
   rel_heights = c(1, 0.22)
 )
@@ -1101,7 +1100,7 @@ Panel_MH <- Panel_MH & theme(
   plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
 )
 
-print(final_plot_MH)
+
 # ---------------------------
 ######################################
 
@@ -1151,9 +1150,16 @@ Panel_MA <- Panel_MA & theme(
   plot.margin = margin(t = 5.5, r = 30, b = 5.5, l = 5.5, unit = "pt")
 )
 
-print(final_plot_MA)
+
 # ---------------------------
 
+final_plot_cbms <- cowplot::plot_grid(
+  final_plot_AS,
+  final_plot_MH,
+  final_plot_MA, 
+  ncol = 1,
+  align = "v"
+)
 
-
+print(final_plot_cbms)
 

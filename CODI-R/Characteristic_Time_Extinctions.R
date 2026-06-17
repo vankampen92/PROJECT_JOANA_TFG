@@ -55,7 +55,6 @@ temps_br3 <- colext_Results_df_BR3_ordenado %>%
 
 df_temps <- bind_rows(temps_br1, temps_br2, temps_br3)
 # Mantenim l'ordre de les especies
-df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 Local_Extinction_Counts <- function(ocupancia_012, T_n)
 {
@@ -159,21 +158,23 @@ Local_Extinction_2024 <- function(ocupancia_012, T_n)
 # The reason is that the loop we are going to do for species and bioregions uses
 # lists of data frames that have that initial order 
 
-species_order <- c("Celastrina argiolus",  
-  "Lycaena virgaureae", 
-  "Plebejus argus", 
-  "Pseudophilotes panoptes", 
-  "Cyaniris semiargus", 
-  "Vanessa cardui",          
-  "Aglais io",               
-  "Anthocharis euphenoides",
-  "Melanargia occitanica", 
-  "Pararge aegeria", 
-  "Pyronia bathseba", 
-  "Pyronia cecilia" 
+species_order <- c("Pseudophilotes panoptes",
+                   "Cyaniris semiargus",
+                   "Plebejus argus",
+                   "Aglais io", 
+                   "Melanargia occitanica",
+                   "Anthocharis euphenoides",
+                   "Vanessa cardui", 
+                   "Lycaena virgaureae", 
+                   "Pararge aegeria",
+                   "Celastrina argiolus",  
+                    "Pyronia bathseba", 
+                    "Pyronia cecilia" 
 ) 
 
 Sp <- species_order
+
+df_temps$Species <- factor(df_temps$Species, levels = species_order)
 
 n_Extincions <- matrix(
   nrow = length(Sp),
@@ -376,7 +377,7 @@ panell_temps <- ggplot(df_temps, aes(x = Species, y = valor, fill = Species)) +
   geom_col(width = 0.7) +
   
   geom_errorbar(
-    aes(ymin = valor, ymax = up),
+    aes(ymin = low, ymax = up),
     width = 0.1,
     linewidth = 0.4
   ) +

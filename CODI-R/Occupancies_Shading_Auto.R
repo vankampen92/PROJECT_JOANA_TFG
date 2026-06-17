@@ -126,9 +126,9 @@ Sp = c("Celastrina Argiolus", "Lycaena Vigaureae", "Plebejus argus",
        "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica", 
        "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia") 
 
-BioReg = c("Regió Alpina i Subalpina", 
-           "Regió Mediterrània humida", 
-           "Regió Mediterrània àrida")
+BioReg = c("alpine and subalpin region", 
+           "humid mediterranean region", 
+           "arid mediterranean region")
 
 for (i in 1:12 ) {
   # Dades ocupancia species i en les tres regions. 

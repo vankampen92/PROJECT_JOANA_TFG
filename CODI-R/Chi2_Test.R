@@ -25,22 +25,26 @@ chi2_2p2 <- function(n1, N1, n2, N2) {
   }
     
   return(p_val)
-
+}
 
 p_values_df    <- data.frame(matrix(nrow = 12, ncol = length(1994:2024)))
 preferencia_df <- data.frame(matrix(nrow = 12, ncol = length(1994:2024)))
 
 colnames(p_values_df) <- as.character(1994:2024)
-rownames(p_values_df) <- c("cela", "lyca", "plebe", 
-                           "pseudo", "cyani", "vane", 
-                           "agla", "antho", "mela", 
-                           "para", "pyrobath", "pyroceci")
+rownames(p_values_df) <- c("Pseudophilotes panoptes", "Cyaniris semiargus",
+                           "Plebejus argus",  "Aglais io", "Melanargia occitanica", 
+                           "Anthocharis euphenoides", "Vanessa cardui", 
+                            "Lycaena virgaureae", "Pararge aegeria",
+                           "Celastrina argiolus", "Pyronia bathseba", 
+                           "Pyronia cecilia")
 
 colnames(preferencia_df) <- as.character(1994:2024)
-rownames(preferencia_df) <- c("cela", "lyca", "plebe", 
-                           "pseudo", "cyani", "vane", 
-                           "agla", "antho", "mela", 
-                           "para", "pyrobath", "pyroceci")
+rownames(preferencia_df) <- c("Pseudophilotes panoptes", "Cyaniris semiargus",
+                              "Plebejus argus",  "Aglais io", "Melanargia occitanica", 
+                              "Anthocharis euphenoides", "Vanessa cardui", 
+                              "Lycaena virgaureae", "Pararge aegeria",
+                              "Celastrina argiolus", "Pyronia bathseba", 
+                              "Pyronia cecilia")
 for (i in 1:12) {
   df <- as.data.frame(list_chi2[[i]])
   
@@ -254,7 +258,9 @@ library(tidyr)
 library(dplyr)
 
 # Preserve species order as in the data
-species_order <- rownames(preferencia_df)
+species_order <- rev(rownames(preferencia_df))
+
+df_long$Species <- factor(df_long$Species, levels = species_order)
 
 # Move rownames into a column and keep order
 preferencia_df <- preferencia_df %>%
@@ -287,13 +293,14 @@ label_colors <- c(
 )
 
 # Plot
-ggp <- ggplot(df_long, aes(x = Year, y = Species, fill = factor(Label))) +
+ggp <- ggplot(df_long, aes(x = Year, y = forcats::fct_rev(Species), fill = factor(Label))) +
   geom_tile(color = "white", linewidth = 0.3) +
   scale_fill_manual(values = label_colors, na.value = "white") +
   scale_x_continuous(breaks = seq(1994, 2024, by = 2)) +
-  scale_y_discrete(limits = rev(levels(df_long$Species))) +  # flip vertically
+  scale_y_discrete(limits = levels(df_long$Species)) +  
   theme_minimal(base_size = 12) +
-  labs(x = "Year", y = "Species", fill = "Regió") +
+  labs(x = "Year", y = "", fill = "Region") +
+  coord_fixed(ratio = 1.25) +
   theme(
     panel.grid = element_blank(),
     axis.text.x = element_text(angle = 45, hjust = 1),

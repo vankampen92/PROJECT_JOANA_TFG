@@ -1,6 +1,7 @@
 # This script automatize the plotting of occupancies (with shading)
 library(ggplot2)
 library(dplyr)
+library(tidyverse)
 
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/my_list_chi2.RData")
 load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
@@ -8,10 +9,18 @@ load("/home/dalonso/PROJECT_JOANA_TFG/DADES/list_colext_regionsbioclima.RData")
 # ---  Crear carpeta donde guardar los gráficos ---
 # dir.create("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/grafics_ocupancies", showWarnings = FALSE)
 
-Sp = c("Celastrina Argiolus", "Lycaena Vigaureae", "Plebejus argus", 
+Sp = c("Celastrina argiolus", "Lycaena vigaureae", "Plebejus argus", 
        "Psedophilotes panoptes", "Cyaniris semiargus", "Vanessa cardui", 
        "Aglais io", "Anthocharis euphenoides", "Melanargia occitanica", 
        "Pararge aegeria", "Pyronia bathseba", "Pyronia cecilia") 
+
+# 2. Definición del orden
+species_order <- c(
+  "Pseudophilotes panoptes", "Cyaniris semiargus", "Plebejus argus",
+  "Aglais io", "Melanargia occitanica", "Anthocharis euphenoides", "Vanessa cardui",
+  "Lycaena virgaureae","Pararge aegeria","Celastrina argiolus",  
+  "Pyronia bathseba", "Pyronia cecilia"
+)
 
 BioReg = c("Regió Alpina i Subalpina", 
            "Regió Mediterrània humida", 
@@ -284,7 +293,7 @@ for (i in 1:12 ) {
   
   # Activate the next line if you consider only the period 2004-2024.
   # (otherwise comment it out, and results will be generatedfor the whole period 1994-2024)
-  data_ocupancia <- data_ocupancia[data_ocupancia$year >= 2004, ]
+  #data_ocupancia <- data_ocupancia[data_ocupancia$year >= 2004, ]
   
   for (j in 1:3) {
     
@@ -369,33 +378,38 @@ results_3$trend <- ifelse(results_3$p_value < 0.05 & results_3$slope > 0,
 
 
 ######################################################
+results_2$species[results_2$species == "Psedophilotes panoptes"] <-
+  "Pseudophilotes panoptes"
+
+results_2$species[results_2$species == "anthocharis euphenoides"] <-
+  "Anthocharis euphenoides"
 
 # 1. Calcular el cambio total y clasificar con todas las categorías
 df_grafico <- results_1 %>%
-  mutate(total_change = slope * 31) %>%
-  mutate(Categoria = case_when(
+  mutate(total_change = slope * 10) %>%
+  mutate(Category = case_when(
     p_value >= 0.05 ~ "Estable (No Sig.)",
-    p_value < 0.05 & total_change <= -0.30 ~ "Descens Fort (>30%)",
-    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Descens Moderat (<30%)",
-    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Augment Moderat (<30%)",
-    p_value < 0.05 & total_change > 0.30 ~ "Augment Fort (>30%)",
+    p_value < 0.05 & total_change <= -0.30 ~ "Strong regression (>30%)",
+    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Moderate regression (<30%)",
+    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Moderate increase (<30%)",
+    p_value < 0.05 & total_change > 0.30 ~ "Strong increase (>30%)",
     TRUE ~ "Altres"
   ))
 
 # 2. Definir la paleta de colores completa (Semáforo ampliado)
 mis_colores <- c(
-  "Descens Fort (>30%)" = "#B22222",      # Rojo Intenso
-  "Descens Moderat (<30%)" = "#FF6B6B",   # Rojo Claro
+  "Strong regression (>30%)" = "#B22222",      # Rojo Intenso
+  "Moderate regression (<30%)" = "#FF6B6B",   # Rojo Claro
   "Estable (No Sig.)" = "#D3D3D3",        # Gris
-  "Augment Moderat (<30%)" = "#90EE90",   # Verde Claro
-  "Augment Fort (>30%)" = "#228B22"       # Verde Oscuro
+  "Moderate increase (<30%)" = "#90EE90",   # Verde Claro
+  "Strong increase (>30%)" = "#228B22"       # Verde Oscuro
 )
 
 # 3. Forzar el orden de las especies (usando el vector que ya tenemos)
 df_grafico$species <- factor(df_grafico$species, levels = species_order)
 
 # 4. Generar el Gráfico de Tendencias Final
-trend_ocu_BR1 <- ggplot(df_grafico, aes(x = species, y = total_change, fill = Categoria)) +
+trend_ocu_BR1 <- ggplot(df_grafico, aes(x = species, y = total_change, fill = Category)) +
   geom_col(color = "black", width = 0.7) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +  # Línea de equilibrio
   geom_hline(yintercept = c(-0.30, 0.30), linetype = "dashed", color = "gray40") + # Líneas de umbral 30%
@@ -403,7 +417,7 @@ trend_ocu_BR1 <- ggplot(df_grafico, aes(x = species, y = total_change, fill = Ca
   labs(
     title = "",
     x = "Espècies",
-    y = "Canvi total estimat (Slope * 31)",
+    y = "Average occupancy change expression(year^{-1}))",
     fill = "Categoria d'Estatus"
   ) +
   theme_bw(base_size = 11) +
@@ -420,14 +434,21 @@ print(trend_ocu_BR1)
 #######################################################################
 
 
+
+results_2$species[results_2$species == "Psedophilotes panoptes"] <-
+  "Pseudophilotes panoptes"
+
+results_2$species[results_2$species == "anthocharis euphenoides"] <-
+  "Anthocharis euphenoides"
+
 df_grafico2 <- results_2 %>%
-  mutate(total_change = slope * 31) %>%
-  mutate(Categoria = case_when(
+  mutate(total_change = slope * 10) %>%
+  mutate(Category = case_when(
     p_value >= 0.05 ~ "Estable (No Sig.)",
-    p_value < 0.05 & total_change <= -0.30 ~ "Descens Fort (>30%)",
-    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Descens Moderat (<30%)",
-    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Augment Moderat (<30%)",
-    p_value < 0.05 & total_change > 0.30 ~ "Augment Fort (>30%)",
+    p_value < 0.05 & total_change <= -0.30 ~ "Strong regression (>30%)",
+    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Moderate regression (<30%)",
+    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Moderate increase (<30%)",
+    p_value < 0.05 & total_change > 0.30 ~ "Strong increase (>30%)",
     TRUE ~ "Altres"
   ))
 
@@ -435,20 +456,20 @@ df_grafico2 <- results_2 %>%
 df_grafico2$species <- factor(df_grafico2$species, levels = species_order)
 
 # 4. Generar el Gráfico de Tendencias Final
-trend_ocu_BR2 <- ggplot(df_grafico2, aes(x = species, y = total_change, fill = Categoria)) +
+trend_ocu_BR2 <- ggplot(df_grafico2, aes(x = species, y = total_change, fill = Category)) +
   geom_col(color = "black", width = 0.7) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +  # Línea de equilibrio
   geom_hline(yintercept = c(-0.30, 0.30), linetype = "dashed", color = "gray40") + # Líneas de umbral 30%
   scale_fill_manual(values = mis_colores) +
   labs(
     title = "",
-    x = "Espècies",
-    y = "Canvi total estimat (Slope * 31)",
-    fill = "Categoria d'Estatus"
+    x = "Species",
+    y = "Average occupancy change expression(year^{-1}))",
+    fill = ""
   ) +
   theme_bw(base_size = 11) +
   theme(
-    axis.text.x = element_blank(),
+    axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1),
     axis.ticks.x = element_blank(),
     legend.position = "right",
     legend.text = element_text(size = 9),
@@ -457,16 +478,21 @@ trend_ocu_BR2 <- ggplot(df_grafico2, aes(x = species, y = total_change, fill = C
 
 print(trend_ocu_BR2)
 ########################################################################
+results_3$species[results_3$species == "Psedophilotes panoptes"] <-
+  "Pseudophilotes panoptes"
+
+results_3$species[results_3$species == "anthocharis euphenoides"] <-
+  "Anthocharis euphenoides"
 
 
 df_grafico3 <- results_3 %>%
-  mutate(total_change = slope * 31) %>%
-  mutate(Categoria = case_when(
+  mutate(total_change = slope * 10) %>%
+  mutate(Category = case_when(
     p_value >= 0.05 ~ "Estable (No Sig.)",
-    p_value < 0.05 & total_change <= -0.30 ~ "Descens Fort (>30%)",
-    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Descens Moderat (<30%)",
-    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Augment Moderat (<30%)",
-    p_value < 0.05 & total_change > 0.30 ~ "Augment Fort (>30%)",
+    p_value < 0.05 & total_change <= -0.30 ~ "Strong regression (>30%)",
+    p_value < 0.05 & total_change > -0.30 & total_change < 0 ~ "Moderate regression (<30%)",
+    p_value < 0.05 & total_change > 0 & total_change <= 0.30 ~ "Moderate increase (<30%)",
+    p_value < 0.05 & total_change > 0.30 ~ "Strong increase (>30%)",
     TRUE ~ "Altres"
   ))
 
@@ -474,21 +500,21 @@ df_grafico3 <- results_3 %>%
 df_grafico3$species <- factor(df_grafico3$species, levels = species_order)
 
 # 4. Generar el Gráfico de Tendencias Final
-trend_ocu_BR3 <- ggplot(df_grafico3, aes(x = species, y = total_change, fill = Categoria)) +
+trend_ocu_BR3 <- ggplot(df_grafico3, aes(x = species, y = total_change, fill = Category)) +
   geom_col(color = "black", width = 0.7) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +  # Línea de equilibrio
   geom_hline(yintercept = c(-0.30, 0.30), linetype = "dashed", color = "gray40") + # Líneas de umbral 30%
-  scale_fill_manual(values = mis_colores) +
+  scale_fill_manual(values = mis_colores,  limits = niveles_categoria, drop = FALSE) +
   labs(
-    title = "Regio Mediterrania arida",
-    x = "Espècies",
-    y = "Canvi total estimat (Slope * 31)",
-    fill = "Categoria d'Estatus"
+    title = "Arid Mediterranian region",
+    x = "Species",
+    y = "Average occupancy change expression(year^{-1}))",
+    fill = "Estatus category"
   ) +
   theme_bw(base_size = 11) +
   theme(
     axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_blank(),
     legend.position = "right",
     legend.text = element_text(size = 9),
     strip.background = element_rect(fill = "gray90")
@@ -510,8 +536,8 @@ preparar_df <- function(df, orden) {
 df %>%
 complete(species = orden) %>% # Rellena las especies faltantes
 mutate(
-total_change = ifelse(is.na(slope), 0, slope * 31),
-Categoria = ifelse(is.na(Categoria), "Estable (No Sig.)", Categoria)
+total_change = ifelse(is.na(slope), 0, slope * 10),
+Category = ifelse(is.na(Category), "Estable (No Sig.)", Category)
 ) %>%
 mutate(species = factor(species, levels = orden)) %>%
 filter(!is.na(species)) # Elimina cualquier fila que sea realmente NA
@@ -520,8 +546,8 @@ preparar_df <- function(df, orden) {
   df %>%
     complete(species = orden) %>% # Rellena las especies faltantes
     mutate(
-      total_change = ifelse(is.na(slope), 0, slope * 31),
-      Categoria = ifelse(is.na(Categoria), "Estable (No Sig.)", Categoria)
+      total_change = ifelse(is.na(slope), 0, slope * 10),
+      Category = ifelse(is.na(Category), "Estable (No Sig.)", Category)
     ) %>%
     mutate(species = factor(species, levels = orden)) %>%
     filter(!is.na(species)) # Elimina cualquier fila que sea realmente NA
@@ -533,48 +559,71 @@ df1_final <- preparar_df(df_grafico, lista_especies_completa)
 df2_final <- preparar_df(df_grafico2, lista_especies_completa)
 df3_final <- preparar_df(df_grafico3, lista_especies_completa)
 
+
+
+
 # 4. Definir el estilo visual minimalista
 estilo_eje_y <- theme_bw() + theme(
   axis.title.x = element_blank(),
-  axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, face = "italic", size = 8),
-  legend.position = "none", # Quitamos leyendas individuales
+  axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, face = "italic", size = 12),
+legend.position = "bottom", # Quitamos leyendas individuales
   plot.title = element_text(hjust = 0.5, size = 10, face = "bold")
 )
 
 # 5. Crear los 3 gráficos con ejes coordinados
 
-g1 <- ggplot(df1_final, aes(x = species, y = total_change, fill = Categoria)) +
-  geom_col(color = "black") +
-  scale_fill_manual(values = mis_colores) +
-  labs(title = "Regió Alpina i Subalpina", y = "Canvi total estimat (Pendent*31)") +
-  estilo_eje_y
+#para invertir el orden de las especies#
+df1_final$species <- forcats::fct_rev(df1_final$species)
 
-g2 <- ggplot(df2_final, aes(x = species, y = total_change, fill = Categoria)) +
+g1 <- ggplot(df1_final, aes(x = species, y = total_change, fill = Category)) +
   geom_col(color = "black") +
-  scale_fill_manual(values = mis_colores) +
-  labs(title = "Regió Mediterrània Humida", y = "") +
+  scale_fill_manual(values = mis_colores, drop = FALSE) +
+  labs(title = "Alpin and Subalpin Region", y = "Average occupancy change in 10 years") +
   estilo_eje_y +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_text(size = 12),
+        axis.text.y = element_text(size = 12),  # Mantiene los números del eje Y
+        axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1)) # Nombres de especies más grandes y alineados
 
-g3 <- ggplot(df3_final, aes(x = species, y = total_change, fill = Categoria)) +
+g1 <- g1 + theme(legend.position = "none")
+
+#para invertir el orden de las especies#
+df2_final$species <- forcats::fct_rev(df2_final$species)
+
+g2 <- ggplot(df2_final, aes(x = species, y = total_change, fill = Category)) +
   geom_col(color = "black") +
-  scale_fill_manual(values = mis_colores) +
-  labs(title = "Regió Mediterrània Àrida", y = "") +
+  scale_fill_manual(values = mis_colores, drop = FALSE) +
+  labs(title = "Humid Mediterranian Region", y = "") +
   estilo_eje_y +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1))   
 
-# 6. Unificar con Patchwork
+g2 <- g2 + theme(legend.position = "none")
+#para invertir el orden de las especies#
+df3_final$species <- forcats::fct_rev(df3_final$species)
+
+g3 <- ggplot(df3_final, aes(x = species, y = total_change, fill = Category)) +
+  geom_col(color = "black") +
+  scale_fill_manual(values = mis_colores, drop = FALSE) +
+  labs(title = "Arid Mediterranian Region", y = "") +
+  estilo_eje_y +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust = 1))
+g3 <- g3 + theme(legend.position = "none")
+
+
+
+# 6. Unificar con Patchwork (este bloque se queda igual)
 library(patchwork)
 panell_tendencies <- (g1 | g2 | g3) +
   plot_layout(guides = "collect") +
   plot_annotation(
-    title = "Estatus de la Tendència en ocupància als darrers 31 anys",
+    title = "",
     theme = theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
   ) & theme(legend.position = "bottom")
 
 print(panell_tendencies)
-
-
 # 6. Guardarlo en tu carpeta (ajustando el tamaño para que quepa todo)
 ggsave("/home/dalonso/PROJECT_JOANA_TFG/GRAFICS/Extincions/Tendencies_ocupancies.png",
        plot = panell_tendencies, width = 14, height = 8, dpi = 300)
